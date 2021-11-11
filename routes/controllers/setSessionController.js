@@ -1,7 +1,7 @@
 const Session        =  require('../models/setSession');
 
 module.exports={
-    async setSessionData(req ,res , next){    
+    async setSessionData(req ,res ,next){    
         const newSessionData  = new Session({
             doctorId        :   req.body.doctorId,  
             clinicId        :   req.body.clinicId,
@@ -17,11 +17,16 @@ module.exports={
     },
 
     async fetchSessionData(req ,res , next){       
-        await Session.find({doctorId: req.params.doctorId, clinicId: req.params.clinicId}, function (err, doc) {
+        await Session.find({doctorId: req.body.doctorId, clinicId: req.body.clinicId}, function (err, doc) {
             res.send(doc);
         })
     },
 
+    async getSessionDataById(req ,res , next){       
+        await Session.find({doctorId: req.params.doctorId, clinicId: req.params.clinicId}, function (err, doc) {
+            res.send(doc);
+        })
+    },
     async fetchSessionDataById(req ,res , next){     
         Session.find({doctorId: req.params.id})
         .then(clinic => res.json(clinic))

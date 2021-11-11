@@ -15,8 +15,8 @@ module.exports = function(app){
 
     //create session Route
     router.route('/setSession').post((...params)=>{setSessionRoutec.setSessionData(...params)})
-    //router.route('/fetchtime').post((...params)=>{setSessionRoutec.fetchSessionData(...params)})
+    router.route('/fetchtime').post((...params)=>{setSessionRoutec.fetchSessionData(...params)})
     router.route('/fetchtime/:id').get((...params)=>{setSessionRoutec.fetchSessionDataById(...params)})
-    router.route('/fetcSessionSlots/:doctorId/:clinicId').get((...params)=>{setSessionRoutec.fetchSessionData(...params)})
+    router.route('/fetcSessionSlots/:doctorId/:clinicId').get((...params)=>{setSessionRoutec.getSessionDataById(...params)})
     app.use('/api',router)
 }
