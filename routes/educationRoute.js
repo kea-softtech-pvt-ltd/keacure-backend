@@ -1,8 +1,8 @@
-const express     = require('express'),
-router            = express.Router();
-const multer               =  require('multer');
-const { v4: uuidv4 }       =  require('uuid');
-const path                 =  require("path");
+const express            =  require('express'),
+router                   =  express.Router();
+const multer             =  require('multer');
+const { v4: uuidv4 }     =  require('uuid');
+const path               =  require("path");
 const doctorEducationsRoute = require('./controllers/doctorEducationsController')
 
 //add data cb=callback

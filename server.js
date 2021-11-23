@@ -27,6 +27,8 @@ require('./routes/experienceRoute')(app);
 require('./routes/clinicRoute')(app);
 require('./routes/fetchapiRoute')(app);
 require('./routes/patientRoutes')(app);
+require('./routes/patientMedicalRoutes')(app);
+require('./routes/patientLifestyleRoutes')(app);
 // app.use("/", require("./controllers/doctorExperienceRoute"))
 
 app.listen(9000, () => {

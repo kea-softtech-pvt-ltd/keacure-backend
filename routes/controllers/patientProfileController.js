@@ -76,19 +76,48 @@ module.exports = {
     },
 
     async insertPatientDetails(req,res,next){
-        await PatientLogin.findByIdAndUpdate({_id: req.params.id},{
-        name          : req.body.name,
-        lName         : req.body.lName,
-        email         : req.body.email,
-        gender        : req.body.gender,
-        age           : req.body.age
-        }, function(err, data){
-        if(err) {
-            res.json(err);
-        } 
-        else { 
-            res.json(data);
+        let data=[]
+        if (req.file){
+            data={
+                photo         : req.file.filename,    
+                name          : req.body.name,
+                email         : req.body.email,
+                gender        : req.body.gender,
+                mobile        : req.body.mobile,
+                age           : req.body.age,
+                bloodgroup    : req.body.bloodgroup,
+                maritalstatus : req.body.maritalstatus,
+                height        : req.body.height,
+                weight        : req.body.weight,
+                birthdate     : req.body.birthdate,
+                emcontact     : req.body.emcontact,
+                address       : req.body.address,
+            }
+        }else{
+            data={
+                name          : req.body.name,
+                email         : req.body.email,
+                gender        : req.body.gender,
+                mobile        : req.body.mobile,
+                age           : req.body.age,
+                bloodgroup    : req.body.bloodgroup,
+                maritalstatus : req.body.maritalstatus,
+                height        : req.body.height,
+                weight        : req.body.weight,
+                birthdate     : req.body.birthdate,
+                emcontact     : req.body.emcontact,
+                address       : req.body.address,
+            }
         }
+        await PatientLogin.findByIdAndUpdate({_id: req.params.id},data, {
+            new: true
+          }, function(err, data){
+            if(err) {
+                res.json(err);
+            } 
+            else { 
+                res.json(data);
+            }
         });
     },
 
@@ -113,6 +142,7 @@ module.exports = {
 
     async fetchPatientById(req, res, next) {
         await PatientLogin.findById(req.params.id, function (err, doc) {
+            console.log(doc)
           res.send(doc);
         })
     }
