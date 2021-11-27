@@ -22,11 +22,18 @@ module.exports={
         })
     },
 
+    async getDaysSlots(req ,res , next){       
+        await Session.find({doctorId: req.body.doctorId, clinicId: req.body.clinicId ,day: req.body.day ,Appointment: req.body.Appointment}, function (err, doc) {
+            res.send(doc);
+        })
+    },
+
     async getSessionDataById(req ,res , next){       
         await Session.find({doctorId: req.params.doctorId, clinicId: req.params.clinicId}, function (err, doc) {
             res.send(doc);
         })
     },
+    
     async fetchSessionDataById(req ,res , next){     
         Session.find({doctorId: req.params.id})
         .then(clinic => res.json(clinic))
