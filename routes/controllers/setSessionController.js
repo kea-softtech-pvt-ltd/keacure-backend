@@ -8,6 +8,7 @@ module.exports={
             fromTime        :   req.body.fromTime,
             toTime          :   req.body.toTime,
             timeSlot        :   req.body.timeSlot,
+            selectedSlot    :   req.body.selectedSlot,
             Appointment     :   req.body.Appointment,
             fees            :   req.body.fees,
             day             :   req.body.day 

@@ -6,6 +6,7 @@ const setSession = new mongoose.Schema({
     fromTime     :  Date,
     toTime       :  Date,
     timeSlot     :  String,
+    selectedSlot :  Array,
     Appointment  :  String,
     fees         :  String,
     day          :  String
