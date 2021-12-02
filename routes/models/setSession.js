@@ -6,7 +6,11 @@ const setSession = new mongoose.Schema({
     fromTime     :  Date,
     toTime       :  Date,
     timeSlot     :  String,
-    selectedSlot :  Array,
+    showSelectedSlots :  [new mongoose.Schema({
+        slotId     :  mongoose.Schema.Types.ObjectId,
+        slotTime   :  String,
+        status     : Number
+    })],
     Appointment  :  String,
     fees         :  String,
     day          :  String

@@ -8,7 +8,7 @@ module.exports={
             fromTime        :   req.body.fromTime,
             toTime          :   req.body.toTime,
             timeSlot        :   req.body.timeSlot,
-            selectedSlot    :   req.body.selectedSlot,
+            showSelectedSlots   :   req.body.showSelectedSlots,
             Appointment     :   req.body.Appointment,
             fees            :   req.body.fees,
             day             :   req.body.day 
@@ -24,7 +24,7 @@ module.exports={
     },
 
     async getDaysSlots(req ,res , next){       
-        await Session.find({doctorId: req.body.doctorId, clinicId: req.body.clinicId ,day: req.body.day ,Appointment: req.body.Appointment}, function (err, doc) {
+        await Session.findOne({doctorId: req.body.doctorId, clinicId: req.body.clinicId ,day: req.body.day ,Appointment: req.body.Appointment }, function (err, doc) {
             res.send(doc);
         })
     },
