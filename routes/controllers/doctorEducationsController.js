@@ -7,7 +7,7 @@ module.exports = {
     })
   },
 
-  //for fetching doctor info
+  //for fe  tching doctor info
   async fetchAllEducationData(req, res, next) {  
     await DoctorEducation.find()
     .then(education => res.json(education))
@@ -20,7 +20,7 @@ module.exports = {
   },
 
   
-  //for update data
+  //for add data
   async allEducationData(req, res, next) {   
     const reqFiles = [];
     for (var i = 0; i < req.files.length; i++) {
