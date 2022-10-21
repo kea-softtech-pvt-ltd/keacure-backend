@@ -46,9 +46,9 @@ module.exports = {
       console.log(doc.document)
       let reqFiles = [];
       reqFiles = doc.document
-      for (var i = 0; i < req.files.length; i++) {
-          reqFiles.push(req.files[i].filename)
-      }
+      // for (var i = 0; i < req.files.length; i++) {
+      //     reqFiles.push(req.files[i].filename)
+      // }
       DoctorEducation.findByIdAndUpdate({_id: req.params.id},{
         doctorId         : req.body.doctorId,
         specialization   : req.body.specialization,

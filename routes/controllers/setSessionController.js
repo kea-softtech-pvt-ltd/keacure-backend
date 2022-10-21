@@ -3,18 +3,53 @@ const Session        =  require('../models/setSession');
 module.exports={
     async setSessionData(req ,res ,next){    
         const newSessionData  = new Session({
-            doctorId        :   req.body.doctorId,  
-            clinicId        :   req.body.clinicId,
-            fromTime        :   req.body.fromTime,
-            toTime          :   req.body.toTime,
-            timeSlot        :   req.body.timeSlot,
+            doctorId            :   req.body.doctorId,  
+            clinicId            :   req.body.clinicId,
+            fromTime            :   req.body.fromTime,
+            toTime              :   req.body.toTime,
+            timeSlot            :   req.body.timeSlot,
             showSelectedSlots   :   req.body.showSelectedSlots,
-            Appointment     :   req.body.Appointment,
-            fees            :   req.body.fees,
-            day             :   req.body.day 
+            Appointment         :   req.body.Appointment,
+            fees                :   req.body.fees,
+            day                 :   req.body.day 
         })
         newSessionData.save();
         res.json(newSessionData);
+        console.log("newSessionData", newSessionData)
+    },
+
+    //for update data
+    async updateSessionData(req,res,next)  {
+        Session.findByIdAndUpdate({_id: req.params.id}, 
+            {
+                $unset: { showSelectedSlots: []}
+            }).exec();
+        Session.findByIdAndUpdate({_id: req.params.id}, 
+            {
+            doctorId            :   req.body.doctorId,  
+            clinicId            :   req.body.clinicId,
+            fromTime            :   req.body.fromTime,
+            toTime              :   req.body.toTime,
+            timeSlot            :   req.body.timeSlot,
+            showSelectedSlots   :   req.body.showSelectedSlots,
+            Appointment         :   req.body.Appointment,
+            fees                :   req.body.fees,
+            day                 :   req.body.day 
+        },
+        { new: true }, function(err, data){
+            if(err) {
+              res.json(err);
+            } 
+            else { 
+              res.json(data);
+            }
+        });
+    },
+
+    async fetchSetSessionData(req ,res , next){     
+        await Session.find({doctorId: req.params.doctorId, clinicId: req.params.clinicId, _id: req.params.id}, function (err, doc) {
+            res.send(doc);
+        })
     },
 
     async fetchSessionData(req ,res , next){       

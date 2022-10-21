@@ -112,7 +112,7 @@ module.exports = {
         gender              : req.body.gender,
         address             : req.body.address,
         officialEmail       : req.body.officialEmail,
-        personalEmail       : req.body.personalEmail,
+        personalEmail       : req.body.personalEmail
       }
     }
     DoctorDetail.findByIdAndUpdate({_id: req.params.id},data, function(err, data){
@@ -125,6 +125,7 @@ module.exports = {
     });
   },
 
+  
   async fetchAllDoctor(req, res, next) {   
     await DoctorDetail.aggregate([
     { 

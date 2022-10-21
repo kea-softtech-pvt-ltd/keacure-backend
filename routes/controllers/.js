@@ -1,6 +1,4 @@
 const PatientLogin = require('../models/patientProfile');
-const jwt = require("jsonwebtoken");
-const config = require("../auth/config")
 const Razorpay = require('razorpay');
 
 module.exports = {
@@ -54,7 +52,6 @@ module.exports = {
     async getPatientOtp(req,res,next){    
         const otp  = req.body.otp;
         const _id  = req.body._id;
-        const mobile = req.body.mobile;
         if(!otp ){
         return res.json({"status": {"error":"please fill the field properly"}});
         }
@@ -64,31 +61,18 @@ module.exports = {
             PatientLogin.findByIdAndUpdate({_id:_id},{
                 isLoggedIn: true
             }, {new: true}, function(err, data){
-                console.log("data--------", data)
                 if(err) {
                     res.json(err);
                 } 
                 else { 
-                    let accessToken = jwt.sign({ id: _id }, config.secret, {
-                        expiresIn: config.jwtExpiration,
-                    });
-            
-                    let refreshToken = PatientLogin.createToken(data);
-                    
-                    res.status(200).send({
-                        id: _id,
-                        mobile:mobile,
-                        accessToken: accessToken,
-                        refreshToken: refreshToken,
-                    });
+                    res.json(data);
                 }
             })
-            
         }else{
             return res.json({"status": {"error":"Please Enter Correct OTP"}})
         }
         }catch(err){
-            console.log(err);
+        console.log(err);
         }
     },
 
@@ -164,41 +148,15 @@ module.exports = {
         })
     },
 
-    async refreshJWTToken(req, res, next) {
-        const _id  = req.body._id;
-        const { refreshToken: requestToken } = req.body;
-
-        if (requestToken == null) {
-          return res.status(403).json({ message: "Refresh Token is required!" });
-        }
-      
-        try {
-          let refreshToken = await PatientLogin.findOne({ token: requestToken });
-      
-          if (!refreshToken) {
-            res.status(403).json({ message: "Refresh token is not in database!" });
-            return;
-          }
-      
-          if (PatientLogin.verifyExpiration(refreshToken)) {
-            PatientLogin.findByIdAndRemove(refreshToken._id, { useFindAndModify: false }).exec();
-            
-            res.status(403).json({
-              message: "Refresh token was expired. Please make a new signin request",
-            });
-            return;
-          }
-      
-          let newAccessToken = jwt.sign({ id: refreshToken.user._id }, config.secret, {
-            expiresIn: config.jwtExpiration,
-          });
-      
-          return res.status(200).json({
-            accessToken: newAccessToken,
-            refreshToken: refreshToken.token,
-          });
-        } catch (err) {
-          return res.status(500).send({ message: err });
-        }
+    async getPaymentDetails() {
+        var instance = new Razorpay({ key_id: 'rzp_test_9YSujFU2kXGJti', key_secret: 'NgKdgQNRgRjjzQzafHgPwYS8' })
+        var options = {
+            amount: 50000,  // amount in the smallest currency unit
+            currency: "INR",
+            //amount_paid: 1000,
+            receipt: "order_rcptid_11"
+        };
+        const ordeDetails = await instance.orders.create(options);
+        console.log(ordeDetails)
     }
 }

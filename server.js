@@ -29,7 +29,8 @@ require('./routes/fetchapiRoute')(app);
 require('./routes/patientRoutes')(app);
 require('./routes/patientMedicalRoutes')(app);
 require('./routes/patientLifestyleRoutes')(app);
-// app.use("/", require("./controllers/doctorExperienceRoute"))
+require('./routes/payment')(app);
+//app.use("/", require("./controllers/doctorExperienceRoute"))
 
 app.listen(9000, () => {
     console.log(`Server is running on port: 9000`);

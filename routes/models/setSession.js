@@ -3,12 +3,12 @@ const mongoose = require('mongoose');
 const setSession = new mongoose.Schema({
     doctorId     :  mongoose.Schema.Types.ObjectId,
     clinicId     :  mongoose.Schema.Types.ObjectId,
-    fromTime     :  Date,
-    toTime       :  Date,
+    fromTime     :  String,
+    toTime       :  String,
     timeSlot     :  String,
     showSelectedSlots :  [new mongoose.Schema({
         slotId     :  mongoose.Schema.Types.ObjectId,
-        slotTime   :  String,
+        time       :  String,
         status     : Number
     })],
     Appointment  :  String,

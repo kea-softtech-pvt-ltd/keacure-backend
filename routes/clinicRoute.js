@@ -15,11 +15,12 @@ module.exports = function(app){
 
     //create session Route
     router.route('/setSession').post((...params)=>{setSessionRoutec.setSessionData(...params)})
+    router.route('/setSession/:doctorId/:clinicId/:id').post((...params)=>{setSessionRoutec.updateSessionData(...params)})
+    router.route('/fetchsetSession/:doctorId/:clinicId/:id').get((...params)=>{setSessionRoutec.fetchSetSessionData(...params)})
     router.route('/fetchtime').post((...params)=>{setSessionRoutec.fetchSessionData(...params)})
     router.route('/fetchtime/:id').get((...params)=>{setSessionRoutec.fetchSessionDataById(...params)})
     router.route('/fetcSessionSlots/:doctorId/:clinicId').get((...params)=>{setSessionRoutec.getSessionDataById(...params)})
-    router.route('/fetchDaysSlots').post((...params)=>{setSessionRoutec.getDaysSlots(...params)})
-    ///:doctorId/:clinicId/:day/:Appointment
-    
+    router.route('/fetchDaysSlots').get((...params)=>{setSessionRoutec.getDaysSlots(...params)})
+   
     app.use('/api',router)
 }

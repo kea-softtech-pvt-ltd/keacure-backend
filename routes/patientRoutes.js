@@ -33,6 +33,7 @@ module.exports = function (app) {
   router.route('/insertPatientDetails/:id').post(upload ,(...params) => {patientProfileController.insertPatientDetails(...params)});
   router.route('/patient').post((...params) => {patientProfileController.allPatient(...params)});
   router.route('/patientById/:id').get((...params)=>patientProfileController.fetchPatientById(...params));
+  router.route('/auth/refreshToken').post((...params)=>patientProfileController.refreshJWTToken(...params));
 
   app.use('/api', router);
 };
