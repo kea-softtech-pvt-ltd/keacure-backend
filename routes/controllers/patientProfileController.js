@@ -52,41 +52,34 @@ module.exports = {
     },
     
     async getPatientOtp(req,res,next){    
-        const otp  = req.body.otp;
-        const _id  = req.body._id;
-        const mobile = req.body.mobile;
+        const {otp , _id}  = req.body;
         if(!otp ){
-        return res.json({"status": {"error":"please fill the field properly"}});
+            return res.json({"status": {"error":"please fill the field properly"}});
         }
         try{
-        const userExit = await PatientLogin.findOne({otp:otp},{_id:_id});
-        if(userExit){
-            PatientLogin.findByIdAndUpdate({_id:_id},{
-                isLoggedIn: true
-            }, {new: true}, function(err, data){
-                console.log("data--------", data)
-                if(err) {
-                    res.json(err);
-                } 
-                else { 
-                    let accessToken = jwt.sign({ id: _id }, config.secret, {
-                        expiresIn: config.jwtExpiration,
-                    });
-            
-                    let refreshToken = PatientLogin.createToken(data);
-                    
-                    res.status(200).send({
-                        id: _id,
-                        mobile:mobile,
-                        accessToken: accessToken,
-                        refreshToken: refreshToken,
-                    });
-                }
-            })
-            
-        }else{
-            return res.json({"status": {"error":"Please Enter Correct OTP"}})
-        }
+            const userExit = await PatientLogin.findOne({otp:otp},{_id:_id});
+            const accessToken = jwt.sign({ id: _id }, config.secret, {
+                expiresIn: config.jwtExpiration,
+            });
+            const refreshToken = PatientLogin.createToken(userExit);
+
+            if(userExit){
+                PatientLogin.findByIdAndUpdate({_id:_id},{
+                    isLoggedIn: true,
+                    accessToken: accessToken,
+                    refreshToken: refreshToken,
+                }, {new: true}, function(err, data){
+                    if(err) {
+                        res.json(err);
+                    } 
+                    else{ 
+                        res.json(data);
+                    }
+                })
+                
+            }else{
+                return res.json({"status": {"error":"Please Enter Correct OTP"}})
+            }
         }catch(err){
             console.log(err);
         }

@@ -3,6 +3,7 @@ const config = require("../auth/config")
 const { v4: uuidv4 } = require('uuid');
 
 const patientDetails = new mongoose.Schema({
+    accessToken         :String,
     refreshToken        :String,
     photo               :String,
     mobile              :Number,
