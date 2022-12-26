@@ -16,7 +16,6 @@ const doctorEducationsRoute = require('./controllers/doctorEducationsController'
   });
     
   const fileFilter = (req, file, cb) => {
-    console.log(file.mimetype);
     const allowedFileTypes = ['image/jpg','image/jpeg', 'image/png', 'application/vnd.ms-excel' ,'application/pdf']
     if(allowedFileTypes.includes(file.mimetype)) {
         return cb(null, true);

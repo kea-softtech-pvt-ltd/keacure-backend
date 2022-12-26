@@ -1,7 +1,9 @@
 const PatientLogin = require('../models/patientProfile');
+const Payment = require('../models/payment')
 const jwt = require("jsonwebtoken");
 const config = require("../auth/config")
 const Razorpay = require('razorpay');
+const mongoose = require('mongoose');
 
 module.exports = {
     //for fetch otp
@@ -151,11 +153,33 @@ module.exports = {
     },
 
     async fetchPatientById(req, res, next) {
-        await PatientLogin.findById(req.params.id, function (err, doc) {
-            console.log(doc)
-          res.send(doc);
+        const id = mongoose.Types.ObjectId(req.params.id);
+        await PatientLogin.aggregate([
+            { "$match": { "_id": id } },
+            { 
+              $lookup:{
+                from: Payment.collection.name,
+                localField: "_id",
+                foreignField: "patientId",
+                as: "BookingDetails",
+              }
+            }
+        ])
+        .exec( (err, result)=>{
+            if(err) {
+                res.send(err);
+            } 
+            if(result) { 
+                res.send(result)
+            }
         })
     },
+
+    // async fetchPatientByDoctorId(req ,res , next){       
+    //     await PatientLogin.find({doctorId: req.params.doctorId}, function (err, doc) {
+    //         res.send(doc);
+    //     })
+    // },
 
     async refreshJWTToken(req, res, next) {
         const _id  = req.body._id;

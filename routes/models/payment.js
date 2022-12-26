@@ -12,7 +12,8 @@ const payment = new mongoose.Schema({
     fees          : Number,
     currency      : String,
     date          : String,
-    day           : String
-},{collection: 'payments' });
+    day           : String,
+    slotTime      : String
+},{collection: 'BookingDetails' });
 
 module.exports = Payment = mongoose.model('payment', payment);

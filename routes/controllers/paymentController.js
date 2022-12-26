@@ -1,5 +1,10 @@
-const Payment = require('../models/payment')
+const Payment = require('../models/payment');
+const PatientLogin = require('../models/patientProfile');
+const clinicInfo = require('../models/clinicInfo');
+const ownClinicInfo = require('../models/ownClinicInfo');
+const setSession = require('../models/setSession');
 const Razorpay = require('razorpay');
+const mongoose = require('mongoose');
 
 module.exports = {
     async getPaymentDetails(req, res) {
@@ -10,7 +15,6 @@ module.exports = {
             receipt: "order_rcptid_11"
         };
         const ordeDetails = await instance.orders.create(options, function(err, order) {
-            //console.log("order========>", order);
             res.send({orderId : order.id})
         });
     },
@@ -27,18 +31,102 @@ module.exports = {
             fees              : req.body.fees,
             date              : req.body.date,
             currency          : req.body.currency,
-            day               : req.body.day
+            day               : req.body.day,
+            slotTime          : req.body.slotTime
         })
-        console.log("data=======", Data)
         await Data.save();
         if(res) {
             return res.json(Data)
         }
     },
 
-    async fetchDataById(req, res) { 
-        await Payment.findById(req.params.id, function (err, doc) {
-          res.send(doc);
+    async fetchPaymentDataByDoctorId(req ,res , next){       
+        await Payment.find({doctorId: req.params.doctorId, clinicId: req.params.clinicId}, function (err, doc) {
+            res.send(doc);
+        })
+    },
+
+    // async fetchPaymentDataBydoctorId(req ,res , next){   
+    //     await Payment.find({doctorId: req.params.doctorId}, function (err, doc) {
+    //         res.send(doc);
+    //     })
+    // },
+
+    async fetchPaymentDataBydoctorId(req ,res , next){   
+        const doctorId = mongoose.Types.ObjectId(req.params.doctorId);
+        await Payment.aggregate([
+            { "$match": { "doctorId": doctorId } },
+            { 
+                $lookup:{
+                    from: PatientLogin.collection.name,
+                    localField: "patientId",
+                    foreignField: "_id",
+                    as: "patientDetails",
+                }
+            },
+            {
+                $lookup: {
+                  from: clinicInfo.collection.name,
+                  localField: "clinicId",
+                  foreignField: "_id",
+                  as:"clinicList"
+                }
+            },
+            {
+                $lookup: {
+                    from: ownClinicInfo.collection.name,
+                    localField: "clinicId",
+                    foreignField: "_id",
+                    as:"ownClinicList"
+                }
+            }
+        ])
+        .exec( (err, result)=>{
+            if(err) {
+                res.send(err);
+            } 
+            if(result) { 
+                res.send(result)
+            }
+        })
+    },
+    
+    async fetchCurrentAppointmentData(req ,res , next){   
+        const doctorId = mongoose.Types.ObjectId(req.params.doctorId);
+        await Payment.aggregate([
+            { "$match": { "doctorId": doctorId } },
+            { 
+                $lookup:{
+                    from: PatientLogin.collection.name,
+                    localField: "patientId",
+                    foreignField: "_id",
+                    as: "patientDetails",
+                }
+            },
+            {
+                $lookup: {
+                  from: clinicInfo.collection.name,
+                  localField: "clinicId",
+                  foreignField: "_id",
+                  as:"clinicList"
+                }
+            },
+            {
+                $lookup: {
+                    from: ownClinicInfo.collection.name,
+                    localField: "clinicId",
+                    foreignField: "_id",
+                    as:"ownClinicList"
+                }
+            }
+        ])
+        .exec( (err, result)=>{
+            if(err) {
+                res.send(err);
+            } 
+            if(result) { 
+                res.send(result)
+            }
         })
     },
 

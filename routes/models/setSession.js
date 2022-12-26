@@ -9,7 +9,7 @@ const setSession = new mongoose.Schema({
     showSelectedSlots :  [new mongoose.Schema({
         slotId     :  mongoose.Schema.Types.ObjectId,
         time       :  String,
-        status     : Number
+        status     : Boolean
     })],
     Appointment  :  String,
     fees         :  String,

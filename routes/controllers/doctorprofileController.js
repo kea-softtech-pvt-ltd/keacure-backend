@@ -1,76 +1,91 @@
-const DoctorDetail   =  require('../models/doctorprofile');
+const DoctorLogin   =  require('../models/doctorprofile');
 const doctorEducation = require('../models/doctorEducation');
 const doctorExperience = require('../models/doctorExperience');
 const clinicInfo = require('../models/clinicInfo');
 const ownClinicInfo = require('../models/ownClinicInfo');
 const setSession = require('../models/setSession');
+const jwt = require("jsonwebtoken");
+const config = require("../auth/config")
 const mongoose = require('mongoose');
 
 //for insert mobile number and generate otp
 module.exports = {
-  async login(req, res, next) {
+  async login(req,res,next){    
     const mobile    = req.body.mobile;
     const digits    = '0123456789';
     let otp = '';
     
-    if(!mobile ){
-      return res.status(422).json("please fill the field properly ");
+    if(!mobile){
+        return res.status(422).json({"status": {"error":"Please fill the field properly"}});
     }
-    await DoctorDetail.findOne({mobile:mobile}).then(user => {
-      if(user) {
-        if(user.isLoggedIn) {
-          return {
-            "message":"already logged in",
-            "data": res.json(user)
-          }
+    try{
+        const userExit = await  DoctorLogin.findOne({mobile:mobile});
+        if(userExit){
+            for(let i = 0; i < 6; i++) {
+                otp += digits[Math.floor(Math.random() * 10)];
+            }
+            DoctorLogin.findByIdAndUpdate({_id: userExit._id},{
+                otp     : otp,
+            }, {new: true}, function(err, data){
+                if(err) {
+                    res.json(err);
+                } 
+                else { 
+                    res.json(data);
+                }
+            })
         } else {
-          for(let i = 0; i < 6; i++) {
-            otp += digits[Math.floor(Math.random() * 10)];
-          }
-          return {
-            "message":"User found",
-            "data": {...user, ...{otp: otp}}
-          }
+            for(let i = 0; i < 6; i++) {
+                otp += digits[Math.floor(Math.random() * 10)];
+            }
+            const newUserData    = new  DoctorLogin({
+                mobile,
+                otp
+            })
+            await newUserData.save();
+            res.json(newUserData);
         }
-      } else {
-        for(let i = 0; i < 6; i++) {
-          otp += digits[Math.floor(Math.random() * 10)];
-        }
-        const newDoctorData  = new DoctorDetail({
-          mobile ,
-          otp
-        })
-        newDoctorData.save()
-        res.json(newDoctorData);
-      }
-    });
+    }catch(err){
+        console.log(err);
+    }
   },
 
   //for fetch otp
-  async loginOtp(req, res, next) {  
-    const otp  = req.body.otp;
-    const _id  = req.body._id;
-  
+  async loginOtp(req,res,next){    
+    const {otp , _id}  = req.body;
     if(!otp ){
-      return res.json({"status": {"error":"please fill the field properly"}});
+        return res.json({"status": {"error":"please fill the field properly"}});
     }
     try{
-    const userExit = await DoctorDetail.findOne({otp:otp},{_id:_id});
-      if(userExit){ 
-        DoctorDetail.findByIdAndUpdate({_id: _id},{
-          isLoggedIn: true
+        const userExit = await DoctorLogin.findOne({otp:otp},{_id:_id});
+        const accessToken = jwt.sign({ id: _id }, config.secret, {
+            expiresIn: config.jwtExpiration,
         });
-        return res.json(req.body);
-      }else{
-        return res.json({"status": {"error":"wrong otp"}})
-      }
+        const refreshToken = DoctorLogin.createToken(userExit);
+
+        if(userExit){
+          DoctorLogin.findByIdAndUpdate({_id:_id},{
+            isLoggedIn: true,
+            accessToken: accessToken,
+            refreshToken: refreshToken,
+          }, {new: true}, function(err, data){
+            if(err) {
+                res.json(err);
+            } 
+            else{ 
+                res.json(data);
+            }
+          })
+        }else{
+          return res.json({"status": {"error":"Please Enter Correct OTP"}})
+        }
     }catch(err){
-      console.log(err);
+        console.log(err);
     }
   },
 
   async otpIsLoggedIn(req, res, next) { 
-    await  DoctorDetail.findByIdAndUpdate({_id: req.params.id},{
+    await  DoctorLogin.findByIdAndUpdate({_id: req.params.id},{
       isLoggedIn     : req.body.isLoggedIn,
     }, function(err, data){
       if(err) {
@@ -84,13 +99,13 @@ module.exports = {
 
   //fetchdata
   async fetchOtp(req, res, next) { 
-    await DoctorDetail.find(function(err,docs) {
+    await DoctorLogin.find(function(err,docs) {
       res.send(docs)  
     })
   },
 
   async fetchDataById(req, res, next) { 
-    await DoctorDetail.findById(req.params.id, function (err, doc) {
+    await DoctorLogin.findById(req.params.id, function (err, doc) {
       res.send(doc);
     })
   },
@@ -115,9 +130,9 @@ module.exports = {
         personalEmail       : req.body.personalEmail
       }
     }
-    DoctorDetail.findByIdAndUpdate({_id: req.params.id},data, function(err, data){
+    DoctorLogin.findByIdAndUpdate({_id: req.params.id},data, function(err, data){
       if(err) {
-          res.json(err);
+        res.json(err);
       } 
       else { 
           res.json(data);
@@ -127,7 +142,7 @@ module.exports = {
 
   
   async fetchAllDoctor(req, res, next) {   
-    await DoctorDetail.aggregate([
+    await DoctorLogin.aggregate([
     { 
       $lookup:{
           from: doctorEducation.collection.name,
@@ -154,10 +169,10 @@ module.exports = {
       }
     })
   },
+
   async fetchDoctorsById(req, res, next) {
-    console.log(req.params)
     const id = mongoose.Types.ObjectId(req.params.id);
-    await DoctorDetail.aggregate([
+    await DoctorLogin.aggregate([
       { "$match": { "_id": id } },
       { 
         $lookup:{
@@ -208,5 +223,42 @@ module.exports = {
         res.send(result)
       }
     })
+  },
+
+  async refreshJWTToken(req, res, next) {
+    const _id  = req.body._id;
+    const { refreshToken: requestToken } = req.body;
+
+    if (requestToken == null) {
+      return res.status(403).json({ message: "Refresh Token is required!" });
+    }
+  
+    try {
+      let refreshToken = await DoctorLogin.findOne({ token: requestToken });
+      if (!refreshToken) {
+        res.status(403).json({ message: "Refresh token is not in database!" });
+        return;
+      }
+  
+      if (DoctorLogin.verifyExpiration(refreshToken)) {
+        DoctorLogin.findByIdAndRemove(refreshToken._id, { useFindAndModify: false }).exec();
+        
+        res.status(403).json({
+          message: "Refresh token was expired. Please make a new signin request",
+        });
+        return;
+      }
+  
+      let newAccessToken = jwt.sign({ id: refreshToken.user._id }, config.secret, {
+        expiresIn: config.jwtExpiration,
+      });
+  
+      return res.status(200).json({
+        accessToken: newAccessToken,
+        refreshToken: refreshToken.token,
+      });
+    } catch (err) {
+      return res.status(500).send({ message: err });
+    }
   }
 } 

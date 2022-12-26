@@ -34,6 +34,7 @@ module.exports = function (app) {
   router.route('/insertPersonalInfo/:id').post(upload, (...params) =>{ doctorprofileRoute.insertPersonalInfoById(...params)});
   router.route('/doctor').get((...params) => {doctorprofileRoute.fetchAllDoctor(...params)});
   router.route('/doctor/:id').get((...params) =>{ doctorprofileRoute.fetchDoctorsById(...params)});
+  router.route('/auth/token').post((...params)=>doctorprofileRoute.refreshJWTToken(...params));
  
   app.use('/api', router);
 };

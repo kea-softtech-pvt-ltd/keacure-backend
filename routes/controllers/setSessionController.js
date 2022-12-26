@@ -15,7 +15,6 @@ module.exports={
         })
         newSessionData.save();
         res.json(newSessionData);
-        console.log("newSessionData", newSessionData)
     },
 
     //for update data

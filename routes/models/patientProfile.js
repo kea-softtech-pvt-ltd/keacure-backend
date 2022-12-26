@@ -37,8 +37,6 @@ patientDetails.statics.createToken = function (user) {
       patientId: user._id,
       expiryDate: expiredAt.getTime(),
     });
-  
-    console.log("token =======", token);
     return token;
   };
   
@@ -46,5 +44,4 @@ patientDetails.statics.createToken = function (user) {
     return token.expiryDate.getTime() < new Date().getTime();
   }
   
-
 module.exports = PatientLogin = mongoose.model(' patientDetails',  patientDetails);

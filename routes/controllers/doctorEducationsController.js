@@ -32,7 +32,7 @@ module.exports = {
       collage          : req.body.collage,
       comYear          : req.body.comYear,
       degree           : req.body.degree,
-      document         : reqFiles
+      //document         : reqFiles
     })
     educationData.save();
     if(res) {
@@ -43,7 +43,6 @@ module.exports = {
   //for update data
   async allUpdateEducationData(req, res, next) {  
     await DoctorEducation.findById(req.params.id, function (err, doc) {
-      console.log(doc.document)
       let reqFiles = [];
       reqFiles = doc.document
       // for (var i = 0; i < req.files.length; i++) {
@@ -59,12 +58,12 @@ module.exports = {
       },{ new: true }, function(err, data){
         if(err) {
           res.json(err);
-        } 
-        else { 
+        }
+        else {
           res.json(data);
         }
       });
-    }) 
+    })
   },
 
   //for delete document

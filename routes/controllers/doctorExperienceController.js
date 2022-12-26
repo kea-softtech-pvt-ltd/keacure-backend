@@ -3,7 +3,6 @@ const DoctorExperience   =  require('../models/doctorExperience');
 module.exports ={
   //fetch data
   async fetchAllExperienceById(req,res,next)  {
-    console.log(req.params.id)
     await DoctorExperience.find({doctorId: req.params.id}, function (err, doc) {
       res.send(doc);
     })
