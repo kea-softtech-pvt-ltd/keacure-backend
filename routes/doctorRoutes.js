@@ -35,6 +35,10 @@ module.exports = function (app) {
   router.route('/doctor').get((...params) => {doctorprofileRoute.fetchAllDoctor(...params)});
   router.route('/doctor/:id').get((...params) =>{ doctorprofileRoute.fetchDoctorsById(...params)});
   router.route('/auth/token').post((...params)=>doctorprofileRoute.refreshJWTToken(...params));
+  //search API
+  router.route('/search/:key').get((...params)=>doctorprofileRoute.FilterSearchData(...params));
+  router.route('/searchEdu/:key').get((...params)=>doctorprofileRoute.FilterSearchEduData(...params));
+  // message API
  
   app.use('/api', router);
 };

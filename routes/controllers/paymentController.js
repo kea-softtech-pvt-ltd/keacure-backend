@@ -2,7 +2,7 @@ const Payment = require('../models/payment');
 const PatientLogin = require('../models/patientProfile');
 const clinicInfo = require('../models/clinicInfo');
 const ownClinicInfo = require('../models/ownClinicInfo');
-const setSession = require('../models/setSession');
+const DoctorLogin = require('../models/doctorprofile')
 const Razorpay = require('razorpay');
 const mongoose = require('mongoose');
 
@@ -32,7 +32,9 @@ module.exports = {
             date              : req.body.date,
             currency          : req.body.currency,
             day               : req.body.day,
-            slotTime          : req.body.slotTime
+            slotTime          : req.body.slotTime,
+            selectedDate      : req.body.selectedDate,
+            startDate         : req.body.startDate
         })
         await Data.save();
         if(res) {
@@ -46,13 +48,13 @@ module.exports = {
         })
     },
 
-    // async fetchPaymentDataBydoctorId(req ,res , next){   
+    // async getBookingDetailsBydoctorId(req ,res , next){   
     //     await Payment.find({doctorId: req.params.doctorId}, function (err, doc) {
     //         res.send(doc);
     //     })
     // },
 
-    async fetchPaymentDataBydoctorId(req ,res , next){   
+    async getBookingDetailsWithPatientDataBydoctorId(req ,res , next){   
         const doctorId = mongoose.Types.ObjectId(req.params.doctorId);
         await Payment.aggregate([
             { "$match": { "doctorId": doctorId } },
@@ -86,51 +88,54 @@ module.exports = {
                 res.send(err);
             } 
             if(result) { 
-                res.send(result)
-            }
-        })
-    },
-    
-    async fetchCurrentAppointmentData(req ,res , next){   
-        const doctorId = mongoose.Types.ObjectId(req.params.doctorId);
-        await Payment.aggregate([
-            { "$match": { "doctorId": doctorId } },
-            { 
-                $lookup:{
-                    from: PatientLogin.collection.name,
-                    localField: "patientId",
-                    foreignField: "_id",
-                    as: "patientDetails",
-                }
-            },
-            {
-                $lookup: {
-                  from: clinicInfo.collection.name,
-                  localField: "clinicId",
-                  foreignField: "_id",
-                  as:"clinicList"
-                }
-            },
-            {
-                $lookup: {
-                    from: ownClinicInfo.collection.name,
-                    localField: "clinicId",
-                    foreignField: "_id",
-                    as:"ownClinicList"
-                }
-            }
-        ])
-        .exec( (err, result)=>{
-            if(err) {
-                res.send(err);
-            } 
-            if(result) { 
-                res.send(result)
+                const test = result.map(function(item, index){
+                    const note1 =item["timeSlot"]
+                    const dateTime= item["startDate"]
+                    const note2 =item.patientDetails[0]["name"]
+                    result[index]["note"] = note2
+                    result[index]["duration"] = "00:"+ note1+":00"
+                    result[index]["start"] = dateTime+":00"
+                    return item
+                })
+                res.send(test)
             }
         })
     },
 
-    async getDaySlots(req ,res , next){       
+    async getBookingDetailsByPatientId(req ,res , next){   
+        const patientId = mongoose.Types.ObjectId(req.params.patientId);
+        await Payment.aggregate([
+            { "$match": { "patientId": patientId } },
+           
+            { 
+                $lookup:{
+                    from: DoctorLogin.collection.name,
+                    localField: "doctorId",
+                    foreignField: "_id",
+                    as: "doctorDetails",
+                }
+            },
+        ])
+        .exec( (err, result)=>{
+            if(err) {
+                res.send(err);
+            } 
+            if(result) { 
+                const test = result.map(function(item, index){
+                    const note1 =item["timeSlot"]
+                    const dateTime= item["startDate"]
+                    const note2 =item.doctorDetails[0]["name"]
+                    result[index]["note"] = note2
+                    result[index]["duration"] = "00:"+ note1+":00"
+                    result[index]["start"] = dateTime+":00"
+                    return item
+                })
+                res.send(test)
+            }
+        })
+    },
+
+    async getDaySlots(req ,res , next){     
         await Payment.find({doctorId: req.params.doctorId, clinicId: req.params.clinicId, daySlotId: req.params.daySlotId}, function (err, doc) {
             res.send(doc);
         })

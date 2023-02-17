@@ -102,7 +102,6 @@ module.exports = {
                 height        : req.body.height,
                 weight        : req.body.weight,
                 birthdate     : req.body.birthdate,
-                emcontact     : req.body.emcontact,
                 address       : req.body.address,
             }
         }else{
@@ -117,7 +116,6 @@ module.exports = {
                 height        : req.body.height,
                 weight        : req.body.weight,
                 birthdate     : req.body.birthdate,
-                emcontact     : req.body.emcontact,
                 address       : req.body.address,
             }
         }
@@ -135,7 +133,7 @@ module.exports = {
 
     async otpIsLoggedIn(req, res, next) { 
         await PatientLogin.findByIdAndUpdate({_id: req.params.id},{
-          isLoggedIn     : req.body.isLoggedIn,
+            isLoggedIn     : req.body.isLoggedIn,
         }, function(err, data){
             if(err) {
                 res.json(err);

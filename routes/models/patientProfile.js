@@ -7,6 +7,7 @@ const patientDetails = new mongoose.Schema({
     refreshToken        :String,
     photo               :String,
     mobile              :Number,
+    MPIN                :Number,
     otp                 :String,
     name                :String,
     email               :String,
@@ -17,7 +18,6 @@ const patientDetails = new mongoose.Schema({
     height              :Number,
     weight              :Number,
     birthdate           :String,
-    emcontact           :Number,
     address             :String,
     isLoggedIn          :Boolean,
     expiryDate          :Date

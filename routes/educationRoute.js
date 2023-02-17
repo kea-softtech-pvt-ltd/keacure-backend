@@ -29,6 +29,7 @@ let upload = multer({ storage: storage, fileFilter:fileFilter}).array('document'
 module.exports = function (app) {
     router.route('/fetchEduData/:id').get((...params) => {doctorEducationsRoute.fetchEducationData(...params)});
     router.route('/fetchEduData').get((...params) => {doctorEducationsRoute.fetchEducationData(...params)});
+    router.route('/fetchAllEduData').get((...params) => {doctorEducationsRoute.fetchAllEducationData(...params)});
     router.route('/fetchEditEduData/:id').get((...params) => {doctorEducationsRoute.fetchAllEditEducationData(...params)});
     router.route('/education').post(upload,(...params) => {doctorEducationsRoute.allEducationData(...params)});
     router.route('/updateEducation/:id').post(upload,(...params) => {doctorEducationsRoute.allUpdateEducationData(...params)});
