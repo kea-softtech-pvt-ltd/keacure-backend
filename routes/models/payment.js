@@ -14,6 +14,7 @@ const payment = new mongoose.Schema({
     date          : String,
     day           : String,
     slotTime      : String,
+    timeSlot      : String,
     selectedDate  : Date,
     startDate     : String
 },{collection: 'BookingDetails' });

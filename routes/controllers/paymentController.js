@@ -32,6 +32,7 @@ module.exports = {
             date              : req.body.date,
             currency          : req.body.currency,
             day               : req.body.day,
+            timeSlot          : req.body.timeSlot,
             slotTime          : req.body.slotTime,
             selectedDate      : req.body.selectedDate,
             startDate         : req.body.startDate
@@ -88,6 +89,7 @@ module.exports = {
                 res.send(err);
             } 
             if(result) { 
+                // console.log("result---------->>>>", result)
                 const test = result.map(function(item, index){
                     const note1 =item["timeSlot"]
                     const dateTime= item["startDate"]

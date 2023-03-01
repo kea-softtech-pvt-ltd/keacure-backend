@@ -36,5 +36,8 @@ module.exports = function (app) {
  // router.route('/patientById/:doctorId').get((...params)=>patientProfileController.fetchPatientByDoctorId(...params));
   router.route('/auth/refreshToken').post((...params)=>patientProfileController.refreshJWTToken(...params));
 
+  //search by patient name
+  router.route('/search-patient/:key').get((...params)=>patientProfileController.FilterSearchData(...params));
+
   app.use('/api', router);
 };

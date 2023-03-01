@@ -1,7 +1,7 @@
 const PatientLogin = require('../models/patientProfile');
-const Payment = require('../models/payment')
+const Payment = require('../models/payment');
 const jwt = require("jsonwebtoken");
-const config = require("../auth/config")
+const config = require("../auth/config");
 const Razorpay = require('razorpay');
 const mongoose = require('mongoose');
 
@@ -215,5 +215,19 @@ module.exports = {
         } catch (err) {
           return res.status(500).send({ message: err });
         }
-    }
+    },
+
+    async FilterSearchData(req, res, next) {
+        let data = await PatientLogin.find(
+         {
+           "$or":[
+               {
+               name:{$regex: req.params.key}
+             }
+           ]
+         }
+       );
+       console.log(data)
+       res.send( data)
+     }
 }

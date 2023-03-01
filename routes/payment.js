@@ -13,4 +13,3 @@ module.exports = function (app) {
   router.route('/fetchSelectedDaySlots/:doctorId/:clinicId/:daySlotId').post((...params)=>{paymentController.getDaySlots(...params)})
   app.use('/api', router);
 };
-
