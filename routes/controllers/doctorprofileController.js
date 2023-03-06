@@ -146,12 +146,21 @@ module.exports = {
   },
 
   async fetchAllDoctor(req, res, next) {
+    const searchText = req.body.key ? req.body.key : ""
     await DoctorLogin.aggregate([
+      { "$match": { "name":{ $regex: new RegExp(searchText), $options: 'i' }} },
       {
         $lookup: {
           from: doctorEducation.collection.name,
           localField: "_id",
           foreignField: "doctorId",
+          // pipeline: [
+          //   {
+          //     "$match":  {
+          //       "specialization":{ $regex: new RegExp(searchText), $options: 'i' }
+          //     },
+          //   },
+          // ],
           as: "educationList",
         }
       },

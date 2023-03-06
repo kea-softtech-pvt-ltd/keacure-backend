@@ -32,12 +32,13 @@ module.exports = function (app) {
   router.route('/fetchOtp').get((...params) => {doctorprofileRoute.fetchOtp(...params)});
   router.route('/fetchData/:id').get((...params) => {doctorprofileRoute.fetchDataById(...params)});
   router.route('/insertPersonalInfo/:id').post(upload, (...params) =>{ doctorprofileRoute.insertPersonalInfoById(...params)});
-  router.route('/doctor').get((...params) => {doctorprofileRoute.fetchAllDoctor(...params)});
+  //router.route('/doctor/:key').get((...params) => {doctorprofileRoute.fetchAllDoctor(...params)});
   router.route('/doctor/:id').get((...params) =>{ doctorprofileRoute.fetchDoctorsById(...params)});
   router.route('/auth/token').post((...params)=>doctorprofileRoute.refreshJWTToken(...params));
   //search API
-  router.route('/search/:key').get((...params)=>doctorprofileRoute.FilterSearchData(...params));
-  router.route('/searchEdu/:key').get((...params)=>doctorprofileRoute.FilterSearchEduData(...params));
+  router.route('/search').post((...params)=> {
+    doctorprofileRoute.fetchAllDoctor(...params)
+  });
   // message API
  
   app.use('/api', router);
