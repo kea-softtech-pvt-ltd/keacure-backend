@@ -21,15 +21,15 @@ mongoose.connect(dbUrl ,{
 
 //required route
 app.use(cors());
-require('./routes/doctorRoutes')(app);
-require('./routes/educationRoute')(app);
-require('./routes/experienceRoute')(app);
-require('./routes/clinicRoute')(app);
-require('./routes/fetchapiRoute')(app);
-require('./routes/patientRoutes')(app);
-require('./routes/patientMedicalRoutes')(app);
-require('./routes/patientLifestyleRoutes')(app);
-require('./routes/payment')(app);
+require('../routes/doctorRoutes')(app);
+require('../routes/educationRoute')(app);
+require('../routes/experienceRoute')(app);
+require('../routes/clinicRoute')(app);
+require('../routes/fetchapiRoute')(app);
+require('../routes/patientRoutes')(app);
+require('../routes/patientMedicalRoutes')(app);
+require('../routes/patientLifestyleRoutes')(app);
+require('../routes/payment')(app);
 //app.use("/", require("./controllers/doctorExperienceRoute"))
 
 app.listen(9000, () => {
