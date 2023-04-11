@@ -228,14 +228,14 @@ module.exports = {
         }
       }
     ])
-      .exec((err, result) => {
-        if (err) {
-          res.send(err);
-        }
-        if (result) {
-          res.send(result)
-        }
-      })
+    .exec((err, result) => {
+      if (err) {
+        res.send(err);
+      }
+      if (result) {
+        res.send(result)
+      }
+    })
   },
 
   async refreshJWTToken(req, res, next) {

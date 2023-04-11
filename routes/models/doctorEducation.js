@@ -5,7 +5,7 @@ const doctorEducation = new mongoose.Schema({
     degree              :String,
     collage             :String,
     comYear             :String,
-    specialization      :String,
+    specialization      :[],
     document            :Array
 },{collection: 'doctorEducations' });
 

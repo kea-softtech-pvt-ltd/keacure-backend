@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 const ownClinicInfo = new mongoose.Schema({
     clinicId         :mongoose.Schema.Types.ObjectId,
     doctorId         :mongoose.Schema.Types.ObjectId,
-    specialization   :String,
+    specialization   :[],
     clinicName       :String,
     address          :String,
     clinicNumber     :Number,
-    services         :String,
+    services         :[],
     fees             :String
 },  {collection: 'ownClinicInfos' });
 
