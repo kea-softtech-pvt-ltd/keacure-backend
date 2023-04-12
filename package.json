@@ -2,9 +2,9 @@
   "name": "health-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "./api/index.js",
+  "main": "index.js",
   "scripts": {
-    "start": "supervisor ./api/index.js",
+    "start": "supervisor index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
