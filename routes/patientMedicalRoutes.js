@@ -18,6 +18,7 @@ module.exports = function (app) {
   router.route('/add_premedication_note/:reportId').post((...params) => MedicalReportController.InsertPremedicationData(...params));
   router.route('/new_follw_up_date/:reportId').post((...params) => MedicalReportController.InsertFollowUpDate(...params));
   router.route('/fetchMedicalReport/:patientAppointmentId/:doctorId/:patientId').get((...params) => MedicalReportController.fetchMedicalData(...params));
+  router.route('/create-pdf-prescription/:reportId').post((...params) => MedicalReportController.createPrescriptionPdf(...params));
 
   //medicine list, prescription data API
   router.route('/fetchmedicines').get((...params) => MedicalReportController.fetchmedicineData(...params));

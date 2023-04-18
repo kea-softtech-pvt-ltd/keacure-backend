@@ -154,13 +154,6 @@ module.exports = {
           from: doctorEducation.collection.name,
           localField: "_id",
           foreignField: "doctorId",
-          // pipeline: [
-          //   {
-          //     "$match":  {
-          //       "specialization":{ $regex: new RegExp(searchText), $options: 'i' }
-          //     },
-          //   },
-          // ],
           as: "educationList",
         }
       },

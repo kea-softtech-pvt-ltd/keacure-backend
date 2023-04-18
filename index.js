@@ -3,6 +3,13 @@ const cors     = require("cors");
 const mongoose = require("mongoose");
 require('dotenv').config();
 const app = express();
+var path = require('path');
+var fs = require('fs');
+
+var dir = path.join(__dirname, 'public');
+
+
+app.use(express.static(dir));
 
 app.use(cors());
 app.use(express.json());

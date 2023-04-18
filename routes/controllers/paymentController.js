@@ -14,37 +14,40 @@ module.exports = {
             currency: "INR",
             receipt: "order_rcptid_11"
         };
-        const ordeDetails = await instance.orders.create(options, function(err, order) {
-            res.send({orderId : order.id})
+        const ordeDetails = await instance.orders.create(options, function (err, order) {
+            res.send({ orderId: order.id })
         });
     },
 
-    async getOrderedPaymentDetails(req, res){
+    async getOrderedPaymentDetails(req, res) {
         const Data = new Payment({
-            doctorId          : req.body.DoctorId,
-            patientId         : req.body.patientId,
-            clinicId          : req.body.ClinicId,
-            slotId            : req.body.slotId,
-            daySlotId         : req.body.daySlotId,
-            orderId           : req.body.order_id,
-            transactionId     : req.body.transactionId,
-            fees              : req.body.fees,
-            date              : req.body.date,
-            currency          : req.body.currency,
-            day               : req.body.day,
-            timeSlot          : req.body.timeSlot,
-            slotTime          : req.body.slotTime,
-            selectedDate      : req.body.selectedDate,
-            startDate         : req.body.startDate
+            doctorId: req.body.DoctorId,
+            patientId: req.body.patientId,
+            clinicId: req.body.ClinicId,
+            slotId: req.body.slotId,
+            daySlotId: req.body.daySlotId,
+            orderId: req.body.order_id,
+            transactionId: req.body.transactionId,
+            fees: req.body.fees,
+            date: req.body.date,
+            currency: req.body.currency,
+            day: req.body.day,
+            timeSlot: req.body.timeSlot,
+            slotTime: req.body.slotTime,
+            selectedDate: req.body.selectedDate,
+            startDate: req.body.startDate,
+            status: req.body.status,
+            medicalReportId: req.body.medicalReportId
         })
         await Data.save();
-        if(res) {
+        if (res) {
+            console.log("data------------", res)
             return res.json(Data)
         }
     },
 
-    async fetchPaymentDataByDoctorId(req ,res , next){       
-        await Payment.find({doctorId: req.params.doctorId, clinicId: req.params.clinicId}, function (err, doc) {
+    async fetchPaymentDataByDoctorId(req, res, next) {
+        await Payment.find({ doctorId: req.params.doctorId, clinicId: req.params.clinicId }, function (err, doc) {
             res.send(doc);
         })
     },
@@ -55,12 +58,12 @@ module.exports = {
     //     })
     // },
 
-    async getBookingDetailsWithPatientDataBydoctorId(req ,res , next){   
+    async getBookingDetailsWithPatientDataBydoctorId(req, res, next) {
         const doctorId = mongoose.Types.ObjectId(req.params.doctorId);
         await Payment.aggregate([
             { "$match": { "doctorId": doctorId } },
-            { 
-                $lookup:{
+            {
+                $lookup: {
                     from: PatientLogin.collection.name,
                     localField: "patientId",
                     foreignField: "_id",
@@ -69,10 +72,10 @@ module.exports = {
             },
             {
                 $lookup: {
-                  from: clinicInfo.collection.name,
-                  localField: "clinicId",
-                  foreignField: "_id",
-                  as:"clinicList"
+                    from: clinicInfo.collection.name,
+                    localField: "clinicId",
+                    foreignField: "_id",
+                    as: "clinicList"
                 }
             },
             {
@@ -80,37 +83,52 @@ module.exports = {
                     from: ownClinicInfo.collection.name,
                     localField: "clinicId",
                     foreignField: "_id",
-                    as:"ownClinicList"
+                    as: "ownClinicList"
                 }
             }
         ])
-        .exec( (err, result)=>{
-            if(err) {
-                res.send(err);
-            } 
-            if(result) { 
-                // console.log("result---------->>>>", result)
-                const test = result.map(function(item, index){
-                    const note1 =item["timeSlot"]
-                    const dateTime= item["startDate"]
-                    const note2 =item.patientDetails[0]["name"]
-                    result[index]["note"] = note2
-                    result[index]["duration"] = "00:"+ note1+":00"
-                    result[index]["start"] = dateTime+":00"
-                    return item
-                })
-                res.send(test)
-            }
-        })
+            .exec((err, result) => {
+                if (err) {
+                    res.send(err);
+                }
+                if (result) {
+                    // console.log("result---------->>>>", result)
+                    const test = result.map(function (item, index) {
+                        const note1 = item["timeSlot"]
+                        const dateTime = item["startDate"]
+                        const note2 = item.patientDetails[0]["name"]
+                        result[index]["note"] = note2
+                        result[index]["duration"] = "00:" + note1 + ":00"
+                        result[index]["start"] = dateTime + ":00"
+                        return item
+                    })
+                    res.send(test)
+                }
+            })
     },
 
-    async getBookingDetailsByPatientId(req ,res , next){   
+    async updateStatus(req, res, next) {
+        let data = {
+            status: req.body.status,
+            medicalReportId: req.body.medicalReportId
+        }
+        await Payment.findByIdAndUpdate({ _id: req.params.patientAppointmentId }, data, function (err, data) {
+            if (err) {
+                res.json(err);
+            }
+            else {
+                res.json(data);
+            }
+        });
+    },
+
+    async getBookingDetailsByPatientId(req, res, next) {
         const patientId = mongoose.Types.ObjectId(req.params.patientId);
         await Payment.aggregate([
             { "$match": { "patientId": patientId } },
-           
-            { 
-                $lookup:{
+
+            {
+                $lookup: {
                     from: DoctorLogin.collection.name,
                     localField: "doctorId",
                     foreignField: "_id",
@@ -118,27 +136,27 @@ module.exports = {
                 }
             },
         ])
-        .exec( (err, result)=>{
-            if(err) {
-                res.send(err);
-            } 
-            if(result) { 
-                const test = result.map(function(item, index){
-                    const note1 =item["timeSlot"]
-                    const dateTime= item["startDate"]
-                    const note2 =item.doctorDetails[0]["name"]
-                    result[index]["note"] = note2
-                    result[index]["duration"] = "00:"+ note1+":00"
-                    result[index]["start"] = dateTime+":00"
-                    return item
-                })
-                res.send(test)
-            }
-        })
+            .exec((err, result) => {
+                if (err) {
+                    res.send(err);
+                }
+                if (result) {
+                    const test = result.map(function (item, index) {
+                        const note1 = item["timeSlot"]
+                        const dateTime = item["startDate"]
+                        const note2 = item.doctorDetails[0]["name"]
+                        result[index]["note"] = note2
+                        result[index]["duration"] = "00:" + note1 + ":00"
+                        result[index]["start"] = dateTime + ":00"
+                        return item
+                    })
+                    res.send(test)
+                }
+            })
     },
 
-    async getDaySlots(req ,res , next){     
-        await Payment.find({doctorId: req.params.doctorId, clinicId: req.params.clinicId, daySlotId: req.params.daySlotId}, function (err, doc) {
+    async getDaySlots(req, res, next) {
+        await Payment.find({ doctorId: req.params.doctorId, clinicId: req.params.clinicId, daySlotId: req.params.daySlotId }, function (err, doc) {
             res.send(doc);
         })
     },

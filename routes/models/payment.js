@@ -6,6 +6,7 @@ const payment = new mongoose.Schema({
     clinicId      : { type: mongoose.Schema.Types.ObjectId },
     slotId        : { type: mongoose.Schema.Types.ObjectId },
     daySlotId     : { type: mongoose.Schema.Types.ObjectId },
+    medicalReportId: { type: mongoose.Schema.Types.ObjectId },
     orderId       : String,
     transactionId : String,
     Appointment   : String,
@@ -16,7 +17,13 @@ const payment = new mongoose.Schema({
     slotTime      : String,
     timeSlot      : String,
     selectedDate  : Date,
-    startDate     : String
+    startDate     : String,
+    status        : String
+    // status: {
+    //     type: String,
+    //     enum : ['Ongoing','Completed'] ,
+    //     default: 'Ongoing'
+    // } 
 },{collection: 'BookingDetails' });
 
 module.exports = Payment = mongoose.model('payment', payment);

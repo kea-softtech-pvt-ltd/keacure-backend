@@ -1,20 +1,25 @@
 const MedicalReport = require("../models/patient_medical_report");
 const MedicineList = require("../models/medicine_ListModel")
+const PatientLogin = require('../models/patientProfile')
+const DoctorLogin = require('../models/doctorprofile')
+const ownClinicInfo = require('../models/ownClinicInfo')
+const clinicInfo = require('../models/clinicInfo')
+const doctorEducation = require('../models/doctorEducation')
 const MedicinePrescription = require("../models/medicine_Prescription")
 const LabPrescription = require("../models/lab_testPrescription")
 const LabTest = require("../models/lab_TestModel")
+const Payment = require("../models/payment")
+const fs = require('fs');
+const hbs = require('hbs');
+const htmlPDF = require('puppeteer-html-pdf');
+const readFile = require('util').promisify(fs.readFile);
+const mongoose = require('mongoose');
 
 module.exports = {
     async InsertMedicalData(req, res, next) {
-        // const medicalData = new MedicalReport({
-        //     doctorId                : req.body.doctorId,
-        //     patientId               : req.body.patientId,
-        //     patientAppointmentId    : req.body.patientAppointmentId,
-        // })
-        // medicalData.save();
-        // res.json(medicalData);
         const doctorId = req.body.doctorId
         const patientId = req.body.patientId
+        const clinicId = req.body.clinicId
         const patientAppointmentId = req.body.patientAppointmentId
         try {
             const userExit = await MedicalReport.findOne({ patientAppointmentId: patientAppointmentId });
@@ -23,6 +28,7 @@ module.exports = {
                     patientAppointmentId: userExit.patientAppointmentId,
                     patientId: userExit.patientId,
                     doctorId: userExit.doctorId,
+                    clinicId: userExit.clinicId,
                     _id: userExit._id
                 }
                     , { new: true }, function (err, data) {
@@ -31,13 +37,24 @@ module.exports = {
                         }
                         else {
                             res.json(data);
-                            console.log(data)
                         }
                     })
+                    // Payment.findOneAndUpdate(
+                    //     { _id: patientAppointmentId },
+                    //     { $push: { medicalReportId: userExit._id } },
+                    //     function (error, success) {
+                    //         if (error) {
+                    //             console.log(error);
+                    //         } else {
+                    //             console.log("success=============>",success);
+                    //         }
+                    //     }
+                    // );
             } else {
                 const medicalData = new MedicalReport({
                     doctorId,
                     patientId,
+                    clinicId,
                     patientAppointmentId,
                 })
                 await medicalData.save();
@@ -47,6 +64,165 @@ module.exports = {
         } catch (err) {
             console.log(err);
         }
+    },
+
+    async createPrescriptionPdf(req, res, next) {
+        console.log("req.bady-----------", req.params)
+
+        const id =  mongoose.Types.ObjectId(req.params.reportId);
+        var dateString = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000))
+            .toISOString()
+            .split("T")[0];
+       console.log("req-----------", id)
+
+        await MedicalReport.aggregate([
+            { "$match": { "_id": id } },
+            {
+                $lookup: {
+                    from: PatientLogin.collection.name,
+                    localField: "patientId",
+                    foreignField: "_id",
+                    as: "patientDetails",
+                }
+            },
+            {
+                $lookup: {
+                    from: DoctorLogin.collection.name,
+                    localField: "doctorId",
+                    foreignField: "_id",
+                    as: "doctorDetails",
+                }
+            },
+            {
+                $lookup: {
+                    from: doctorEducation.collection.name,
+                    localField: "doctorId",
+                    foreignField: "doctorId",
+                    as: "educationList",
+                }
+            },
+            {
+                $lookup: {
+                    from: clinicInfo.collection.name,
+                    localField: "clinicId",
+                    foreignField: "_id",
+                    as: "clinicList",
+                }
+            },
+            {
+                $lookup: {
+                    from: ownClinicInfo.collection.name,
+                    localField: "clinicId",
+                    foreignField: "_id",
+                    as: "ownClinicList"
+                }
+            },
+        ])
+            .exec(async (err, result) => {
+                if (err) {
+                    res.send(err);
+                }
+                if (result) {
+                    console.log("result-------", result)
+                    //res.send(result)
+                    // const data = result[0].medicine_Prescriptions
+
+
+                    // const response = data.map(async (r, i) => {
+                    //     const id = mongoose.Types.ObjectId(r.id)
+                    //     console.log("r-------", id)
+
+                    //     await MedicinePrescription.aggregate([
+                    //         { "$match": { "_id": id } },
+                    //         {
+                    //             $lookup: {
+                    //                 from: MedicalReport.collection.name,
+                    //                 localField: "id",
+                    //                 foreignField: "_id",
+                    //                 as: "patientDetails",
+                    //             }
+                    //         }
+                    //     ])
+                    //         .exec(async (err, resu) => {
+                    //             console.log("result-------", resu)
+                    //             // result.send(resu)
+                    //             return 
+                    //             // if (err) {
+                    //             //     data.send(err);
+                    //             // }
+                    //             // if (resu) {
+                    //             //     data.send(resu)
+                    //             // }
+                    //         })
+
+                    //     //return response
+                    // })
+
+                    const pdfData = {
+                        DoctorData: {
+                            Name: result[0].doctorDetails[0].name,
+                            Mobile: result[0].doctorDetails[0].mobile,
+                            degree: result[0].educationList[0].degree,
+                            clinicName: result[0].clinicList[0].clinicName,
+                            address: result[0].clinicList[0].address,
+                            services: result[0].clinicList[0].services,
+                            Date : dateString
+                            // if(result[0].clinicList[0].lenght > 0){
+                            //     address: result[0].clinicList[0].address,
+                            //     services: result[0].clinicList[0].services,
+                            // }else{
+                            // address: result[0].ownClinicList[0].address,
+                            // services: result[0].ownClinicList[0].services,
+                            // }
+                            // address: result[0].ownClinicList[0].address,
+                            // services: result[0].ownClinicList[0].services,
+
+                        },
+                        patientData: {
+                            Name: result[0].patientDetails[0].name,
+                            Mobile: result[0].patientDetails[0].mobile,
+                            Gender: result[0].patientDetails[0].gender,
+                        },
+                        vitalSign: {
+                            BMI: result[0].BMI,
+                            age: result[0].age,
+                            bp: result[0].bp,
+                            height: result[0].height,
+                            weight: result[0].weight,
+                            pulse: result[0].pulse,
+                            temp: result[0].temp,
+                        },
+                    }
+
+                    const options = {
+                        format: 'A4',
+                        path: 'storage/invoice.pdf'
+                    }
+
+                    try {
+                        const html = await readFile('views/invoice.hbs', 'utf8');
+                        const template = hbs.compile(html);
+                        const content = template(pdfData);
+                        const buffer = await htmlPDF.create(content, options);
+                        res.attachment('invoice.pdf')
+                        res.end(buffer);
+                    } catch (error) {
+                        console.log(error);
+                        res.send('Something went wrong.')
+                    }
+                }
+            }),
+            Payment.findOneAndUpdate(
+                { _id: req.body.reportId },
+                { $push: { status: "Completed" } },
+                function (error, success) {
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log(success);
+                    }
+                }
+            );
     },
 
     async InsertInvestigationData(req, res, next) {
@@ -65,14 +241,14 @@ module.exports = {
 
     async InsertVitalSignsData(req, res, next) {
         let data = {
-            age         : req.body.age,
-            weight      : req.body.weight,
-            height      : req.body.height,
-            BMI         : req.body.BMI,
-            temp        : req.body.temp,
-            bp          : req.body.bp,
-            pulse       : req.body.pulse,
-            problem     : req.body.problem,
+            age: req.body.age,
+            weight: req.body.weight,
+            height: req.body.height,
+            BMI: req.body.BMI,
+            temp: req.body.temp,
+            bp: req.body.bp,
+            pulse: req.body.pulse,
+            problem: req.body.problem,
         }
         await MedicalReport.findByIdAndUpdate({ _id: req.params.reportId }, data, function (err, data) {
             if (err) {
@@ -129,7 +305,7 @@ module.exports = {
         prescriptionData.save();
         MedicalReport.findOneAndUpdate(
             { _id: req.body.reportId },
-            { $push: { medicine_Prescriptions: prescriptionData._id } },
+            { $push: { medicine_Prescriptions: { id: prescriptionData._id } } },
             function (error, success) {
                 if (error) {
                     console.log(error);

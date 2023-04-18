@@ -1,0 +1,152 @@
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Invoice Example</title>
+    <style>
+        {
+            box-sizing: border-box;
+        }
+
+        /* Set additional styling options for the columns*/
+        .column {
+            float: right;
+            width: 50%;
+        }
+
+        .col {
+            float: left;
+            width: 30%;
+        }
+
+        .colm {
+            float: right;
+            width: 30%;
+        }
+
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        .headingStyle {
+            color: #1a3c8b;
+            text-align: center;
+        }
+
+        .border {
+            border-top: 2px solid;
+            border-width: 2px;
+        }
+
+        .padd {
+            padding: 50px;
+        }
+
+        .table {
+            width: 100%;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+        }
+
+        th,
+        td {
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    {{!-- <h3 class="headingStyle">KEACure आपके वाय का सुरा कवच</h3> --}}
+    <div class="padd">
+        <div class="row">
+            <div class="col">
+                <img src="http://192.168.29.227:9000/logo.png" width="150">
+            </div>
+            <div class="col">
+                <p>
+                    <b>{{DoctorData.clinicName}}</b><br />
+                    {{DoctorData.address}}<br />
+                    {{DoctorData.services}}<br />
+                </p>
+            </div>
+            <div class="col">
+                <p>
+                    <b>DR. {{DoctorData.Name}}</b><br />
+                    Mobile No:{{DoctorData.Mobile}}<br />
+                    {{DoctorData.degree}}<br />
+                    Date:{{DoctorData.Date}}<br />
+
+                </p>
+            </div>
+
+        </div>
+
+        <div class="row border">
+            <div class="col">
+                <h5>Patient Details</h5>
+                <p>
+                    name: {{patientData.Name}}<br />
+                    Mobile:{{patientData.Mobile}}<br />
+                    Gender:{{patientData.Gender}}<br />
+                </p>
+            </div>
+            <div class="colm">
+                <h5>Vital Sign</h5>
+                <p>
+                    BMI:{{vitalSign.BMI}}<br />
+                    Age:{{vitalSign.age}}<br />
+                    BP:{{vitalSign.bp}}<br />
+                    Pulse:{{vitalSign.pulse:}}<br />
+                    Height:{{vitalSign.height}}<br />
+                    Weight:{{vitalSign.weight}}<br />
+                    Temp:{{vitalSign.temp}}<br />
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <table class="table">
+                <h4>Rx. Medicines.</h4>
+                <tr>
+                    <th>Sr. no</th>
+                    <th>Medicine Name</th>
+                    <th>Take</th>
+                    <th>Slots</th>
+                    <th>Duration</th>
+                </tr>
+                <tr>
+                    <td>Freecode Camp</td>
+                    <td>Freecode Camp</td>
+                    <td>Enkijkjkjkj kjkjnkj</td>
+                    <td>Enki</td>
+                    <td>Enki</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="row ">
+            <h4>Lab Test</h4>
+            <p>hgjhgjhgjhgjhg</p>
+        </div>
+
+        <div class="row border">
+            <div class="colm">
+                <p>
+                    <b>DR. {{DoctorData.Name}}</b><br />
+                    {{DoctorData.degree}}<br />
+                    Mobile No:{{DoctorData.Mobile}}<br />
+                </p>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>
