@@ -42,7 +42,9 @@
         }
 
         .padd {
-            padding: 50px;
+            padding-left: 50px;
+            padding-right: 50px;
+            padding-bottom: 50px;
         }
 
         .table {
@@ -63,20 +65,18 @@
 </head>
 
 <body>
-    {{!-- <h3 class="headingStyle">KEACure आपके वाय का सुरा कवच</h3> --}}
     <div class="padd">
+    <h3 class="headingStyle"><img src="http://192.168.29.227:9000/logo.png" width="150"></h3>
         <div class="row">
             <div class="col">
-                <img src="http://192.168.29.227:9000/logo.png" width="150">
-            </div>
-            <div class="col">
                 <p>
-                    <b>{{DoctorData.clinicName}}</b><br />
+                    <b>{{DoctorData.clinicName}} Clinic</b><br />
                     {{DoctorData.address}}<br />
                     {{DoctorData.services}}<br />
                 </p>
             </div>
-            <div class="col">
+
+            <div class="colm">
                 <p>
                     <b>DR. {{DoctorData.Name}}</b><br />
                     Mobile No:{{DoctorData.Mobile}}<br />
@@ -90,23 +90,24 @@
 
         <div class="row border">
             <div class="col">
-                <h5>Patient Details</h5>
+                <h5>Patient Details:</h5>
                 <p>
-                    name: {{patientData.Name}}<br />
-                    Mobile:{{patientData.Mobile}}<br />
-                    Gender:{{patientData.Gender}}<br />
+                    name &nbsp;&nbsp;&nbsp;&nbsp; <b>:</b>&nbsp;{{patientData.Name}}<br />
+                    Mobile &nbsp;&nbsp;<b>:</b>&nbsp;{{patientData.Mobile}}<br />
+                    Gender &nbsp;&nbsp;<b>:</b>&nbsp;{{patientData.Gender}}<br />
                 </p>
             </div>
+           
             <div class="colm">
-                <h5>Vital Sign</h5>
+                <h5>Vital Sign:</h5>
                 <p>
-                    BMI:{{vitalSign.BMI}}<br />
-                    Age:{{vitalSign.age}}<br />
-                    BP:{{vitalSign.bp}}<br />
-                    Pulse:{{vitalSign.pulse:}}<br />
-                    Height:{{vitalSign.height}}<br />
-                    Weight:{{vitalSign.weight}}<br />
-                    Temp:{{vitalSign.temp}}<br />
+                    BMI   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>:</b>&nbsp; {{vitalSign.BMI}}<br />
+                    Age   &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;<b>:</b>&nbsp; {{vitalSign.age}}<br />
+                    BP   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>:</b>&nbsp; {{vitalSign.bp}}<br />
+                    Pulse   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>:</b>&nbsp; {{vitalSign.pulse}}<br />
+                    Temp  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>:</b>&nbsp; {{vitalSign.temp}}<br />
+                    Height  &nbsp;&nbsp;&nbsp;&nbsp;<b>:</b>&nbsp; {{vitalSign.height}}<br />
+                    Weight  &nbsp;&nbsp;&nbsp;&nbsp;<b>:</b>&nbsp; {{vitalSign.weight}}<br />
                 </p>
             </div>
         </div>
@@ -118,22 +119,28 @@
                     <th>Sr. no</th>
                     <th>Medicine Name</th>
                     <th>Take</th>
-                    <th>Slots</th>
                     <th>Duration</th>
+                    <th>Slots</th>
                 </tr>
+
+                {{#each medicineList.medicineList}}
                 <tr>
-                    <td>Freecode Camp</td>
-                    <td>Freecode Camp</td>
-                    <td>Enkijkjkjkj kjkjnkj</td>
-                    <td>Enki</td>
-                    <td>Enki</td>
+                    <td>1</td>
+                    <td>{{this.medicineName}}</td>
+                    <td>{{this.timing}}</td>
+                    <td>{{this.days}}</td>
+                    <td>{{#each this.frequency}}{{this.schedule}},{{/each}}</td>
                 </tr>
+
+                {{/each}}
             </table>
         </div>
 
         <div class="row ">
             <h4>Lab Test</h4>
-            <p>hgjhgjhgjhgjhg</p>
+            {{#each labtestList.testList}}
+            <p>{{this.test_name}}</p><br />
+            {{/each}}
         </div>
 
         <div class="row border">

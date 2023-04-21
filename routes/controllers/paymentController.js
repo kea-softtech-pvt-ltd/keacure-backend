@@ -21,27 +21,26 @@ module.exports = {
 
     async getOrderedPaymentDetails(req, res) {
         const Data = new Payment({
-            doctorId: req.body.DoctorId,
-            patientId: req.body.patientId,
-            clinicId: req.body.ClinicId,
-            slotId: req.body.slotId,
-            daySlotId: req.body.daySlotId,
-            orderId: req.body.order_id,
-            transactionId: req.body.transactionId,
-            fees: req.body.fees,
-            date: req.body.date,
-            currency: req.body.currency,
-            day: req.body.day,
-            timeSlot: req.body.timeSlot,
-            slotTime: req.body.slotTime,
-            selectedDate: req.body.selectedDate,
-            startDate: req.body.startDate,
-            status: req.body.status,
-            medicalReportId: req.body.medicalReportId
+            doctorId        : req.body.DoctorId,
+            patientId       : req.body.patientId,
+            clinicId        : req.body.ClinicId,
+            slotId          : req.body.slotId,
+            daySlotId       : req.body.daySlotId,
+            orderId         : req.body.order_id,
+            transactionId   : req.body.transactionId,
+            fees            : req.body.fees,
+            date            : req.body.date,
+            currency        : req.body.currency,
+            day             : req.body.day,
+            timeSlot        : req.body.timeSlot,
+            slotTime        : req.body.slotTime,
+            selectedDate    : req.body.selectedDate,
+            startDate       : req.body.startDate,
+            status          : req.body.status,
+            medicalReportId : req.body.medicalReportId
         })
         await Data.save();
         if (res) {
-            console.log("data------------", res)
             return res.json(Data)
         }
     },
@@ -51,12 +50,6 @@ module.exports = {
             res.send(doc);
         })
     },
-
-    // async getBookingDetailsBydoctorId(req ,res , next){   
-    //     await Payment.find({doctorId: req.params.doctorId}, function (err, doc) {
-    //         res.send(doc);
-    //     })
-    // },
 
     async getBookingDetailsWithPatientDataBydoctorId(req, res, next) {
         const doctorId = mongoose.Types.ObjectId(req.params.doctorId);
@@ -92,7 +85,6 @@ module.exports = {
                     res.send(err);
                 }
                 if (result) {
-                    // console.log("result---------->>>>", result)
                     const test = result.map(function (item, index) {
                         const note1 = item["timeSlot"]
                         const dateTime = item["startDate"]

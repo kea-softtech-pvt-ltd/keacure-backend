@@ -14,6 +14,7 @@ const hbs = require('hbs');
 const htmlPDF = require('puppeteer-html-pdf');
 const readFile = require('util').promisify(fs.readFile);
 const mongoose = require('mongoose');
+var path = require('path')
 
 module.exports = {
     async InsertMedicalData(req, res, next) {
@@ -39,17 +40,6 @@ module.exports = {
                             res.json(data);
                         }
                     })
-                    // Payment.findOneAndUpdate(
-                    //     { _id: patientAppointmentId },
-                    //     { $push: { medicalReportId: userExit._id } },
-                    //     function (error, success) {
-                    //         if (error) {
-                    //             console.log(error);
-                    //         } else {
-                    //             console.log("success=============>",success);
-                    //         }
-                    //     }
-                    // );
             } else {
                 const medicalData = new MedicalReport({
                     doctorId,
@@ -67,14 +57,10 @@ module.exports = {
     },
 
     async createPrescriptionPdf(req, res, next) {
-        console.log("req.bady-----------", req.params)
-
-        const id =  mongoose.Types.ObjectId(req.params.reportId);
+        const id = mongoose.Types.ObjectId(req.params.reportId);
         var dateString = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000))
             .toISOString()
             .split("T")[0];
-       console.log("req-----------", id)
-
         await MedicalReport.aggregate([
             { "$match": { "_id": id } },
             {
@@ -117,66 +103,41 @@ module.exports = {
                     as: "ownClinicList"
                 }
             },
+            {
+                $lookup: {
+                    from: MedicinePrescription.collection.name,
+                    localField: "medicine_Prescriptions.id",
+                    foreignField: "_id",
+                    as: "medicineList"
+                }
+            },
+            {
+                $lookup: {
+                    from: LabPrescription.collection.name,
+                    localField: "labTest_Prescriptions.id",
+                    foreignField: "_id",
+                    as: "labTestList"
+                }
+            },
         ])
             .exec(async (err, result) => {
                 if (err) {
                     res.send(err);
                 }
                 if (result) {
-                    console.log("result-------", result)
-                    //res.send(result)
-                    // const data = result[0].medicine_Prescriptions
+                    //res.send(result);
 
-
-                    // const response = data.map(async (r, i) => {
-                    //     const id = mongoose.Types.ObjectId(r.id)
-                    //     console.log("r-------", id)
-
-                    //     await MedicinePrescription.aggregate([
-                    //         { "$match": { "_id": id } },
-                    //         {
-                    //             $lookup: {
-                    //                 from: MedicalReport.collection.name,
-                    //                 localField: "id",
-                    //                 foreignField: "_id",
-                    //                 as: "patientDetails",
-                    //             }
-                    //         }
-                    //     ])
-                    //         .exec(async (err, resu) => {
-                    //             console.log("result-------", resu)
-                    //             // result.send(resu)
-                    //             return 
-                    //             // if (err) {
-                    //             //     data.send(err);
-                    //             // }
-                    //             // if (resu) {
-                    //             //     data.send(resu)
-                    //             // }
-                    //         })
-
-                    //     //return response
-                    // })
-
+                    const medicineList = result[0].medicineList
+                    const testList = result[0].labTestList
                     const pdfData = {
                         DoctorData: {
                             Name: result[0].doctorDetails[0].name,
                             Mobile: result[0].doctorDetails[0].mobile,
                             degree: result[0].educationList[0].degree,
                             clinicName: result[0].clinicList[0].clinicName,
-                            address: result[0].clinicList[0].address,
-                            services: result[0].clinicList[0].services,
-                            Date : dateString
-                            // if(result[0].clinicList[0].lenght > 0){
-                            //     address: result[0].clinicList[0].address,
-                            //     services: result[0].clinicList[0].services,
-                            // }else{
-                            // address: result[0].ownClinicList[0].address,
-                            // services: result[0].ownClinicList[0].services,
-                            // }
-                            // address: result[0].ownClinicList[0].address,
-                            // services: result[0].ownClinicList[0].services,
-
+                            address: result[0].clinicList[0].address || result[0].ownClinicList[0].address,
+                            services: result[0].clinicList[0].services || result[0].ownClinicList[0].services,
+                            Date: dateString
                         },
                         patientData: {
                             Name: result[0].patientDetails[0].name,
@@ -192,22 +153,28 @@ module.exports = {
                             pulse: result[0].pulse,
                             temp: result[0].temp,
                         },
+                        medicineList:{
+                            medicineList
+                        },
+                        labtestList:{
+                            testList
+                        }
                     }
 
                     const options = {
                         format: 'A4',
-                        path: 'storage/invoice.pdf'
+                        path: 'public/storage/invoice.pdf'
                     }
 
                     try {
                         const html = await readFile('views/invoice.hbs', 'utf8');
                         const template = hbs.compile(html);
                         const content = template(pdfData);
-                        const buffer = await htmlPDF.create(content, options);
+                        const buffer = await htmlPDF.create(content, options, medicineList);
+                        res.contentType("application/pdf");
                         res.attachment('invoice.pdf')
                         res.end(buffer);
                     } catch (error) {
-                        console.log(error);
                         res.send('Something went wrong.')
                     }
                 }
@@ -223,6 +190,10 @@ module.exports = {
                     }
                 }
             );
+    },
+
+    async getPdfPrescription(req, res, next) {
+        res.sendFile(path.resolve('public/storage/invoice.pdf'));
     },
 
     async InsertInvestigationData(req, res, next) {
@@ -324,14 +295,22 @@ module.exports = {
     },
 
     async fetchMedicalData(req, res, next) {
-        await MedicalReport.find({ patientAppointmentId: req.params.patientAppointmentId, doctorId: req.params.doctorId, patientId: req.params.patientId }, function (err, doc) {
+        await MedicalReport.find({
+            patientAppointmentId: req.params.patientAppointmentId,
+            doctorId: req.params.doctorId, patientId:
+                req.params.patientId
+        }, function (err, doc) {
             res.send(doc);
         })
     },
 
 
     async fetchmedicinePrescriptionData(req, res, next) {
-        await MedicinePrescription.find({ patientAppointmentId: req.params.patientAppointmentId, doctorId: req.params.doctorId, patientId: req.params.patientId }, function (err, doc) {
+        await MedicinePrescription.find({
+            patientAppointmentId: req.params.patientAppointmentId,
+            doctorId: req.params.doctorId,
+            patientId: req.params.patientId
+        }, function (err, doc) {
             res.send(doc);
         })
     },
@@ -352,7 +331,7 @@ module.exports = {
 
         MedicalReport.findOneAndUpdate(
             { _id: req.body.reportId },
-            { $push: { labTest_Prescriptions: testData._id } },
+            { $push: { labTest_Prescriptions: {id: testData._id} } },
             function (error, success) {
                 if (error) {
                     console.log(error);
@@ -370,7 +349,11 @@ module.exports = {
     },
 
     async fetchLabTestPrescriptionData(req, res, next) {
-        await LabPrescription.find({ patientAppointmentId: req.params.patientAppointmentId, doctorId: req.params.doctorId, patientId: req.params.patientId }, function (err, doc) {
+        await LabPrescription.find({
+            patientAppointmentId: req.params.patientAppointmentId,
+            doctorId: req.params.doctorId,
+            patientId: req.params.patientId
+        }, function (err, doc) {
             res.send(doc);
         })
     },
