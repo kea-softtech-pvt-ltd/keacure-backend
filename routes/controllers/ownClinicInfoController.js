@@ -1,6 +1,5 @@
-const express        =  require('express');
-const router         =  express.Router();
 const OwnClinic      =  require('../models/ownClinicInfo');
+const {ownClinicInfoSchema} = require('../auth/doctorSchemasValidate')
 
 module.exports ={
     async fetchOwnClinicData(req ,res,next){
@@ -9,13 +8,14 @@ module.exports ={
     },
 
     async insertOwnClinicData(req ,res ,next){
+        const result = await ownClinicInfoSchema.validateAsync(req.body)
         const newOwnClinicData    = new OwnClinic({
-            doctorId         : req.body.doctorId,
-            specialization   : req.body.specialization,
-            clinicName       : req.body.clinicName,
-            address          : req.body.address,
-            clinicNumber     : req.body.clinicNumber,
-            services         : req.body.services
+            doctorId         : result.doctorId,
+            specialization   : result.specialization,
+            clinicName       : result.clinicName,
+            address          : result.address,
+            clinicNumber     : result.clinicNumber,
+            services         : result.services
         })
         newOwnClinicData.save();
         res.json(newOwnClinicData);

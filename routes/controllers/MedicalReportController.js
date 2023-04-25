@@ -125,8 +125,7 @@ module.exports = {
                     res.send(err);
                 }
                 if (result) {
-                    //res.send(result);
-
+                    // res.send(result);
                     const medicineList = result[0].medicineList
                     const testList = result[0].labTestList
                     const pdfData = {
@@ -170,7 +169,7 @@ module.exports = {
                         const html = await readFile('views/invoice.hbs', 'utf8');
                         const template = hbs.compile(html);
                         const content = template(pdfData);
-                        const buffer = await htmlPDF.create(content, options, medicineList);
+                        const buffer = await htmlPDF.create(content, options);
                         res.contentType("application/pdf");
                         res.attachment('invoice.pdf')
                         res.end(buffer);

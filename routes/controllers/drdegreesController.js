@@ -1,8 +1,8 @@
-const Degrees         =  require('../models/drdegrees_master');
+const Degrees = require('../models/drdegrees_master');
 
 module.exports = {
-    async getAllDegrees(req, res, next) {        
+    async getAllDegrees(req, res, next) {
         await Degrees.find()
-        .then(degrees => res.json(degrees))
-    }   
+            .then(degrees => res.json(degrees))
+    }
 }    

@@ -5,10 +5,25 @@ require('dotenv').config();
 const app = express();
 var path = require('path');
 var fs = require('fs');
-
+var interceptor = require('express-interceptor')
 var dir = path.join(__dirname, 'public');
 
+const MainInterceptor = interceptor(function(req, res){
+    return {
+        isInterceptable : function(){
+            return  true
+        },
+        intercept : function(body , send){
+            send(body)
+        },
+        afterSend :(oldBody, newBody) =>{
+          //  console.log("oldBody------", oldBody)
 
+        }
+    }
+})
+
+app.use(MainInterceptor);
 app.use(express.static(dir));
 
 app.use(cors());

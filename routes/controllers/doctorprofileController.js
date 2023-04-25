@@ -4,25 +4,28 @@ const doctorExperience = require('../models/doctorExperience');
 const clinicInfo = require('../models/clinicInfo');
 const ownClinicInfo = require('../models/ownClinicInfo');
 const setSession = require('../models/setSession');
-const TextLocalSMS = require('../../services/TextLocalSMS')
+// const TextLocalSMS = require('../../services/TextLocalSMS')
 const jwt = require("jsonwebtoken");
 const config = require("../auth/config")
-var urlencode = require('urlencode');
-var http = require('http');
 const mongoose = require('mongoose');
-
+const {
+  loginSchema, 
+  loginOtpSchema,
+  personalInfoSchema
+} = require('../auth/doctorSchemasValidate')
 //for insert mobile number and generate otp
 module.exports = {
   async login(req, res, next) {
-    const mobile = req.body.mobile;
+    const result = await loginSchema.validateAsync(req.body)
+    // const mobile = req.body.mobile;
     const digits = '0123456789';
     let otp = '';
 
-    if (!mobile) {
+    if (!result.mobile) {
       return res.status(422).json({ "status": { "error": "Please fill the field properly" } });
     }
     try {
-      const userExit = await DoctorLogin.findOne({ mobile: mobile });
+      const userExit = await DoctorLogin.findOne({ mobile: result.mobile });
       if (userExit) {
         for (let i = 0; i < 6; i++) {
           otp += digits[Math.floor(Math.random() * 10)];
@@ -42,6 +45,7 @@ module.exports = {
         for (let i = 0; i < 6; i++) {
           otp += digits[Math.floor(Math.random() * 10)];
         }
+        const mobile = result.mobile
         const newUserData = new DoctorLogin({
           mobile,
           otp
@@ -56,7 +60,8 @@ module.exports = {
 
   //for fetch otp
   async loginOtp(req, res, next) {
-    const { otp, _id } = req.body;
+    const {_id , otp} = req.body;
+    // const  {otp} = await loginOtpSchema.validateAsync(req.body)
     if (!otp) {
       return res.json({ "status": { "error": "please fill the field properly" } });
     }
@@ -66,7 +71,6 @@ module.exports = {
         expiresIn: config.jwtExpiration,
       });
       const refreshToken = DoctorLogin.createToken(userExit);
-
       if (userExit) {
         DoctorLogin.findByIdAndUpdate({ _id: _id }, {
           isLoggedIn: true,
@@ -84,7 +88,7 @@ module.exports = {
         return res.json({ "status": { "error": "Please Enter Correct OTP" } })
       }
     } catch (err) {
-      console.log(err);
+      console.log("err==========",err);
     }
   },
 
@@ -115,6 +119,7 @@ module.exports = {
   },
   //for update data
   async insertPersonalInfoById(req, res, next) {
+    const result = await personalInfoSchema.validateAsync(req.body)
     let data = []
     if (req.file) {
       data = {
@@ -122,7 +127,7 @@ module.exports = {
         name: req.body.name,
         gender: req.body.gender,
         address: req.body.address,
-        officialEmail: req.body.officialEmail,
+       // officialEmail: req.body.officialEmail,
         personalEmail: req.body.personalEmail,
         education: []
       }
@@ -131,7 +136,7 @@ module.exports = {
         name: req.body.name,
         gender: req.body.gender,
         address: req.body.address,
-        officialEmail: req.body.officialEmail,
+        //officialEmail: req.body.officialEmail,
         personalEmail: req.body.personalEmail
       }
     }
