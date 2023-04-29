@@ -9,12 +9,14 @@ const MedicinePrescription = require("../models/medicine_Prescription")
 const LabPrescription = require("../models/lab_testPrescription")
 const LabTest = require("../models/lab_TestModel")
 const Payment = require("../models/payment")
+const symptomsList = require("../models/symptoms");
+
 const fs = require('fs');
 const hbs = require('hbs');
 const htmlPDF = require('puppeteer-html-pdf');
 const readFile = require('util').promisify(fs.readFile);
 const mongoose = require('mongoose');
-var path = require('path')
+var path = require('path');
 
 module.exports = {
     async InsertMedicalData(req, res, next) {
@@ -209,6 +211,20 @@ module.exports = {
         });
     },
 
+    async InsertSymptomsData(req, res, next) {
+        let data = {
+            symptoms: req.body.symptoms,
+        }
+        await MedicalReport.findByIdAndUpdate({ _id: req.params.reportId }, data, function (err, data) {
+            if (err) {
+                res.json(err);
+            }
+            else {
+                res.json(data);
+            }
+        });
+    },
+
     async InsertVitalSignsData(req, res, next) {
         let data = {
             age: req.body.age,
@@ -290,6 +306,11 @@ module.exports = {
 
     async fetchmedicineData(req, res, next) {
         await MedicineList.find()
+            .then(med => res.json(med))
+    },
+
+    async fetchSymptomsData(req, res, next) {
+        await symptomsList.find()
             .then(med => res.json(med))
     },
 

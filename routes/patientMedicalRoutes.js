@@ -15,6 +15,7 @@ module.exports = function (app) {
   router.route('/medicine_report').post((...params) => MedicalReportController.InsertMedicalData(...params));
   router.route('/add_investigation_note/:reportId').post((...params) => MedicalReportController.InsertInvestigationData(...params));
   router.route('/add_vital_signs/:reportId').post((...params) => MedicalReportController.InsertVitalSignsData(...params));
+  router.route('/add_symptoms/:reportId').post((...params) => MedicalReportController.InsertSymptomsData(...params));
   router.route('/add_premedication_note/:reportId').post((...params) => MedicalReportController.InsertPremedicationData(...params));
   router.route('/new_follw_up_date/:reportId').post((...params) => MedicalReportController.InsertFollowUpDate(...params));
   router.route('/fetchMedicalReport/:patientAppointmentId/:doctorId/:patientId').get((...params) => MedicalReportController.fetchMedicalData(...params));
@@ -23,6 +24,7 @@ module.exports = function (app) {
 
   //medicine list, prescription data API
   router.route('/fetchmedicines').get((...params) => MedicalReportController.fetchmedicineData(...params));
+  router.route('/fetchsymptoms').get((...params) => MedicalReportController.fetchSymptomsData(...params));
   router.route('/add_medicinePrescription').post((...params) => MedicalReportController.InsertMedicinePrescriptionData(...params));
   router.route('/fetchmedicinePrescription/:patientAppointmentId/:doctorId/:patientId').get((...params) => MedicalReportController.fetchmedicinePrescriptionData(...params));
 

@@ -3,10 +3,11 @@ const mongoose = require('mongoose');
 const medicalReport = new mongoose.Schema({
     doctorId            : { type: mongoose.Schema.Types.ObjectId },
     patientId           : { type: mongoose.Schema.Types.ObjectId },
-    clinicId           : { type: mongoose.Schema.Types.ObjectId },
+    clinicId            : { type: mongoose.Schema.Types.ObjectId },
     patientAppointmentId: { type: mongoose.Schema.Types.ObjectId },
     investigation_note  : String,
     premedication_note  : String,
+    symptoms            : [],
     age                 : String,
     weight              : String,
     height              : String,
