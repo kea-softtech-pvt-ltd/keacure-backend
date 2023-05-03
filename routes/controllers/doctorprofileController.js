@@ -9,8 +9,7 @@ const jwt = require("jsonwebtoken");
 const config = require("../auth/config")
 const mongoose = require('mongoose');
 const {
-  loginSchema, 
-  loginOtpSchema,
+  loginSchema,
   personalInfoSchema
 } = require('../auth/doctorSchemasValidate')
 //for insert mobile number and generate otp

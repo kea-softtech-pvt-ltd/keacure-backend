@@ -24,7 +24,6 @@ module.exports = function (app) {
 
   //medicine list, prescription data API
   router.route('/fetchmedicines').get((...params) => MedicalReportController.fetchmedicineData(...params));
-  router.route('/fetchsymptoms').get((...params) => MedicalReportController.fetchSymptomsData(...params));
   router.route('/add_medicinePrescription').post((...params) => MedicalReportController.InsertMedicinePrescriptionData(...params));
   router.route('/fetchmedicinePrescription/:patientAppointmentId/:doctorId/:patientId').get((...params) => MedicalReportController.fetchmedicinePrescriptionData(...params));
 
@@ -32,7 +31,11 @@ module.exports = function (app) {
   router.route('/fetch_lab_test').get((...params) => MedicalReportController.fetchLabTestData(...params));
   router.route('/add_Labprescription').post((...params) => MedicalReportController.InsertLabPrescriptionData(...params));
   router.route('/fetch_LabTest_Prescription/:patientAppointmentId/:doctorId/:patientId').get((...params) => MedicalReportController.fetchLabTestPrescriptionData(...params));
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+        
+  //symptoms Api
+  router.route('/fetchsymptoms').get((...params) => MedicalReportController.fetchSymptomsData(...params));
+  router.route('/addsymptoms').post((...params) => MedicalReportController.addSymptomsData(...params));
+  
   app.use('/api', router);
 };
   

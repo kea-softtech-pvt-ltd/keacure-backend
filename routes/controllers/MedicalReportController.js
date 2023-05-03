@@ -278,15 +278,15 @@ module.exports = {
     //for medicine
     async InsertMedicinePrescriptionData(req, res, next) {
         const prescriptionData = new MedicinePrescription({
-            doctorId: req.body.doctorId,
-            patientId: req.body.patientId,
-            reportId: req.body.reportId,
-            medicineName: req.body.medicineName,
+            doctorId        : req.body.doctorId,
+            patientId       : req.body.patientId,
+            reportId        : req.body.reportId,
+            medicineName    : req.body.medicineName,
             patientAppointmentId: req.body.patientAppointmentId,
-            weight: req.body.weight,
-            days: req.body.days,
-            timing: req.body.timing,
-            frequency: req.body.frequency,
+            weight          : req.body.weight,
+            days            : req.body.days,
+            timing          : req.body.timing,
+            frequency       : req.body.frequency,
         })
         prescriptionData.save();
         MedicalReport.findOneAndUpdate(
@@ -303,22 +303,16 @@ module.exports = {
         res.json(prescriptionData);
     },
 
-
     async fetchmedicineData(req, res, next) {
         await MedicineList.find()
-            .then(med => res.json(med))
-    },
-
-    async fetchSymptomsData(req, res, next) {
-        await symptomsList.find()
             .then(med => res.json(med))
     },
 
     async fetchMedicalData(req, res, next) {
         await MedicalReport.find({
             patientAppointmentId: req.params.patientAppointmentId,
-            doctorId: req.params.doctorId, patientId:
-                req.params.patientId
+            doctorId        : req.params.doctorId, 
+            patientId       : req.params.patientId
         }, function (err, doc) {
             res.send(doc);
         })
@@ -377,4 +371,20 @@ module.exports = {
             res.send(doc);
         })
     },
+
+    //for symptoms=========
+    async fetchSymptomsData(req, res, next) {
+        await symptomsList.find()
+            .then(med => res.json(med))
+    },
+
+    async addSymptomsData(req, res, next) {
+        const symptom = new symptomsList({
+            name: req.body.symptoms,
+        })
+        symptom.save();
+        res.json(symptom);
+        console.log("symptoms---------", symptom)
+    },
+
 }
