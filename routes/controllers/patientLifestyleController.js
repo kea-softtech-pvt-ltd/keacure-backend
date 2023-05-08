@@ -3,8 +3,10 @@ const PatientLifestyle = require('../models/patientLifestyle')
 module.exports = {
   //fetch inserted data
   async getPatientLifestyleData(req ,res,next){
-    await PatientLifestyle.find({patientId: req.params.id})
-    .then(medical => res.json(medical))
+    await PatientLifestyle.findById(req.params.id, function (err, doc) {
+      console.log("----------", doc)
+      res.send(doc);
+    })
   },
 
   //insert data

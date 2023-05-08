@@ -1,4 +1,6 @@
+const { ObjectId } = require('mongodb')
 const PatientMedical = require('../models/patientMedicalInfo')
+const mongoose = require('mongoose');
 
 module.exports = {
   //fetch inserted data
@@ -19,7 +21,7 @@ module.exports = {
       surgeries      : req.body.surgeries
     })
     await medicalData.save();
-    res.json(medicalData);
+    // console.log(medicalData)
   },
 
   //update inserted data

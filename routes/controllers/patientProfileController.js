@@ -16,7 +16,6 @@ module.exports = {
 
     async PatientLogin(req, res, next) {
         const result = await loginSchema.validateAsync(req.body)
-        console.log("result------------", result)
         const mobile = result.mobile;
         const digits = '0123456789';
         let otp = '';

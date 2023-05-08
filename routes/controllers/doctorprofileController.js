@@ -14,7 +14,7 @@ const {
 } = require('../auth/doctorSchemasValidate')
 //for insert mobile number and generate otp
 module.exports = {
-  async login(req, res, next) {
+  async login(req, res) {
     const result = await loginSchema.validateAsync(req.body)
     // const mobile = req.body.mobile;
     const digits = '0123456789';
