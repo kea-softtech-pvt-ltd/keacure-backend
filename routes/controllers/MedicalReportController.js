@@ -273,8 +273,6 @@ module.exports = {
             }
         });
     },
-
-
     //for medicine
     async InsertMedicinePrescriptionData(req, res, next) {
         const prescriptionData = new MedicinePrescription({
@@ -310,20 +308,19 @@ module.exports = {
 
     async fetchMedicalData(req, res, next) {
         await MedicalReport.find({
-            patientAppointmentId: req.params.patientAppointmentId,
-            doctorId        : req.params.doctorId, 
-            patientId       : req.params.patientId
+            patientAppointmentId: req.params.patientAppointmentId
+            // doctorId        : req.params.doctorId, 
+            // patientId       : req.params.patientId
         }, function (err, doc) {
             res.send(doc);
         })
     },
 
-
     async fetchmedicinePrescriptionData(req, res, next) {
         await MedicinePrescription.find({
             patientAppointmentId: req.params.patientAppointmentId,
-            doctorId: req.params.doctorId,
-            patientId: req.params.patientId
+            // doctorId: req.params.doctorId,
+            // patientId: req.params.patientId
         }, function (err, doc) {
             res.send(doc);
         })
@@ -365,8 +362,8 @@ module.exports = {
     async fetchLabTestPrescriptionData(req, res, next) {
         await LabPrescription.find({
             patientAppointmentId: req.params.patientAppointmentId,
-            doctorId: req.params.doctorId,
-            patientId: req.params.patientId
+            // doctorId: req.params.doctorId,
+            // patientId: req.params.patientId
         }, function (err, doc) {
             res.send(doc);
         })

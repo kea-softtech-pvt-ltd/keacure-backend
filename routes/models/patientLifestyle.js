@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const patientLifestyleInfo = new mongoose.Schema({
     patientId     : { type: mongoose.Schema.Types.ObjectId },
     smokingHabits : String ,
-    activitylevel : String ,
+    activityLevel : String ,
     alcoholConsumption : String ,
     foodPreferences : String ,
     occupation : String

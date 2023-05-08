@@ -5,8 +5,9 @@ const mongoose = require('mongoose');
 module.exports = {
   //fetch inserted data
   async getPatientMedicalData(req ,res,next){
-    await PatientMedical.find({patientId: req.params.id})
-    .then(medical => res.json(medical))
+    await PatientMedical.find({patientId:req.params.id}, function (err, doc) {
+      res.send(doc);
+    })
   },
 
   //insert data
@@ -21,12 +22,11 @@ module.exports = {
       surgeries      : req.body.surgeries
     })
     await medicalData.save();
-    // console.log(medicalData)
   },
 
   //update inserted data
   async updatePatientMedicalData(req ,res ,next) {
-    await PatientMedical.findByIdAndUpdate({_id: req.params.id},{
+    await PatientMedical.findByIdAndUpdate(req.params.id,{
       patientId      : req.body.patientId,
       allergies      : req.body.allergies,
       cmedication    : req.body.cmedication,
