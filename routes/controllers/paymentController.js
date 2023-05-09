@@ -137,7 +137,7 @@ module.exports = {
                         const note1 = item["timeSlot"]
                         const dateTime = item["startDate"]
                         const note2 = item.doctorDetails[0]["name"]
-                        result[index]["note"] = note2
+                        result[index]["note"] =  "Dr." + note2
                         result[index]["duration"] = "00:" + note1 + ":00"
                         result[index]["start"] = dateTime + ":00"
                         return item
