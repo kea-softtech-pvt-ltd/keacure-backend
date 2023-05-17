@@ -179,18 +179,18 @@ module.exports = {
                         res.send('Something went wrong.')
                     }
                 }
-            }),
-            Payment.findOneAndUpdate(
-                { _id: req.body.reportId },
-                { $push: { status: "Completed" } },
-                function (error, success) {
-                    if (error) {
-                        console.log(error);
-                    } else {
-                        console.log(success);
-                    }
-                }
-            );
+            })
+            // Payment.findOneAndUpdate(
+            //     { _id: req.body.reportId },
+            //     { $push: { status: "Completed" } },
+            //     function (error, success) {
+            //         if (error) {
+            //             console.log(error);
+            //         } else {
+            //             console.log(success);
+            //         }
+            //     }
+            // );
     },
 
     async getPdfPrescription(req, res, next) {
@@ -375,7 +375,6 @@ module.exports = {
         })
         symptom.save();
         res.json(symptom);
-        console.log("symptoms---------", symptom)
     },
 
 }

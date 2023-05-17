@@ -55,13 +55,44 @@ module.exports = {
         }
     },
 
+    async resetOTP(req, res) {
+        const _id = req.body._id;
+        const digits = '0123456789';
+        let otp = '';
+        const userExit = await PatientLogin.findOne({ _id: _id });
+        if (userExit) {
+            for (let i = 0; i < 6; i++) {
+                otp += digits[Math.floor(Math.random() * 10)];
+            }
+            PatientLogin.findByIdAndUpdate({ _id: userExit._id }, {
+                otp: otp,
+            }, { new: true }, function (err, data) {
+                if (err) {
+                    res.json(err);
+                }
+                else {
+                    res.json(data);
+                }
+            })
+        } else {
+            for (let i = 0; i < 6; i++) {
+                otp += digits[Math.floor(Math.random() * 10)];
+            }
+            const newUserData = new PatientLogin({
+                otp
+            })
+            await newUserData.save();
+            res.json(newUserData);
+        }
+    },
+
     async getPatientOtp(req, res, next) {
-        const { otp, _id } = req.body;
-        if (!otp) {
+        const { getOTP, _id } = req.body;
+        if (!getOTP) {
             return res.json({ "status": { "error": "please fill the field properly" } });
         }
         try {
-            const userExit = await PatientLogin.findOne({ otp: otp }, { _id: _id });
+            const userExit = await PatientLogin.findOne({ otp: getOTP }, { _id: _id });
             const accessToken = jwt.sign({ id: _id }, config.secret, {
                 expiresIn: config.jwtExpiration,
             });

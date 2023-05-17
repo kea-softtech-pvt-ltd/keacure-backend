@@ -27,6 +27,7 @@ let upload = multer({ storage: storage, fileFilter:fileFilter}).single('photo');
 
 module.exports = function (app) {
   router.route('/loginotp').post((...params) => {doctorprofileRoute.login(...params)});
+  router.route('/resendotp').post((...params) => {doctorprofileRoute.resetOTP(...params)});
   router.route('/otp').post((...params) => {doctorprofileRoute.loginOtp(...params)});
   router.route('/otpIsLoggedIn/:id').post((...params) => {doctorprofileRoute.otpIsLoggedIn(...params)});
   router.route('/fetchOtp').get((...params) => {doctorprofileRoute.fetchOtp(...params)});

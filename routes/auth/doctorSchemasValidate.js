@@ -12,7 +12,7 @@ const personalInfoSchema = joi.object({
     name: joi.string().min(3).max(30).required(),
     gender: joi.string().required(),
     address: joi.string().required(),
-    personalEmail: joi.string().email().required(),
+    personalEmail: joi.string().email().required().trim(),
 })
 
 const educationalInfoSchema = joi.object({

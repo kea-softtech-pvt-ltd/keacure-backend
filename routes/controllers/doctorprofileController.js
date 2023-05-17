@@ -57,15 +57,47 @@ module.exports = {
     }
   },
 
+  async resetOTP(req, res) {
+    const  _id  =  req.body._id;
+    const digits = '0123456789';
+    let otp = '';
+    const userExit = await DoctorLogin.findOne({ _id: _id });
+    if (userExit) {
+      for (let i = 0; i < 6; i++) {
+        otp += digits[Math.floor(Math.random() * 10)];
+      }
+      DoctorLogin.findByIdAndUpdate({ _id: userExit._id }, {
+        otp: otp,
+      }, { new: true }, function (err, data) {
+        if (err) {
+          res.json(err);
+        }
+        else {
+          res.json(data);
+        }
+      })
+    } else {
+      for (let i = 0; i < 6; i++) {
+        otp += digits[Math.floor(Math.random() * 10)];
+      }
+      const newUserData = new DoctorLogin({
+        otp
+      })
+      await newUserData.save();
+      res.json(newUserData);
+    }
+  },
+
   //for fetch otp
   async loginOtp(req, res, next) {
-    const {_id , otp} = req.body;
+    const { _id, getOTP } = req.body;
+
     // const  {otp} = await loginOtpSchema.validateAsync(req.body)
-    if (!otp) {
+    if (!getOTP) {
       return res.json({ "status": { "error": "please fill the field properly" } });
     }
     try {
-      const userExit = await DoctorLogin.findOne({ otp: otp }, { _id: _id });
+      const userExit = await DoctorLogin.findOne({ otp: getOTP }, { _id: _id });
       const accessToken = jwt.sign({ id: _id }, config.secret, {
         expiresIn: config.jwtExpiration,
       });
@@ -87,7 +119,7 @@ module.exports = {
         return res.json({ "status": { "error": "Please Enter Correct OTP" } })
       }
     } catch (err) {
-      console.log("err==========",err);
+      console.log("err==========", err);
     }
   },
 
@@ -126,7 +158,6 @@ module.exports = {
         name: req.body.name,
         gender: req.body.gender,
         address: req.body.address,
-       // officialEmail: req.body.officialEmail,
         personalEmail: req.body.personalEmail,
         education: []
       }
@@ -135,7 +166,6 @@ module.exports = {
         name: req.body.name,
         gender: req.body.gender,
         address: req.body.address,
-        //officialEmail: req.body.officialEmail,
         personalEmail: req.body.personalEmail
       }
     }
@@ -152,7 +182,7 @@ module.exports = {
   async fetchAllDoctor(req, res, next) {
     const searchText = req.body.key ? req.body.key : ""
     await DoctorLogin.aggregate([
-      { "$match": { "name":{ $regex: new RegExp(searchText), $options: 'i' }} },
+      { "$match": { "name": { $regex: new RegExp(searchText), $options: 'i' } } },
       {
         $lookup: {
           from: doctorEducation.collection.name,
@@ -225,14 +255,14 @@ module.exports = {
         }
       }
     ])
-    .exec((err, result) => {
-      if (err) {
-        res.send(err);
-      }
-      if (result) {
-        res.send(result)
-      }
-    })
+      .exec((err, result) => {
+        if (err) {
+          res.send(err);
+        }
+        if (result) {
+          res.send(result)
+        }
+      })
   },
 
   async refreshJWTToken(req, res, next) {
@@ -273,20 +303,20 @@ module.exports = {
   },
 
   async FilterSearchData(req, res, next) {
-     let data = await DoctorLogin.find(
+    let data = await DoctorLogin.find(
       {
-        "$or":[
-            {
-            name:{$regex: req.params.key}
+        "$or": [
+          {
+            name: { $regex: req.params.key }
           }
         ]
       }
     );
-    
-    res.send( data)
+
+    res.send(data)
   },
 
-  async sendSMS(){ 
+  async sendSMS() {
     const result = await DoctorLogin.create({
       baseURL: "https://api.textlocal.in/",
       params: {
@@ -309,7 +339,7 @@ module.exports = {
     }
     return sendPartnerWelcomeMessage()
   },
-  
+
   // async smsClient(){
   //   const sendPartnerWelcomeMessage =(user) => {
   //     if (user && user.phone && user.name) {
