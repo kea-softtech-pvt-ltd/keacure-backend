@@ -57,6 +57,7 @@ module.exports = {
 
     async resetOTP(req, res) {
         const _id = req.body._id;
+        console.log("--------->",_id)
         const digits = '0123456789';
         let otp = '';
         const userExit = await PatientLogin.findOne({ _id: _id });

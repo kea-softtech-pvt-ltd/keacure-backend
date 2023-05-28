@@ -18,21 +18,20 @@ module.exports = function (app) {
   router.route('/add_symptoms/:reportId').post((...params) => MedicalReportController.InsertSymptomsData(...params));
   router.route('/add_premedication_note/:reportId').post((...params) => MedicalReportController.InsertPremedicationData(...params));
   router.route('/new_follw_up_date/:reportId').post((...params) => MedicalReportController.InsertFollowUpDate(...params));
-  // router.route('/fetchMedicalReport/:patientAppointmentId/:doctorId/:patientId').get((...params) => MedicalReportController.fetchMedicalData(...params));
   router.route('/fetchMedicalReport/:patientAppointmentId').get((...params) => MedicalReportController.fetchMedicalData(...params));
-  router.route('/create-pdf-prescription/:reportId').post((...params) => MedicalReportController.createPrescriptionPdf(...params));
-  router.route('/get-pdf-prescription').get((...params) => MedicalReportController.getPdfPrescription(...params));
+
+  //prescription pdf 
+  router.route('/createprescriptionpdf/:reportId').get((...params) => MedicalReportController.createPrescriptionPdf(...params));
+  router.route('/getpdfprescription/:reportId').get((...params) => MedicalReportController.getPdfPrescription(...params));
 
   //medicine list, prescription data API
   router.route('/fetchmedicines').get((...params) => MedicalReportController.fetchmedicineData(...params));
   router.route('/add_medicinePrescription').post((...params) => MedicalReportController.InsertMedicinePrescriptionData(...params));
-  // router.route('/fetchmedicinePrescription/:patientAppointmentId/:doctorId/:patientId').get((...params) => MedicalReportController.fetchmedicinePrescriptionData(...params));
   router.route('/fetchmedicinePrescription/:patientAppointmentId').get((...params) => MedicalReportController.fetchmedicinePrescriptionData(...params));
 
   //Lab Test API 
   router.route('/fetch_lab_test').get((...params) => MedicalReportController.fetchLabTestData(...params));
   router.route('/add_Labprescription').post((...params) => MedicalReportController.InsertLabPrescriptionData(...params));
-  // router.route('/fetch_LabTest_Prescription/:patientAppointmentId/:doctorId/:patientId').get((...params) => MedicalReportController.fetchLabTestPrescriptionData(...params));
   router.route('/fetch_LabTest_Prescription/:patientAppointmentId').get((...params) => MedicalReportController.fetchLabTestPrescriptionData(...params));
         
   //symptoms Api

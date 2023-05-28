@@ -58,7 +58,7 @@ module.exports = {
   },
 
   async resetOTP(req, res) {
-    const  _id  =  req.body._id;
+    const _id = req.body._id;
     const digits = '0123456789';
     let otp = '';
     const userExit = await DoctorLogin.findOne({ _id: _id });
@@ -150,25 +150,26 @@ module.exports = {
   },
   //for update data
   async insertPersonalInfoById(req, res, next) {
-    const result = await personalInfoSchema.validateAsync(req.body)
-    let data = []
-    if (req.file) {
+    // const result = await personalInfoSchema.validateAsync(req.body)
+    // let data = []
+    // if (req.body.photo) {
+    //   data = {
+    //     photo: req.body.photo,
+    //     name: req.body.name,
+    //     gender: req.body.gender,
+    //     address: req.body.address,
+    //     personalEmail: req.body.personalEmail,
+    //     education: []
+    //   }
+    // } else {
       data = {
-        photo: req.file.filename,
-        name: req.body.name,
-        gender: req.body.gender,
-        address: req.body.address,
-        personalEmail: req.body.personalEmail,
-        education: []
-      }
-    } else {
-      data = {
+        photo: req.body.photo,
         name: req.body.name,
         gender: req.body.gender,
         address: req.body.address,
         personalEmail: req.body.personalEmail
       }
-    }
+    // }
     DoctorLogin.findByIdAndUpdate({ _id: req.params.id }, data, function (err, data) {
       if (err) {
         res.json(err);

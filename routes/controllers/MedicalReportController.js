@@ -10,10 +10,11 @@ const LabPrescription = require("../models/lab_testPrescription")
 const LabTest = require("../models/lab_TestModel")
 const Payment = require("../models/payment")
 const symptomsList = require("../models/symptoms");
-
 const fs = require('fs');
 const hbs = require('hbs');
 const htmlPDF = require('puppeteer-html-pdf');
+const writeFile = require('util').promisify(fs.writeFile);
+
 const readFile = require('util').promisify(fs.readFile);
 const mongoose = require('mongoose');
 var path = require('path');
@@ -124,9 +125,10 @@ module.exports = {
         ])
             .exec(async (err, result) => {
                 if (err) {
-                    res.send(err);
+                    res.send("err==========", err);
                 }
                 if (result) {
+                    console.log("result==========", result);
                     // res.send(result);
                     const medicineList = result[0].medicineList
                     const testList = result[0].labTestList
@@ -154,10 +156,10 @@ module.exports = {
                             pulse: result[0].pulse,
                             temp: result[0].temp,
                         },
-                        medicineList:{
+                        medicineList: {
                             medicineList
                         },
-                        labtestList:{
+                        labtestList: {
                             testList
                         }
                     }
@@ -171,30 +173,26 @@ module.exports = {
                         const html = await readFile('views/invoice.hbs', 'utf8');
                         const template = hbs.compile(html);
                         const content = template(pdfData);
+
                         const buffer = await htmlPDF.create(content, options);
+                        const writtenFile = await writeFile('invoice.pdf', buffer);
+
                         res.contentType("application/pdf");
                         res.attachment('invoice.pdf')
-                        res.end(buffer);
+                        res.end(writtenFile);
                     } catch (error) {
+                        console.log("error======", error)
                         res.send('Something went wrong.')
                     }
                 }
             })
-            // Payment.findOneAndUpdate(
-            //     { _id: req.body.reportId },
-            //     { $push: { status: "Completed" } },
-            //     function (error, success) {
-            //         if (error) {
-            //             console.log(error);
-            //         } else {
-            //             console.log(success);
-            //         }
-            //     }
-            // );
     },
 
     async getPdfPrescription(req, res, next) {
-        res.sendFile(path.resolve('public/storage/invoice.pdf'));
+        console.log("req======>>>>>>>>>>>", res)
+        const response = res.sendFile(path.resolve('public/storage/invoice.pdf'));
+        console.log("response>>>>>>>>", response)
+
     },
 
     async InsertInvestigationData(req, res, next) {
@@ -276,15 +274,15 @@ module.exports = {
     //for medicine
     async InsertMedicinePrescriptionData(req, res, next) {
         const prescriptionData = new MedicinePrescription({
-            doctorId        : req.body.doctorId,
-            patientId       : req.body.patientId,
-            reportId        : req.body.reportId,
-            medicineName    : req.body.medicineName,
+            doctorId: req.body.doctorId,
+            patientId: req.body.patientId,
+            reportId: req.body.reportId,
+            medicineName: req.body.medicineName,
             patientAppointmentId: req.body.patientAppointmentId,
-            weight          : req.body.weight,
-            days            : req.body.days,
-            timing          : req.body.timing,
-            frequency       : req.body.frequency,
+            weight: req.body.weight,
+            days: req.body.days,
+            timing: req.body.timing,
+            frequency: req.body.frequency,
         })
         prescriptionData.save();
         MedicalReport.findOneAndUpdate(
@@ -338,7 +336,7 @@ module.exports = {
 
         MedicalReport.findOneAndUpdate(
             { _id: req.body.reportId },
-            { $push: { labTest_Prescriptions: {id: testData._id} } },
+            { $push: { labTest_Prescriptions: { id: testData._id } } },
             function (error, success) {
                 if (error) {
                     console.log(error);
