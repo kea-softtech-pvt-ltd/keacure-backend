@@ -128,6 +128,7 @@ module.exports = {
                 }
                 if (result) {
                     // res.send(result);
+                    console.log("result=====", result)
                     const medicineList = result[0].medicineList
                     const testList = result[0].labTestList
                     const pdfData = {
@@ -164,7 +165,7 @@ module.exports = {
 
                     const options = {
                         format: 'A4',
-                        path: 'public/storage/invoice.pdf'
+                        path: `public/storage/invoice-${id}.pdf`
                     }
 
                     try {
@@ -173,7 +174,7 @@ module.exports = {
                         const content = template(pdfData);
                         const buffer = await htmlPDF.create(content, options);
                         res.contentType("application/pdf");
-                        res.attachment('invoice.pdf')
+                        res.attachment(`invoice-${id}.pdf`)
                         res.end(buffer);
                     } catch (error) {
                         res.send('Something went wrong.')
