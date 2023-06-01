@@ -152,30 +152,21 @@ module.exports = {
   },
   //for update data
   async insertPersonalInfoById(req, res, next) {
-    const result = await personalInfoSchema.validateAsync(req.body)
-    let data = []
-    if (req.file) {
-      data = {
-        photo: req.file.filename,
-        name: req.body.name,
-        gender: req.body.gender,
-        address: req.body.address,
-        personalEmail: req.body.personalEmail,
-        education: []
-      }
-    } else {
-      data = {
+    console.log("============",req.params.id)
+    //const result = await personalInfoSchema.validateAsync(req.body)
+    const data = {
+        photo:req.body.photo,
         name: req.body.name,
         gender: req.body.gender,
         address: req.body.address,
         personalEmail: req.body.personalEmail
       }
-    }
     DoctorLogin.findByIdAndUpdate({ _id: req.params.id }, data, function (err, data) {
       if (err) {
         res.json(err);
       }
       else {
+        console.log("data----------",data)
         res.json(data);
       }
     });

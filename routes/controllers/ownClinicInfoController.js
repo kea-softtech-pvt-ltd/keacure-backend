@@ -8,14 +8,14 @@ module.exports ={
     },
 
     async insertOwnClinicData(req ,res ,next){
-        const result = await ownClinicInfoSchema.validateAsync(req.body)
+        // const result = await ownClinicInfoSchema.validateAsync(req.body)
         const newOwnClinicData    = new OwnClinic({
-            doctorId         : result.doctorId,
-            specialization   : result.specialization,
-            clinicName       : result.clinicName,
-            address          : result.address,
-            clinicNumber     : result.clinicNumber,
-            services         : result.services
+            doctorId         : req.body.doctorId,
+            specialization   : req.body.specialization,
+            clinicName       : req.body.clinicName,
+            address          : req.body.address,
+            clinicNumber     : req.body.clinicNumber,
+            services         : req.body.services
         })
         newOwnClinicData.save();
         res.json(newOwnClinicData);
