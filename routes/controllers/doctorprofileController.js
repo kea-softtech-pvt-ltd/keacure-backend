@@ -90,6 +90,8 @@ module.exports = {
 
   //for fetch otp
   async loginOtp(req, res, next) {
+    console.log("res------------>", res.body)
+
     const { _id, getOTP } = req.body;
 
     // const  {otp} = await loginOtpSchema.validateAsync(req.body)
@@ -175,6 +177,7 @@ module.exports = {
         res.json(err);
       }
       else {
+        console.log("data----------",data)
         res.json(data);
       }
     });

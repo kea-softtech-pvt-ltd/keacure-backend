@@ -130,6 +130,7 @@ module.exports = {
                 if (result) {
                     console.log("result==========", result);
                     // res.send(result);
+                    console.log("result=====", result)
                     const medicineList = result[0].medicineList
                     const testList = result[0].labTestList
                     const pdfData = {
@@ -166,7 +167,7 @@ module.exports = {
 
                     const options = {
                         format: 'A4',
-                        path: 'public/storage/invoice.pdf'
+                        path: `public/storage/invoice-${id}.pdf`
                     }
 
                     try {
