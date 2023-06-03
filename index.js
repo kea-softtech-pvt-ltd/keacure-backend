@@ -1,5 +1,7 @@
 const express  = require("express");
 const cors     = require("cors");
+const request = require('request')
+
 const mongoose = require("mongoose");
 require('dotenv').config();
 const app = express();
@@ -7,6 +9,7 @@ var path = require('path');
 var fs = require('fs');
 var interceptor = require('express-interceptor')
 var dir = path.join(__dirname, 'public');
+var storage = path.join(__dirname, 'public/storage/');
 
 const MainInterceptor = interceptor(function(req, res){
     return {
@@ -43,6 +46,9 @@ mongoose.connect(dbUrl ,{
 
 //required route
 app.use(cors());
+app.get('/report/:file', function(req, res) {
+    request(`http://localhost:9000/storage/` + req.params.file).pipe(res);    
+})
 require('./routes/doctorRoutes')(app);
 require('./routes/educationRoute')(app);
 require('./routes/experienceRoute')(app);

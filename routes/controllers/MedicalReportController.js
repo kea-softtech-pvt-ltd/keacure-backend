@@ -135,7 +135,7 @@ module.exports = {
                         DoctorData: {
                             Name: result[0].doctorDetails[0].name,
                             Mobile: result[0].doctorDetails[0].mobile,
-                            degree: result[0].educationList[0].degree,
+                            degree: (result[0].educationList.length > 0 )? result[0].educationList[0].degree : "",
                             clinicName: result[0].clinicList[0].clinicName,
                             address: result[0].clinicList[0].address || result[0].ownClinicList[0].address,
                             services: result[0].clinicList[0].services || result[0].ownClinicList[0].services,
@@ -172,6 +172,7 @@ module.exports = {
                         const html = await readFile('views/invoice.hbs', 'utf8');
                         const template = hbs.compile(html);
                         const content = template(pdfData);
+                        console.log("dynamic html", content)
                         const buffer = await htmlPDF.create(content, options);
                         res.contentType("application/pdf");
                         res.attachment(`invoice-${id}.pdf`)
@@ -237,6 +238,7 @@ module.exports = {
             pulse: req.body.pulse,
             problem: req.body.problem,
         }
+        console.log("==========", data)
         await MedicalReport.findByIdAndUpdate({ _id: req.params.reportId }, data, function (err, data) {
             if (err) {
                 res.json(err);
@@ -309,7 +311,7 @@ module.exports = {
 
     async fetchMedicalData(req, res, next) {
         await MedicalReport.find({
-            patientAppointmentId: req.params.patientAppointmentId
+            _id: req.params.reportId
         }, function (err, doc) {
             res.send(doc);
         })
@@ -317,7 +319,7 @@ module.exports = {
 
     async fetchmedicinePrescriptionData(req, res, next) {
         await MedicinePrescription.find({
-            patientAppointmentId: req.params.patientAppointmentId,
+            reportId: req.params.reportId,
         }, function (err, doc) {
             res.send(doc);
         })
@@ -358,7 +360,7 @@ module.exports = {
 
     async fetchLabTestPrescriptionData(req, res, next) {
         await LabPrescription.find({
-            patientAppointmentId: req.params.patientAppointmentId,
+            reportId: req.params.reportId,
         }, function (err, doc) {
             res.send(doc);
         })

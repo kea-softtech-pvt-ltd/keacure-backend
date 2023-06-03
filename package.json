@@ -28,6 +28,7 @@
     "puppeteer-html-pdf": "^2.0.8",
     "razorpay": "^2.8.3",
     "react-geocode": "^0.2.3",
+    "request": "^2.88.2",
     "supervisor": "^0.12.0",
     "urlencode": "^1.1.0",
     "util": "^0.12.5",

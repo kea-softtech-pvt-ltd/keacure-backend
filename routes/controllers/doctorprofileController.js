@@ -90,8 +90,6 @@ module.exports = {
 
   //for fetch otp
   async loginOtp(req, res, next) {
-    console.log("res------------>", res.body)
-
     const { _id, getOTP } = req.body;
 
     // const  {otp} = await loginOtpSchema.validateAsync(req.body)

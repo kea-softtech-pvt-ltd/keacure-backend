@@ -184,7 +184,7 @@ module.exports = {
     },
 
     async fetchPatientById(req, res, next) {
-        const id = mongoose.Types.ObjectId(req.params.id);
+        const id = req.params.id;
         await PatientLogin.aggregate([
             { "$match": { "_id": id } },
             {
