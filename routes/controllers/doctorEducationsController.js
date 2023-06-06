@@ -23,7 +23,6 @@ module.exports = {
   //for add data
   async allEducationData(req, res, next) {  
     const result = await educationalInfoSchema.validateAsync(req.body)
-    console.log("result-------", result) 
     const reqFiles = [];
     // for (var i = 0; i < req.files.length; i++) {
     //   reqFiles.push(req.files[i].filename)
