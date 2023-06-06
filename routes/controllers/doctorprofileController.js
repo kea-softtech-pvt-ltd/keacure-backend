@@ -8,6 +8,8 @@ const setSession = require('../models/setSession');
 const jwt = require("jsonwebtoken");
 const config = require("../auth/config")
 const mongoose = require('mongoose');
+const paginate = require('jw-paginate');
+
 const {
   loginSchema,
   personalInfoSchema
@@ -162,26 +164,33 @@ module.exports = {
     //     education: []
     //   }
     // } else {
-      data = {
-        photo: req.body.photo,
-        name: req.body.name,
-        gender: req.body.gender,
-        address: req.body.address,
-        personalEmail: req.body.personalEmail
-      }
+    data = {
+      photo: req.body.photo,
+      name: req.body.name,
+      gender: req.body.gender,
+      address: req.body.address,
+      personalEmail: req.body.personalEmail
+    }
     // }
     DoctorLogin.findByIdAndUpdate({ _id: req.params.id }, data, function (err, data) {
       if (err) {
         res.json(err);
       }
       else {
-        console.log("data----------",data)
+        console.log("data----------", data)
         res.json(data);
       }
     });
   },
 
   async fetchAllDoctor(req, res, next) {
+
+    const page = parseInt(req.query.page);
+    console.log("page=================", page)
+    const limit = parseInt(req.query.limit);
+    const skipIndex = (page - 1) * limit;
+    console.log("skipIndex=================", skipIndex)
+
     const searchText = req.body.key ? req.body.key : ""
     await DoctorLogin.aggregate([
       { "$match": { "name": { $regex: new RegExp(searchText), $options: 'i' } } },
@@ -202,12 +211,20 @@ module.exports = {
         }
       }
     ])
-      .exec((err, result) => {
+      .exec(async (err, result) => {
         if (err) {
           res.send(err);
         }
         if (result) {
+          const results = await DoctorLogin.find()
+            .sort({ _id: 1 })
+            .limit(limit)
+            .skip(skipIndex)
+            .exec();
+          result = results;
           res.send(result)
+          console.log("-------------", results)
+          next();
         }
       })
   },
@@ -304,20 +321,6 @@ module.exports = {
     }
   },
 
-  async FilterSearchData(req, res, next) {
-    let data = await DoctorLogin.find(
-      {
-        "$or": [
-          {
-            name: { $regex: req.params.key }
-          }
-        ]
-      }
-    );
-
-    res.send(data)
-  },
-
   async sendSMS() {
     const result = await DoctorLogin.create({
       baseURL: "https://api.textlocal.in/",
@@ -341,31 +344,4 @@ module.exports = {
     }
     return sendPartnerWelcomeMessage()
   },
-
-  // async smsClient(){
-  //   const sendPartnerWelcomeMessage =(user) => {
-  //     if (user && user.phone && user.name) {
-  //       const params = new URLSearchParams();
-  //       params.append("numbers", [parseInt("91" + user.phone)]);
-  //       params.append(
-  //         "message",
-  //         `Hi ${user.name},
-  //           Welcome to iWheels, Download our app to get bookings from our customers with better pricing. 
-  //           https://iwheels.co`
-  //       );
-  //       tlClient();
-  //     }
-  //   }
-  //   const sendVerificationMessage= (user) => {
-  //     if (user && user.phone) {
-  //       const params = new URLSearchParams();
-  //       params.append("numbers", [parseInt("91" + user.phone)]);
-  //       params.append(
-  //         "message",
-  //         `Your iWheels verification code is ${user.verifyCode}`
-  //       );
-  //       tlClient.post("/send", params);
-  //     }
-  //   }
-  // }
 } 
