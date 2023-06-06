@@ -20,7 +20,6 @@ const MainInterceptor = interceptor(function(req, res){
             send(body)
         },
         afterSend :(oldBody, newBody) =>{
-          //  console.log("oldBody------", oldBody)
 
         }
     }

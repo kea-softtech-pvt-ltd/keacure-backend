@@ -128,9 +128,7 @@ module.exports = {
                     res.send("err==========", err);
                 }
                 if (result) {
-                    console.log("result==========", result);
                     // res.send(result);
-                    console.log("result=====", result)
                     const medicineList = result[0].medicineList
                     const testList = result[0].labTestList
                     const pdfData = {
@@ -182,7 +180,6 @@ module.exports = {
                         res.attachment('invoice.pdf')
                         res.end(writtenFile);
                     } catch (error) {
-                        console.log("error======", error)
                         res.send('Something went wrong.')
                     }
                 }
@@ -190,9 +187,7 @@ module.exports = {
     },
 
     async getPdfPrescription(req, res, next) {
-        console.log("req======>>>>>>>>>>>", res)
         const response = res.sendFile(path.resolve('public/storage/invoice.pdf'));
-        console.log("response>>>>>>>>", response)
 
     },
 
@@ -235,7 +230,6 @@ module.exports = {
             pulse: req.body.pulse,
             problem: req.body.problem,
         }
-        console.log("==========", data)
         await MedicalReport.findByIdAndUpdate({ _id: req.params.reportId }, data, function (err, data) {
             if (err) {
                 res.json(err);
@@ -294,7 +288,7 @@ module.exports = {
                 if (error) {
                     console.log(error);
                 } else {
-                    console.log(success);
+                    (success);
                 }
             }
         );

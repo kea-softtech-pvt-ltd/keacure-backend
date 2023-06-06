@@ -119,7 +119,6 @@ module.exports = {
         return res.json({ "status": { "error": "Please Enter Correct OTP" } })
       }
     } catch (err) {
-      console.log("err==========", err);
     }
   },
 
@@ -175,7 +174,6 @@ module.exports = {
         res.json(err);
       }
       else {
-        console.log("data----------",data)
         res.json(data);
       }
     });

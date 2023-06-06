@@ -25,11 +25,7 @@
     "multer": "^1.4.4",
     "nexmo": "^2.9.1",
     "nodemon": "^2.0.15",
-<<<<<<< HEAD
     "puppeteer-html-pdf": "^2.1.2",
-=======
-    "puppeteer-html-pdf": "^2.0.8",
->>>>>>> db7fe1119433c0b8d7a57490fecbf8db7fcb7693
     "razorpay": "^2.8.3",
     "react-geocode": "^0.2.3",
     "request": "^2.88.2",
