@@ -1,6 +1,7 @@
 const express     = require('express'),
 router            = express.Router();
 const paymentController = require('./controllers/paymentController');
+const subscriptionController = require('./controllers/subscriptionContoller')
 
 module.exports = function (app) {
   router.route('/razorpay/order').post((...params)=>paymentController.getPaymentDetails(...params));
@@ -12,5 +13,9 @@ module.exports = function (app) {
   
   // create route for patient queue
   router.route('/fetchSelectedDaySlots/:doctorId/:clinicId/:daySlotId').post((...params)=>{paymentController.getDaySlots(...params)})
+
+  //subscription 
+  router.route('/subscription').post((...params)=>subscriptionController.addSubscription(...params));
+
   app.use('/api', router);
 };
