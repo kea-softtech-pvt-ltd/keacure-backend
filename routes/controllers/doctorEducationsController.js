@@ -22,18 +22,18 @@ module.exports = {
   
   //for add data
   async allEducationData(req, res, next) {  
-    const result = await educationalInfoSchema.validateAsync(req.body)
+    //const result = await educationalInfoSchema.validateAsync(req.body)
     const reqFiles = [];
     // for (var i = 0; i < req.files.length; i++) {
     //   reqFiles.push(req.files[i].filename)
     // }
     const educationData = new DoctorEducation({
-      doctorId         : result.doctorId,
-      specialization   : result.specialization,
-      collage          : result.collage,
-      comYear          : result.comYear,
-      degree           : result.degree,
-      //document         : reqFiles
+      doctorId         : req.body.doctorId,
+      specialization   : req.body.specialization,
+      collage          : req.body.collage,
+      comYear          : req.body.comYear,
+      degree           : req.body.degree,
+      // document         : reqFiles
     })
     educationData.save();
     if(res) {
