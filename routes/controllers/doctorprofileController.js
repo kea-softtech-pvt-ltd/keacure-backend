@@ -183,13 +183,9 @@ module.exports = {
   },
 
   async fetchAllDoctor(req, res, next) {
-
     const page = parseInt(req.query.page);
-    console.log("page=================", page)
     const limit = parseInt(req.query.limit);
     const skipIndex = (page - 1) * limit;
-    console.log("skipIndex=================", skipIndex)
-
     const searchText = req.body.key ? req.body.key : ""
     await DoctorLogin.aggregate([
       { "$match": { "name": { $regex: new RegExp(searchText), $options: 'i' } } },
@@ -215,15 +211,7 @@ module.exports = {
           res.send(err);
         }
         if (result) {
-          const results = await DoctorLogin.find()
-            .sort({ _id: 1 })
-            .limit(limit)
-            .skip(skipIndex)
-            .exec();
-          result = results;
           res.send(result)
-          console.log("-------------", results)
-          next();
         }
       })
   },

@@ -184,26 +184,30 @@ module.exports = {
     },
 
     async fetchPatientById(req, res, next) {
-        const id = req.params.id;
-        await PatientLogin.aggregate([
-            { "$match": { "_id": id } },
-            {
-                $lookup: {
-                    from: Payment.collection.name,
-                    localField: "_id",
-                    foreignField: "patientId",
-                    as: "BookingDetails",
-                }
-            }
-        ])
-            .exec((err, result) => {
-                if (err) {
-                    res.send(err);
-                }
-                if (result) {
-                    res.send(result)
-                }
-            })
+        // const id = req.params.id;
+        // console.log(id)
+        await PatientLogin.findById(req.params.id, function (err, doc) {
+            res.send(doc);
+          })
+        // await PatientLogin.aggregate([
+        //     { "$match": { "_id": id } },
+        //     {
+        //         $lookup: {
+        //             from: Payment.collection.name,
+        //             localField: "_id",
+        //             foreignField: "patientId",
+        //             as: "BookingDetails",
+        //         }
+        //     }
+        // ])
+        //     .exec((err, result) => {
+        //         if (err) {
+        //             res.send(err);
+        //         }
+        //         if (result) {
+        //             res.send(result)
+        //         }
+        //     })
     },
 
     // async fetchPatientByDoctorId(req ,res , next){       
