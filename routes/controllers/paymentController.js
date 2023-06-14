@@ -51,7 +51,7 @@ module.exports = {
         })
     },
 
-    async getBookingDetailsWithPatientDataBydoctorId(req, res, next) {
+    async getBookingDetailsBydoctorId(req, res, next) {
         const doctorId = mongoose.Types.ObjectId(req.params.doctorId);
         await Payment.aggregate([
             { "$match": { "doctorId": doctorId } },
