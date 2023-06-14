@@ -10,4 +10,31 @@ module.exports = {
         data.save();
         res.json(data);
     },
+
+    async getSubscription(req, res) {
+        console.log("-----", req)
+        await subscriptionModel.findById(req.params.id, function (err, doc) {
+            res.send(doc)
+        })
+    },
+    async updateSubscription(req, res) {
+       let data = {
+            doctorId: req.body.doctorId,
+            registerDate: req.body.date,
+            selected_plan: req.body.plan,
+        }
+        console.log('---',req.body)
+        await subscriptionModel.findByIdAndUpdate({ _id: req.params.id }, data, {
+            new: true
+        }, function (err, data) {
+            if (err) {
+                res.json(err)
+            }
+            else {
+                res.json(data)
+            }
+
+        })
+    }
+
 }
