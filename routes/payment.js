@@ -16,7 +16,7 @@ module.exports = function (app) {
 
   //subscription 
   router.route('/subscription').post((...params)=>subscriptionController.addSubscription(...params));
-  router.route('/getsubscription/:id').get((...params)=>subscriptionController.getSubscription(...params));
-  router.route('/updatesubscriptiondata/:id').post((...params)=>subscriptionController.updateSubscription(...params))
+  router.route('/getsubscription/:doctorId').get((...params)=>subscriptionController.getSubscription(...params));
+  router.route('/updatesubscriptiondata/:doctorId').post((...params)=>subscriptionController.updateSubscription(...params))
   app.use('/api', router);
 };

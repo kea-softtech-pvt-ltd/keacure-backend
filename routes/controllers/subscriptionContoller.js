@@ -12,8 +12,9 @@ module.exports = {
     },
 
     async getSubscription(req, res) {
-        console.log("-----", req)
-        await subscriptionModel.findById(req.params.id, function (err, doc) {
+        await subscriptionModel.find({doctorId:req.params.doctorId}, function (err, doc) {
+        console.log("-----", doc)
+
             res.send(doc)
         })
     },
