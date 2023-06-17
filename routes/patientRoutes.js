@@ -29,17 +29,12 @@ module.exports = function (app) {
   router.route('/fetchPatientDetails').get((...params) => {patientProfileController.fetchAllPatient(...params)});
   router.route('/patientLogin').post((...params) => {patientProfileController.PatientLogin(...params)});
   router.route('/resend-otp').post((...params) => {patientProfileController.resetOTP(...params)});
-
   router.route('/patientLoginOtp').post((...params) => {patientProfileController.getPatientOtp(...params)});
   router.route('/patientOtpIsLoggedIn/:id').post((...params) => {patientProfileController.otpIsLoggedIn(...params)});
   router.route('/insertPatientDetails/:id').post(upload ,(...params) => {patientProfileController.insertPatientDetails(...params)});
   router.route('/patient').post((...params) => {patientProfileController.allPatient(...params)});
   router.route('/patientById/:id').get((...params)=>patientProfileController.fetchPatientById(...params));
- // router.route('/patientById/:doctorId').get((...params)=>patientProfileController.fetchPatientByDoctorId(...params));
   router.route('/auth/refreshToken').post((...params)=>patientProfileController.refreshJWTToken(...params));
-
-  //search by patient name
-  router.route('/search-patient/:key').get((...params)=>patientProfileController.FilterSearchData(...params));
 
   app.use('/api', router);
 };

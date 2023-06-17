@@ -232,17 +232,4 @@ module.exports = {
             return res.status(500).send({ message: err });
         }
     },
-
-    async FilterSearchData(req, res, next) {
-        let data = await PatientLogin.find(
-            {
-                "$or": [
-                    {
-                        name: { $regex: req.params.key }
-                    }
-                ]
-            }
-        );
-        res.send(data)
-    }
 }
