@@ -57,6 +57,7 @@ require('./routes/patientRoutes')(app);
 require('./routes/patientMedicalRoutes')(app);
 require('./routes/patientLifestyleRoutes')(app);
 require('./routes/payment')(app);
+require('./routes/helperRoute')(app);
 //app.use("/", require("./controllers/doctorExperienceRoute"))
 
 app.listen(9000, () => {
