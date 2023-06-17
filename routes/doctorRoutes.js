@@ -40,5 +40,4 @@ module.exports = function (app) {
   router.route('/search').get((...params)=> {doctorprofileRoute.fetchAllDoctor(...params)});
   app.use('/api', router);
 
-
 }

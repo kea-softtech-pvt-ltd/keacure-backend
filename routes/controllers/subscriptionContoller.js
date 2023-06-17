@@ -13,18 +13,16 @@ module.exports = {
 
     async getSubscription(req, res) {
         await subscriptionModel.find({doctorId:req.params.doctorId}, function (err, doc) {
-        console.log("-----", doc)
-
             res.send(doc)
         })
     },
+    
     async updateSubscription(req, res) {
        let data = {
             doctorId: req.body.doctorId,
             registerDate: req.body.date,
             selected_plan: req.body.plan,
         }
-        console.log('---',req.body)
         await subscriptionModel.findByIdAndUpdate({ _id: req.params.id }, data, {
             new: true
         }, function (err, data) {
