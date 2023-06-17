@@ -189,12 +189,6 @@ module.exports = {
           })
     },
 
-    // async fetchPatientByDoctorId(req ,res , next){       
-    //     await PatientLogin.find({doctorId: req.params.doctorId}, function (err, doc) {
-    //         res.send(doc);
-    //     })
-    // },
-
     async refreshJWTToken(req, res, next) {
         const _id = req.body._id;
         const { refreshToken: requestToken } = req.body;
