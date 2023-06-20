@@ -3,10 +3,10 @@ const AccessModules = require('../models/accessModule')
 module.exports = {
     async AddHelper(req, res, next) {
         const newUserData = new HelperModel({
-            doctorId    : req.body.doctorId,
+            doctorId: req.body.doctorId,
             username: req.body.username,
             password: req.body.password,
-            access_Model: req.body.access_Model
+            access_module: req.body.access_module
         })
         await newUserData.save();
         res.json(newUserData);
@@ -19,9 +19,10 @@ module.exports = {
         }
         const userLogin = await HelperModel.findOne({ username: username, password: password });
         if (!userLogin) {
-            res.status(400).json("invalid credentials");
+            res.json(userLogin);
         } else {
-            res.json("user login successfully");
+            res.json(userLogin);
+            return userLogin
         }
     },
 
