@@ -39,5 +39,11 @@ module.exports = {
         await HelperModel.find({ doctorId: req.params.doctorId }, function (err, doc) {
             res.send(doc)
         })
+    },
+
+    async deleteHelper(req, res) {
+        await HelperModel.findByIdAndRemove({ _id: req.params.id }, function (err, doc) {
+            res.send(doc)
+        })
     }
 }
