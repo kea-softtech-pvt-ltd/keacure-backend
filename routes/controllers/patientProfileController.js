@@ -186,7 +186,7 @@ module.exports = {
     async fetchPatientById(req, res, next) {
         await PatientLogin.findById(req.params.id, function (err, doc) {
             res.send(doc);
-          })
+        })
     },
 
     async refreshJWTToken(req, res, next) {
@@ -225,5 +225,29 @@ module.exports = {
         } catch (err) {
             return res.status(500).send({ message: err });
         }
+    },
+
+    async addDependent(req, res, next) {
+        const data = new PatientLogin({
+            name: req.body.name,
+            email: req.body.email,
+            gender: req.body.gender,
+            mobile: req.body.mobile,
+            age: req.body.age,
+        })
+        console.log("data=====", data)
+        data.save();
+        PatientLogin.findOneAndUpdate(
+            { _id: req.params.patientId },
+            { $push: { dependent:  data._id  } },
+            function (error, success) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    (success);
+                }
+            }
+        );
+        res.json(data);
     },
 }

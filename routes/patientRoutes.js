@@ -35,6 +35,8 @@ module.exports = function (app) {
   router.route('/patient').post((...params) => {patientProfileController.allPatient(...params)});
   router.route('/patientById/:id').get((...params)=>patientProfileController.fetchPatientById(...params));
   router.route('/auth/refreshToken').post((...params)=>patientProfileController.refreshJWTToken(...params));
+  router.route('/adddependent/:patientId').post((...params)=>patientProfileController.addDependent(...params));
+  // router.route('/getdependent/:patientId').get((...params)=>patientProfileController.getDependent(...params));
 
   app.use('/api', router);
 };

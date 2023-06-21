@@ -6,6 +6,7 @@ module.exports = {
             doctorId: req.body.doctorId,
             username: req.body.username,
             password: req.body.password,
+            email: req.body.email,
             access_module: req.body.access_module
         })
         await newUserData.save();
@@ -33,6 +34,7 @@ module.exports = {
             res.send(docs)
         })
     },
+
     async getHelper(req, res) {
         await HelperModel.find({ doctorId: req.params.doctorId }, function (err, doc) {
             res.send(doc)

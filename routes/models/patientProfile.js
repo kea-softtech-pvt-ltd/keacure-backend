@@ -20,7 +20,8 @@ const patientDetails = new mongoose.Schema({
     birthdate           :String,
     address             :String,
     isLoggedIn          :Boolean,
-    expiryDate          :Date
+    expiryDate          :Date,
+    dependent           :[]
 },{collection:'patientLogins'});
 
 patientDetails.statics.createToken = function (user) {
