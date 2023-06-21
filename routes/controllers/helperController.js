@@ -20,8 +20,10 @@ module.exports = {
         const userLogin = await HelperModel.findOne({ username: username, password: password });
         if (!userLogin) {
             res.json(userLogin);
+            res.json("incorrect data")
         } else {
             res.json(userLogin);
+            res.json("login successfully")
             return userLogin
         }
     },
@@ -31,4 +33,9 @@ module.exports = {
             res.send(docs)
         })
     },
+    async getHelper(req, res) {
+        await HelperModel.find({ doctorId: req.params.doctorId }, function (err, doc) {
+            res.send(doc)
+        })
+    }
 }
