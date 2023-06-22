@@ -7,6 +7,7 @@ module.exports = {
             username: req.body.username,
             password: req.body.password,
             email: req.body.email,
+            mobile:req.body.mobile,
             access_module: req.body.access_module
         })
         await newUserData.save();

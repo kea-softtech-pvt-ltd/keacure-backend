@@ -5,6 +5,7 @@ const helper = new mongoose.Schema({
     username        : String,
     password        : String,
     email           : String,
+    mobile          : Number,
     access_module   : []
 }, { collection: "helpers" })
 module.exports = Helper = mongoose.model("helper", helper)
