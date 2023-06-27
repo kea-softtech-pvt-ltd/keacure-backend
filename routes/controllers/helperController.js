@@ -7,11 +7,28 @@ module.exports = {
             username: req.body.username,
             password: req.body.password,
             email: req.body.email,
-            mobile:req.body.mobile,
+            mobile: req.body.mobile,
             access_module: req.body.access_module
         })
         await newUserData.save();
         res.json(newUserData);
+    },
+    editHelper(req, res) {
+        const newHelperData = {
+            doctorId: req.body.doctorId,
+            username: req.body.username,
+            password: req.body.password,
+            email: req.body.email,
+            mobile: req.body.mobile,
+            access_module: req.body.access_module
+        }
+        HelperModel.findByIdAndUpdate({ _id: req.params.id }, newHelperData, function (err, editHelper) {
+            if (err) {
+                res.json(err)
+            } else {
+                res.json(editHelper)
+            }
+        })
     },
 
     async HelperLogin(req, res, next) {
@@ -39,6 +56,11 @@ module.exports = {
     async getHelper(req, res) {
         await HelperModel.find({ doctorId: req.params.doctorId }, function (err, doc) {
             res.send(doc)
+        })
+    },
+    async fetchHelper(req, res) {
+        await HelperModel.find({ _id: req.params.id }, function (err, data) {
+            res.send(data)
         })
     },
 
