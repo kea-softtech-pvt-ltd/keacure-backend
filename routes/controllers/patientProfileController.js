@@ -184,9 +184,31 @@ module.exports = {
     },
 
     async fetchPatientById(req, res, next) {
-        await PatientLogin.findById(req.params.id, function (err, doc) {
-            res.send(doc);
-        })
+    const id = mongoose.Types.ObjectId(req.params.patientId);
+    console.log("id========", id)
+        // await PatientLogin.findById(req.params.id, function (err, doc) {
+        //     res.send(doc);
+        // })
+        await PatientLogin.aggregate([
+            { "$match": { "_id": id } },
+            {
+              $lookup: {
+                from: PatientLogin.collection.name,
+                foreignField: "_id",
+                localField: "dependent.id",
+                as: "dependent",
+              }
+            }
+          ])
+            .exec((err, result) => {
+              if (err) {
+                res.send(err);
+              }
+              if (result) {
+                res.send(result)
+                console.log("result=========",JSON.stringify(result))
+              }
+            })
     },
 
     async refreshJWTToken(req, res, next) {
@@ -234,17 +256,18 @@ module.exports = {
             gender: req.body.gender,
             mobile: req.body.mobile,
             age: req.body.age,
+            isLoggedIn: true
         })
-        console.log("data=====", data)
         data.save();
+        console.log("---------->>>>.", data)
         PatientLogin.findOneAndUpdate(
             { _id: req.params.patientId },
-            { $push: { dependent:  data._id  } },
+            { $push: { dependent: {id :  data._id}  } },
             function (error, success) {
                 if (error) {
                     console.log(error);
                 } else {
-                    (success);
+                    console.log("===========",success);
                 }
             }
         );
