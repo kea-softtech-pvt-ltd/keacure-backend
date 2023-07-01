@@ -18,7 +18,8 @@ const payment = new mongoose.Schema({
     timeSlot      : String,
     selectedDate  : Date,
     startDate     : String,
-    status        : String
+    status        : String,
+    payment       : String
     // status: {
     //     type: String,
     //     enum : ['Ongoing','Completed'] ,

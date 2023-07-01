@@ -89,6 +89,7 @@ module.exports = {
       res.json(newUserData);
     }
   },
+  
 
   //for fetch otp
   async loginOtp(req, res, next) {
@@ -144,6 +145,40 @@ module.exports = {
     })
   },
 
+
+  //fetchdata
+  // async uploadProfilePic(req, res, next) {
+  //   console.log(req)
+  //   try {
+  //     const dateTime = giveCurrentDateTime();
+
+  //     const storageRef = ref(fbStorage, `files/${req.file.originalname + "       " + dateTime}`);
+
+  //     // Create file metadata including the content type
+  //     const metadata = {
+  //         contentType: req.file.mimetype,
+  //     };
+
+  //     // Upload the file in the bucket storage
+  //     const snapshot = await uploadBytesResumable(storageRef, req.file.buffer, metadata);
+  //     //by using uploadBytesResumable we can control the progress of uploading like pause, resume, cancel
+
+  //     // Grab the public url
+  //     const downloadURL = await getDownloadURL(snapshot.ref);
+
+  //     console.log('File successfully uploaded.');
+  //     return res.send({
+  //         message: 'file uploaded to firebase storage',
+  //         name: req.file.originalname,
+  //         type: req.file.mimetype,
+  //         downloadURL: downloadURL
+  //     })
+  //   } catch (error) {
+  //       return res.status(400).send(error.message)
+  //   }
+  //   res.send({})
+  // },
+
   async fetchDataById(req, res, next) {
     await DoctorLogin.findById(req.params.id, function (err, doc) {
       res.send(doc);
@@ -151,6 +186,7 @@ module.exports = {
   },
   //for update data
   async insertPersonalInfoById(req, res, next) {
+    console.log("file requuuu---", req.file)
     // const result = await personalInfoSchema.validateAsync(req.body)
     // let data = []
     // if (req.body.photo) {

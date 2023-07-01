@@ -37,7 +37,8 @@ module.exports = {
             selectedDate    : req.body.selectedDate,
             startDate       : req.body.startDate,
             status          : req.body.status,
-            medicalReportId : req.body.medicalReportId
+            medicalReportId : req.body.medicalReportId,
+            payment         : req.body.payment,
         })
         await Data.save();
         if (res) {
@@ -102,7 +103,8 @@ module.exports = {
     async updateStatus(req, res, next) {
         let data = {
             status: req.body.status,
-            medicalReportId: req.body.medicalReportId
+            medicalReportId: req.body.medicalReportId,
+            payment: req.body.payment
         }
         await Payment.findByIdAndUpdate({ _id: req.params.patientAppointmentId }, data, function (err, data) {
             if (err) {

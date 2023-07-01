@@ -23,6 +23,7 @@ const fileFilter = (req, file, cb) => {
       return cb(null, false);
   }
 }
+
 let upload = multer({ storage: storage, fileFilter:fileFilter}).single('photo');
 
 module.exports = function (app) {
@@ -38,6 +39,7 @@ module.exports = function (app) {
   router.route('/auth/token').post((...params)=>doctorprofileRoute.refreshJWTToken(...params));
   //search API
   router.route('/search').get((...params)=> {doctorprofileRoute.fetchAllDoctor(...params)});
+  // router.post("/upload", upload.single("filename"));
   app.use('/api', router);
 
 }
