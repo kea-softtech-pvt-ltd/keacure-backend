@@ -13,7 +13,8 @@ module.exports = {
         await newUserData.save();
         res.json(newUserData);
     },
-    editHelper(req, res) {
+
+    async editHelper(req, res) {
         const newHelperData = {
             doctorId: req.body.doctorId,
             username: req.body.username,
@@ -22,7 +23,7 @@ module.exports = {
             mobile: req.body.mobile,
             access_module: req.body.access_module
         }
-        HelperModel.findByIdAndUpdate({ _id: req.params.id }, newHelperData, function (err, editHelper) {
+        await HelperModel.findByIdAndUpdate({ _id: req.params.id }, newHelperData, function (err, editHelper) {
             if (err) {
                 res.json(err)
             } else {
@@ -39,10 +40,8 @@ module.exports = {
         const userLogin = await HelperModel.findOne({ username: username, password: password });
         if (!userLogin) {
             res.json(userLogin);
-            res.json("incorrect data")
         } else {
             res.json(userLogin);
-            res.json("login successfully")
             return userLogin
         }
     },
@@ -58,6 +57,7 @@ module.exports = {
             res.send(doc)
         })
     },
+
     async fetchHelper(req, res) {
         await HelperModel.find({ _id: req.params.id }, function (err, data) {
             res.send(data)
