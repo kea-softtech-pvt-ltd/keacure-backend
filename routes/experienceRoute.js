@@ -8,6 +8,6 @@ module.exports = function(app){
     router.route('/fetchUpdateExperience/:id').get((...params)=>{doctorExperienceRoute.fetchAllEditExperience(...params)});
     router.route('/insertExperience').post((...params)=>{doctorExperienceRoute.allExperienceData(...params)});
     router.route('/updateExperience/:id').post((...params)=>{doctorExperienceRoute.allExperienceDataById(...params)});
-
+    router.route('/deleteexperience/:id').delete((...params)=>{doctorExperienceRoute.deleteExperienceById(...params)});
     app.use('/api', router);
 }

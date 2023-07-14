@@ -5,4 +5,4 @@ const subscriptionModel = new mongoose.Schema({
     registerDate        : String,
     selected_plan       : String,
 }, { collection: 'subscriptions' })
-module.exports = Subscription = mongoose.model("subScriptionModel", subscriptionModel)
+module.exports = Subscription = mongoose.model("subScriptionModel", subscriptionModel) 
