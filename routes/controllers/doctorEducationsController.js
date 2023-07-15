@@ -82,7 +82,6 @@ module.exports = {
     });
   },
   async deleteEducationById(req, res) {
-    console.log("---", req.params.id)
     await DoctorEducation.findByIdAndRemove({ _id: req.params.id }, function (err, doc) {
       res.send(doc)
     })

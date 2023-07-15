@@ -22,6 +22,7 @@ module.exports = function(app){
     router.route('/fetchtime/:id').get((...params)=>{setSessionRoutec.fetchSessionDataById(...params)})
     router.route('/fetcSessionSlots/:doctorId/:clinicId').get((...params)=>{setSessionRoutec.getSessionDataById(...params)})
     router.route('/fetchDaysSlots').get((...params)=>{setSessionRoutec.getDaysSlots(...params)})
+    router.route('/deleteSlots/:id').delete((...params)=>{setSessionRoutec.deleteSessionData(...params)})
    
     app.use('/api',router)
 }

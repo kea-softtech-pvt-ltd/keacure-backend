@@ -57,6 +57,13 @@ module.exports={
         })
     },
 
+    async deleteSessionData(req, res) {
+        console.log("--->>>>", req.params.id)
+        await Session.findByIdAndRemove({ _id: req.params.id }, function (err, doc) {
+          res.send(doc)
+        })
+      },
+
     async getDaysSlots(req ,res , next){       
         await Session.findOne({doctorId: req.body.doctorId, clinicId: req.body.clinicId ,day: req.body.day ,Appointment: req.body.Appointment }, function (err, doc) {
             res.send(doc);
