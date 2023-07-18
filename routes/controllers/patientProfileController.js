@@ -259,7 +259,6 @@ module.exports = {
             isLoggedIn: true
         })
         data.save();
-        console.log("---------->>>>.", data)
         PatientLogin.findOneAndUpdate(
             { _id: req.params.patientId },
             { $push: { dependent: {id :  data._id}  } },
