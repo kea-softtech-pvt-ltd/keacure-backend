@@ -185,7 +185,6 @@ module.exports = {
 
     async fetchPatientById(req, res, next) {
     const id = mongoose.Types.ObjectId(req.params.patientId);
-    console.log("id========", id)
         // await PatientLogin.findById(req.params.id, function (err, doc) {
         //     res.send(doc);
         // })
@@ -206,7 +205,6 @@ module.exports = {
               }
               if (result) {
                 res.send(result)
-                console.log("result=========",JSON.stringify(result))
               }
             })
     },

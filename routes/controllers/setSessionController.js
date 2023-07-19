@@ -60,9 +60,6 @@ module.exports = {
     async deleteSessionData(req, res) {
         await Session.findByIdAndUpdate(req.params.id, { isDeleted: true , deletedAt:new Date()});
         res.status(200).json('user Deleted');
-        // await Session.findByIdAndRemove({ _id: req.params.id }, function (err, doc) {
-        //     res.send(doc)
-        // })
     },
 
     async getDaysSlots(req, res, next) {

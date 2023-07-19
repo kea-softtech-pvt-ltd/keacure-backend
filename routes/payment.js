@@ -10,6 +10,7 @@ module.exports = function (app) {
   router.route('/getBookingData/:doctorId').get((...params)=>paymentController.getBookingDetailsBydoctorId(...params));
   router.route('/getBookings/:patientId').get((...params)=>paymentController.getBookingDetailsByPatientId(...params));
   router.route('/updateStatus/:patientAppointmentId').post((...params)=>paymentController.updateStatus(...params));
+  router.route('/cancelappointment/:id').delete((...params)=>{paymentController.cancelAppointment(...params)})
   
   // create route for patient queue
   router.route('/fetchSelectedDaySlots/:doctorId/:clinicId/:daySlotId').post((...params)=>{paymentController.getDaySlots(...params)})
@@ -18,5 +19,6 @@ module.exports = function (app) {
   router.route('/subscription').post((...params)=>subscriptionController.addSubscription(...params));
   router.route('/getsubscription/:doctorId').get((...params)=>subscriptionController.getSubscription(...params));
   router.route('/updatesubscriptiondata/:id').post((...params)=>subscriptionController.updateSubscription(...params))
+
   app.use('/api', router);
 };
