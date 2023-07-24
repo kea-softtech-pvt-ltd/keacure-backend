@@ -21,24 +21,26 @@ module.exports = {
 
     async getOrderedPaymentDetails(req, res) {
         const Data = new Payment({
-            doctorId        : req.body.DoctorId,
-            patientId       : req.body.patientId,
-            clinicId        : req.body.ClinicId,
-            slotId          : req.body.slotId,
-            daySlotId       : req.body.daySlotId,
-            orderId         : req.body.order_id,
-            transactionId   : req.body.transactionId,
-            fees            : req.body.fees,
-            date            : req.body.date,
-            currency        : req.body.currency,
-            day             : req.body.day,
-            timeSlot        : req.body.timeSlot,
-            slotTime        : req.body.slotTime,
-            selectedDate    : req.body.selectedDate,
-            startDate       : req.body.startDate,
-            status          : req.body.status,
-            medicalReportId : req.body.medicalReportId,
-            payment         : req.body.payment,
+            doctorId: req.body.DoctorId,
+            patientId: req.body.patientId,
+            clinicId: req.body.ClinicId,
+            slotId: req.body.slotId,
+            daySlotId: req.body.daySlotId,
+            orderId: req.body.order_id,
+            transactionId: req.body.transactionId,
+            fees: req.body.fees,
+            date: req.body.date,
+            currency: req.body.currency,
+            day: req.body.day,
+            timeSlot: req.body.timeSlot,
+            slotTime: req.body.slotTime,
+            selectedDate: req.body.selectedDate,
+            startDate: req.body.startDate,
+            status: req.body.status,
+            medicalReportId: req.body.medicalReportId,
+            payment: req.body.payment,
+            paymentMethod: req.body.paymentMethod,
+            total: req.body.total
         })
         await Data.save();
         if (res) {
@@ -104,14 +106,19 @@ module.exports = {
         let data = {
             status: req.body.status,
             medicalReportId: req.body.medicalReportId,
-            payment: req.body.payment
+            payment: req.body.payment,
+            paymentMethod: req.body.paymentMethod,
+            total: req.body.total
         }
         await Payment.findByIdAndUpdate({ _id: req.params.patientAppointmentId }, data, function (err, data) {
             if (err) {
                 res.json(err);
+                console.log("err======", err)
+
             }
             else {
                 res.json(data);
+                console.log("data======", data)
             }
         });
     },
@@ -139,7 +146,7 @@ module.exports = {
                         const note1 = item["timeSlot"]
                         const dateTime = item["startDate"]
                         const note2 = item.doctorDetails[0]["name"]
-                        result[index]["note"] =  "Dr." + note2
+                        result[index]["note"] = "Dr." + note2
                         result[index]["duration"] = "00:" + note1 + ":00"
                         result[index]["start"] = dateTime + ":00"
                         return item
@@ -156,7 +163,7 @@ module.exports = {
     },
 
     async cancelAppointment(req, res) {
-        await Payment.findByIdAndUpdate(req.params.id, { isDeleted: true , deletedAt:new Date(), status: "Cancelled"} );
+        await Payment.findByIdAndUpdate(req.params.id, { isDeleted: true, deletedAt: new Date(), status: "Cancelled" });
         res.status(200).json('user Deleted');
     },
 }
