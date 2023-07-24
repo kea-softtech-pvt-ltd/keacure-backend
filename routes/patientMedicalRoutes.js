@@ -1,5 +1,10 @@
 const express                   = require("express");
 router                          = express.Router();
+const { getStorage, ref, getDownloadURL, uploadBytesResumable } = require("firebase/storage");
+const multer = require("multer");
+const fbStorage = getStorage();
+const upload = multer({ storage: multer.memoryStorage() });
+
 const patientMedicalController  = require('./controllers/patientMedicalController');
 const MedicalReportController   = require('./controllers/MedicalReportController')
 
@@ -21,7 +26,7 @@ module.exports = function (app) {
   // router.route('/fetchMedicalReport/:patientAppointmentId/:doctorId/:patientId').get((...params) => MedicalReportController.fetchMedicalData(...params));
   router.route('/fetchMedicalReport/:reportId').get((...params) => MedicalReportController.fetchMedicalData(...params));
   router.route('/createprescriptionpdf/:reportId').post((...params) => MedicalReportController.createPrescriptionPdf(...params));
-  router.route('/get-pdf-prescription').get((...params) => MedicalReportController.getPdfPrescription(...params));
+  router.route('/get-pdf-prescription/:reportId').get((...params) => MedicalReportController.getPdfPrescription(...params));
 
   //medicine list, prescription data API
   router.route('/fetchmedicines').get((...params) => MedicalReportController.fetchmedicineData(...params));

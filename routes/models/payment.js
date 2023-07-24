@@ -1,30 +1,34 @@
 const mongoose = require('mongoose');
 
 const payment = new mongoose.Schema({
-    doctorId      : { type: mongoose.Schema.Types.ObjectId },
-    patientId     : { type: mongoose.Schema.Types.ObjectId },
-    clinicId      : { type: mongoose.Schema.Types.ObjectId },
-    slotId        : { type: mongoose.Schema.Types.ObjectId },
-    daySlotId     : { type: mongoose.Schema.Types.ObjectId },
+    doctorId: { type: mongoose.Schema.Types.ObjectId },
+    patientId: { type: mongoose.Schema.Types.ObjectId },
+    clinicId: { type: mongoose.Schema.Types.ObjectId },
+    slotId: { type: mongoose.Schema.Types.ObjectId },
+    daySlotId: { type: mongoose.Schema.Types.ObjectId },
     medicalReportId: { type: mongoose.Schema.Types.ObjectId },
-    orderId       : String,
-    transactionId : String,
-    Appointment   : String,
-    fees          : Number,
-    currency      : String,
-    date          : String,
-    day           : String,
-    slotTime      : String,
-    timeSlot      : String,
-    selectedDate  : Date,
-    startDate     : String,
-    status        : String,
-    payment       : String
+    orderId: String,
+    transactionId: String,
+    Appointment: String,
+    fees: Number,
+    currency: String,
+    date: String,
+    day: String,
+    slotTime: String,
+    timeSlot: String,
+    selectedDate: Date,
+    startDate: String,
+    status: String,
+    payment: String,
+    isDeleted: {
+        type: Boolean,
+        default: false
+    }
     // status: {
     //     type: String,
     //     enum : ['Ongoing','Completed'] ,
     //     default: 'Ongoing'
     // } 
-},{collection: 'BookingDetails' });
+}, { collection: 'BookingDetails' });
 
 module.exports = Payment = mongoose.model('payment', payment);

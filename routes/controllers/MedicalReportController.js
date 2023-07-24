@@ -8,13 +8,12 @@ const doctorEducation = require('../models/doctorEducation')
 const MedicinePrescription = require("../models/medicine_Prescription")
 const LabPrescription = require("../models/lab_testPrescription")
 const LabTest = require("../models/lab_TestModel")
-const Payment = require("../models/payment")
 const symptomsList = require("../models/symptoms");
 const fs = require('fs');
 const hbs = require('hbs');
+const { getStorage, ref, getDownloadURL, uploadBytesResumable } = require("firebase/storage");
+const fbStorage = getStorage();
 const htmlPDF = require('puppeteer-html-pdf');
-const writeFile = require('util').promisify(fs.writeFile);
-
 const readFile = require('util').promisify(fs.readFile);
 const mongoose = require('mongoose');
 var path = require('path');
@@ -128,7 +127,6 @@ module.exports = {
                     res.send("err==========", err);
                 }
                 if (result) {
-                    // res.send(result);
                     const medicineList = result[0].medicineList
                     const testList = result[0].labTestList
                     const pdfData = {
@@ -172,13 +170,33 @@ module.exports = {
                         const html = await readFile('views/invoice.hbs', 'utf8');
                         const template = hbs.compile(html);
                         const content = template(pdfData);
-
                         const buffer = await htmlPDF.create(content, options);
-                        const writtenFile = await writeFile('invoice.pdf', buffer);
+                        const storageRef = ref(fbStorage, `files/invoice-${id}.pdf`);
+                        // Create file metadata including the content type
+                        const metadata = {
+                            contentType: "application/pdf",
+                        };
+                        // Upload the file in the bucket storage
+                        const snapshot = await uploadBytesResumable(storageRef, buffer, metadata);
 
-                        res.contentType("application/pdf");
-                        res.attachment('invoice.pdf')
-                        res.end(writtenFile);
+                        // Grab the public url
+                        const downloadURL = await getDownloadURL(snapshot.ref);
+
+                        await MedicalReport.findByIdAndUpdate({ _id: id }, {pdfUrl:`files/invoice-${id}.pdf`},{new:true}, function (err, data) {
+                            if (err) {
+                                res.json(err);
+                            }
+                            else {
+                                res.json(data);
+                            }
+                        });
+
+                        return res.send({
+                            message: 'file uploaded to firebase storage',
+                            name: `invoice-${id}.pdf`,
+                            type: "application/pdf",
+                            downloadURL: downloadURL
+                        })
                     } catch (error) {
                         res.send('Something went wrong.')
                     }
@@ -187,8 +205,19 @@ module.exports = {
     },
 
     async getPdfPrescription(req, res, next) {
-        const response = res.sendFile(path.resolve('public/storage/invoice.pdf'));
-
+        //const response = res.sendFile(path.resolve('public/storage/invoice.pdf'));
+        const reportData = await MedicalReport.findOne({ _id: req.params.reportId });
+        // var file = fs.createReadStream(reportData.pdfUrl);
+        // var stat = fs.statSync(reportData.pdfUrl);
+        // res.setHeader('Content-Length', stat.size);
+        // res.setHeader('Content-Type', 'application/pdf');
+        // res.setHeader('Content-Disposition', 'attachment; filename=prescription.pdf');
+        // file.pipe(res);
+        //const xhr = new XMLHttpRequest();
+        //xhr.responseType = 'application/pdf';
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename=prescription.pdf');
+        res.send(reportData.pdfUrl)
     },
 
     async InsertInvestigationData(req, res, next) {

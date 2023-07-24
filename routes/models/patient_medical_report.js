@@ -19,7 +19,8 @@ const medicalReport = new mongoose.Schema({
     new_follow_up       : Date,
     medicine_history    : String,
     labTest_Prescriptions: [],
-    medicine_Prescriptions: []
+    medicine_Prescriptions: [],
+    pdfUrl              : String
 }, { collection: 'patientMedicalReports' });
 
 module.exports = MedicalReport = mongoose.model('medicalReport', medicalReport);

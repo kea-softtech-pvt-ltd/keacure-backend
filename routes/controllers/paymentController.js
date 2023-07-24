@@ -156,7 +156,7 @@ module.exports = {
     },
 
     async cancelAppointment(req, res) {
-        await Payment.findByIdAndUpdate(req.params.id, { isDeleted: true , deletedAt:new Date(), status: "Cancelled"});
+        await Payment.findByIdAndUpdate(req.params.id, { isDeleted: true , deletedAt:new Date(), status: "Cancelled"} );
         res.status(200).json('user Deleted');
     },
 }
