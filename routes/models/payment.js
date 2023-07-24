@@ -23,12 +23,10 @@ const payment = new mongoose.Schema({
     isDeleted: {
         type: Boolean,
         default: false
-    }
-    // status: {
-    //     type: String,
-    //     enum : ['Ongoing','Completed'] ,
-    //     default: 'Ongoing'
-    // } 
+    },
+    paymentMethod: Array,
+    total: String
+
 }, { collection: 'BookingDetails' });
 
 module.exports = Payment = mongoose.model('payment', payment);
