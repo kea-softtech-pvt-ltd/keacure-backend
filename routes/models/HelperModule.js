@@ -1,3 +1,4 @@
+const { date } = require('joi')
 const mongoose = require('mongoose')
 
 const helper = new mongoose.Schema({
@@ -6,6 +7,12 @@ const helper = new mongoose.Schema({
     password        : String,
     email           : String,
     mobile          : String,
-    access_module   : []
+    access_module   : [],
+    isDeleted       : {
+        type: Boolean,
+        default: false
+    },
+    deletedAt       : String
+
 }, { collection: "helpers" })
 module.exports = Helper = mongoose.model("helper", helper)
