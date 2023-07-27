@@ -219,7 +219,6 @@ module.exports = {
   },
 
   async fetchAllDoctor(req, res, next) {
-    console.log("searchText==")
     // const page = parseInt(req.query.page);
     // const limit = parseInt(req.query.limit);
     // const skipIndex = (page - 1) * limit;

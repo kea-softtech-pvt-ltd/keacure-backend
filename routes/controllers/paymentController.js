@@ -28,6 +28,7 @@ module.exports = {
             daySlotId: req.body.daySlotId,
             orderId: req.body.order_id,
             transactionId: req.body.transactionId,
+            dependentId: req.body.dependentId,
             fees: req.body.fees,
             date: req.body.date,
             currency: req.body.currency,
@@ -68,6 +69,14 @@ module.exports = {
             },
             {
                 $lookup: {
+                    from: PatientLogin.collection.name,
+                    localField: "dependentId",
+                    foreignField: "_id",
+                    as: "dependentDetails",
+                }
+            },
+            {
+                $lookup: {
                     from: clinicInfo.collection.name,
                     localField: "clinicId",
                     foreignField: "_id",
@@ -91,12 +100,20 @@ module.exports = {
                     const test = result.map(function (item, index) {
                         const note1 = item["timeSlot"]
                         const dateTime = item["startDate"]
-                        const note2 = item.patientDetails[0]["name"]
-                        result[index]["note"] = note2
+                        if (item.dependentId) {
+                            const note2 = item.dependentDetails[0]["name"]+ "<br/>" + "(" + item.status +")"
+                            result[index]["note"] = note2
+
+                        } else {
+                            const note2 = item.patientDetails[0]["name"] + "(" + item.status +")"
+                            result[index]["note"] = note2
+
+                        }
                         result[index]["duration"] = "00:" + note1 + ":00"
                         result[index]["start"] = dateTime + ":00"
                         return item
                     })
+                    // console.log("item---------", test)
                     res.send(test)
                 }
             })
