@@ -101,19 +101,17 @@ module.exports = {
                         const note1 = item["timeSlot"]
                         const dateTime = item["startDate"]
                         if (item.dependentId) {
-                            const note2 = item.dependentDetails[0]["name"]+ "<br/>" + "(" + item.status +")"
+                            const note2 = item.dependentDetails[0]["name"] + "(" + item.status +")"
                             result[index]["note"] = note2
 
                         } else {
                             const note2 = item.patientDetails[0]["name"] + "(" + item.status +")"
                             result[index]["note"] = note2
-
                         }
                         result[index]["duration"] = "00:" + note1 + ":00"
                         result[index]["start"] = dateTime + ":00"
                         return item
                     })
-                    // console.log("item---------", test)
                     res.send(test)
                 }
             })
@@ -162,7 +160,7 @@ module.exports = {
                     const test = result.map(function (item, index) {
                         const note1 = item["timeSlot"]
                         const dateTime = item["startDate"]
-                        const note2 = item.doctorDetails[0]["name"]
+                        const note2 = item.doctorDetails[0]["name"] + "(" + item.status +")"
                         result[index]["note"] = "Dr." + note2
                         result[index]["duration"] = "00:" + note1 + ":00"
                         result[index]["start"] = dateTime + ":00"

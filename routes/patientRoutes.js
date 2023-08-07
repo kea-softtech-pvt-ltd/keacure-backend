@@ -28,7 +28,7 @@ module.exports = function (app) {
   //for patient personal details
   router.route('/fetchPatientDetails').get((...params) => {patientProfileController.fetchAllPatient(...params)});
   router.route('/patientLogin').post((...params) => {patientProfileController.PatientLogin(...params)});
-  router.route('/resend-otp').post((...params) => {patientProfileController.resetOTP(...params)});
+  router.route('/resendOtp').post((...params) => {patientProfileController.resetOTP(...params)});
   router.route('/patientLoginOtp').post((...params) => {patientProfileController.getPatientOtp(...params)});
   router.route('/patientOtpIsLoggedIn/:id').post((...params) => {patientProfileController.otpIsLoggedIn(...params)});
   router.route('/insertPatientDetails/:id').post(upload ,(...params) => {patientProfileController.insertPatientDetails(...params)});
@@ -36,7 +36,5 @@ module.exports = function (app) {
   router.route('/patientById/:patientId').get((...params)=>patientProfileController.fetchPatientById(...params));
   router.route('/auth/refreshToken').post((...params)=>patientProfileController.refreshJWTToken(...params));
   router.route('/adddependent/:patientId').post((...params)=>patientProfileController.addDependent(...params));
-  // router.route('/getdependent/:patientId').get((...params)=>patientProfileController.getDependent(...params));
-
   app.use('/api', router);
 };

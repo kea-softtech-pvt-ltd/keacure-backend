@@ -38,7 +38,7 @@ module.exports = function (app) {
   router.route('/doctor/:id').get((...params) =>{ doctorprofileRoute.fetchDoctorsById(...params)});
   router.route('/auth/token').post((...params)=>doctorprofileRoute.refreshJWTToken(...params));
   //search API
-  router.route('/search').get((...params)=> {doctorprofileRoute.fetchAllDoctor(...params)});
+  router.route('/search').post((...params)=> {doctorprofileRoute.fetchAllDoctor(...params)});
   // router.post("/upload", upload.single("filename"));
   app.use('/api', router);
 

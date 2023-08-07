@@ -8,12 +8,15 @@ const setSession = require('../models/setSession');
 const jwt = require("jsonwebtoken");
 const config = require("../auth/config")
 const mongoose = require('mongoose');
-const paginate = require('jw-paginate');
+const { getStorage, ref, getDownloadURL, uploadBytesResumable } = require("firebase/storage");
+const fbStorage = getStorage();
+const axios = require("axios");
 
 const {
   loginSchema,
   personalInfoSchema
 } = require('../auth/doctorSchemasValidate')
+
 //for insert mobile number and generate otp
 module.exports = {
   async login(req, res) {
@@ -89,7 +92,6 @@ module.exports = {
       res.json(newUserData);
     }
   },
-  
 
   //for fetch otp
   async loginOtp(req, res, next) {
@@ -145,7 +147,6 @@ module.exports = {
     })
   },
 
-
   //fetchdata
   // async uploadProfilePic(req, res, next) {
   //   console.log(req)
@@ -186,19 +187,6 @@ module.exports = {
   },
   //for update data
   async insertPersonalInfoById(req, res, next) {
-    console.log("file requuuu---", req.file)
-    // const result = await personalInfoSchema.validateAsync(req.body)
-    // let data = []
-    // if (req.body.photo) {
-    //   data = {
-    //     photo: req.body.photo,
-    //     name: req.body.name,
-    //     gender: req.body.gender,
-    //     address: req.body.address,
-    //     personalEmail: req.body.personalEmail,
-    //     education: []
-    //   }
-    // } else {
     data = {
       photo: req.body.photo,
       name: req.body.name,
@@ -206,13 +194,11 @@ module.exports = {
       address: req.body.address,
       personalEmail: req.body.personalEmail
     }
-    // }
     DoctorLogin.findByIdAndUpdate({ _id: req.params.id }, data, function (err, data) {
       if (err) {
         res.json(err);
       }
       else {
-        console.log("data----------", data)
         res.json(data);
       }
     });
@@ -345,22 +331,23 @@ module.exports = {
   },
 
   async sendSMS() {
-    const result = await DoctorLogin.create({
+    const result = await axios.create({
       baseURL: "https://api.textlocal.in/",
       params: {
         apiKey: "YBzNv++3trI-OjGn7uQnRiEfE6LmKaZ4JtriZ8MIvX", //Text local api key
-        sender: "KEACUR"
+        sender: "600010"
       }
     })
-    const sendPartnerWelcomeMessage = (user) => {
+
+    const sendPartnerWelcomeMessage = () => {
       if ('8806971543' && 'shubhangi') {
         const params = new URLSearchParams();
+        // console.log("======params======", params)
         params.append("numbers", [parseInt("91" + "8806971543")]);
         params.append(
           "message",
-          `Hi shubhangi,
-            Welcome to iWheels, Download our app to get bookings from our customers with better pricing. 
-            https://iwheels.co`
+          `Hi there,
+            your one time OTP is 1234`
         );
         result
       }

@@ -5,7 +5,6 @@ const { initializeApp } = require("firebase/app");
 const { getStorage, ref, getDownloadURL, uploadBytesResumable } = require("firebase/storage");
 const config = require("./firebase.config");
 const multer = require("multer");
-
 const mongoose = require("mongoose");
 require('dotenv').config();
 const app = express();
@@ -17,7 +16,43 @@ var storage = path.join(__dirname, 'public/storage/');
 initializeApp(config.firebaseConfig);
 const fbStorage = getStorage();
 const upload = multer({ storage: multer.memoryStorage() });
+const axios = require("axios");
 
+const tlClient = axios.create({
+    baseURL: "https://api.textlocal.in/",
+    params: {
+        apiKey: "YBzNv++3trI-OjGn7uQnRiEfE6LmKaZ4JtriZ8MIvX", //Text local api key
+        sender: "600010"
+    }
+  });
+  
+  const smsClient = {
+    sendPartnerWelcomeMessage: user => {
+        if ('8806971543' && 'shubhangi') {
+            const params = new URLSearchParams();
+            console.log("======params======", params)
+            params.append("numbers", [parseInt("91" + "8806971543")]);
+            params.append(
+              "message",
+              `Hi there,
+                your one time OTP is 1234`
+            );
+        tlClient.post("/send", params);
+      }
+    },
+    sendVerificationMessage: user => {
+        if ('8806971543' && 'shubhangi') {
+        const params = new URLSearchParams();
+        params.append("numbers", [parseInt("91" + "8806971543")]);
+        params.append(
+          "message",
+          `Your iWheels verification code is 12121`
+        );
+        tlClient.post("/send", params);
+      }
+    }
+  };
+  
 const MainInterceptor = interceptor(function (req, res) {
     return {
         isInterceptable: function () {
@@ -54,7 +89,6 @@ app.use(cors());
 app.get('/report/:file', function (req, res) {
     request(`http://localhost:9000/storage/` + req.params.file).pipe(res);
 })
-
 
 
 require('./routes/doctorRoutes')(app);
