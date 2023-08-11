@@ -386,6 +386,22 @@ module.exports = {
         })
     },
 
+    async downloadPrescription(req, res, next) {
+        console.log("i m in download with report ---", req.params.reportId)
+        const pathReference = ref(fbStorage, `files/invoice-${req.params.reportId}.pdf`);
+        const imgUrl = await getDownloadURL(pathReference)
+        return res.redirect(imgUrl)
+        // var bucket = fs.storage().bucket();
+        // const UploadedFileName = 'demo.txt';
+        // const downloadFileName = 'files/invoice-64b7e315059d8c3600f3bdd0.pdf';
+        // const options = {
+        //     destination: downloadFileName
+        // };
+        // const result = await bucket.file(UploadedFileName).download(options);
+        // console.log('result :', result); 
+        // return res.download(downloadFileName);
+    },
+
     //for symptoms=========
     async fetchSymptomsData(req, res, next) {
         await symptomsList.find()

@@ -39,6 +39,7 @@ module.exports = function (app) {
   router.route('/add_Labprescription').post((...params) => MedicalReportController.InsertLabPrescriptionData(...params));
   // router.route('/fetch_LabTest_Prescription/:reportId/:doctorId/:patientId').get((...params) => MedicalReportController.fetchLabTestPrescriptionData(...params));
   router.route('/fetch_LabTest_Prescription/:reportId').get((...params) => MedicalReportController.fetchLabTestPrescriptionData(...params));
+  router.route('/download-prescription/:reportId').get((...params) => MedicalReportController.downloadPrescription(...params));
         
   //symptoms Api
   router.route('/fetchsymptoms').get((...params) => MedicalReportController.fetchSymptomsData(...params));
