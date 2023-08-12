@@ -337,14 +337,6 @@ module.exports = {
         })
     },
 
-    async fetchmedicinePrescriptionData(req, res, next) {
-        await MedicinePrescription.find({
-            reportId: req.params.reportId,
-        }, function (err, doc) {
-            res.send(doc);
-        })
-    },
-
     //for lab testing
     async InsertLabPrescriptionData(req, res, next) {
         const testData = new LabPrescription({
@@ -405,7 +397,6 @@ module.exports = {
         //     destination: downloadFileName
         // };
         // const result = await bucket.file(UploadedFileName).download(options);
-        // console.log('result :', result); 
         // return res.download(downloadFileName);
     },
 
