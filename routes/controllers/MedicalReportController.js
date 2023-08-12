@@ -2,6 +2,7 @@ const MedicalReport = require("../models/patient_medical_report");
 const MedicineList = require("../models/medicine_ListModel")
 const PatientLogin = require('../models/patientProfile')
 const DoctorLogin = require('../models/doctorprofile')
+const config = require("../../firebase.config");
 const ownClinicInfo = require('../models/ownClinicInfo')
 const clinicInfo = require('../models/clinicInfo')
 const doctorEducation = require('../models/doctorEducation')
@@ -11,7 +12,7 @@ const LabTest = require("../models/lab_TestModel")
 const symptomsList = require("../models/symptoms");
 const fs = require('fs');
 const hbs = require('hbs');
-const { getStorage, ref, getDownloadURL, uploadBytesResumable } = require("firebase/storage");
+const { getStorage, ref, getDownloadURL, uploadBytesResumable, getStream, getBytes } = require("firebase/storage");
 const fbStorage = getStorage();
 const htmlPDF = require('puppeteer-html-pdf');
 const readFile = require('util').promisify(fs.readFile);
@@ -388,9 +389,19 @@ module.exports = {
 
     async downloadPrescription(req, res, next) {
         console.log("i m in download with report ---", req.params.reportId)
+        
+
         const pathReference = ref(fbStorage, `files/invoice-${req.params.reportId}.pdf`);
+        // const bolbData = await getBytes(pathReference)
+        
+        // res.setHeader('Content-Type', 'application/pdf')
+        // res.setHeader('Content-Disposition', 'attachment; filename=name.Pdf')
+        // return res.end(bolbData)
         const imgUrl = await getDownloadURL(pathReference)
-        return res.redirect(imgUrl)
+        // res.header("Access-Control-Allow-Origin", "*");
+        // res.header("Access-Control-Allow-Headers", "X-Requested-With");
+        // res.header('content-type', 'application/pdf');
+        // return res.redirect(imgUrl);
         // var bucket = fs.storage().bucket();
         // const UploadedFileName = 'demo.txt';
         // const downloadFileName = 'files/invoice-64b7e315059d8c3600f3bdd0.pdf';
@@ -399,7 +410,7 @@ module.exports = {
         // };
         // const result = await bucket.file(UploadedFileName).download(options);
         // console.log('result :', result); 
-        // return res.download(downloadFileName);
+        return res.send(imgUrl);
     },
 
     //for symptoms=========
