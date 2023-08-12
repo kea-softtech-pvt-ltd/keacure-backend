@@ -12,13 +12,13 @@ module.exports = {
     },
 
     async getSubscription(req, res) {
-        await subscriptionModel.find({doctorId:req.params.doctorId}, function (err, doc) {
+        await subscriptionModel.find({ doctorId: req.params.doctorId }, function (err, doc) {
             res.send(doc)
         })
     },
-    
+
     async updateSubscription(req, res) {
-       let data = {
+        let data = {
             doctorId: req.body.doctorId,
             registerDate: req.body.date,
             selected_plan: req.body.plan,

@@ -65,7 +65,7 @@ module.exports = {
     },
 
     async deleteHelper(req, res) {
-        await HelperModel.findByIdAndUpdate({ _id: req.params.id } , { isDeleted: true , deletedAt:new Date()}, function (err, doc) {
+        await HelperModel.findByIdAndUpdate({ _id: req.params.id }, { isDeleted: true, deletedAt: new Date() }, function (err, doc) {
             res.send(doc)
         })
     }

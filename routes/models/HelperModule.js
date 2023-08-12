@@ -9,9 +9,9 @@ const helper = new mongoose.Schema({
     mobile          : String,
     access_module   : [],
     isDeleted       : {
-        type: Boolean,
-        default: false
-    },
+                        type: Boolean,
+                        default: false
+                      },
     deletedAt       : String
 
 }, { collection: "helpers" })

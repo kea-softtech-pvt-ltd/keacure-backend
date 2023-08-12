@@ -86,6 +86,12 @@ mongoose.connect(dbUrl, {
 
 //required route
 app.use(cors());
+app.use(function (req, res, next) {
+
+    res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 app.get('/report/:file', function (req, res) {
     request(`http://localhost:9000/storage/` + req.params.file).pipe(res);
 })

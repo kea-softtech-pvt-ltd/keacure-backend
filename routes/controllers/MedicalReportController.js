@@ -387,10 +387,17 @@ module.exports = {
     },
 
     async downloadPrescription(req, res, next) {
+        const file = fs.createWriteStream("file.pdf");
+        
         console.log("i m in download with report ---", req.params.reportId)
         const pathReference = ref(fbStorage, `files/invoice-${req.params.reportId}.pdf`);
         const imgUrl = await getDownloadURL(pathReference)
-        return res.redirect(imgUrl)
+        let readFileSync = fs.readFileSync(imgUrl)
+        console.log(readFileSync)
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "X-Requested-With");
+        res.header('content-type', 'application/pdf');
+        //return res.pipe(file);
         // var bucket = fs.storage().bucket();
         // const UploadedFileName = 'demo.txt';
         // const downloadFileName = 'files/invoice-64b7e315059d8c3600f3bdd0.pdf';
