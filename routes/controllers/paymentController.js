@@ -128,12 +128,10 @@ module.exports = {
         await Payment.findByIdAndUpdate({ _id: req.params.patientAppointmentId }, data, function (err, data) {
             if (err) {
                 res.json(err);
-                console.log("err======", err)
 
             }
             else {
                 res.json(data);
-                console.log("data======", data)
             }
         });
     },

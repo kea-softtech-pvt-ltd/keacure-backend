@@ -338,14 +338,6 @@ module.exports = {
         })
     },
 
-    async fetchmedicinePrescriptionData(req, res, next) {
-        await MedicinePrescription.find({
-            reportId: req.params.reportId,
-        }, function (err, doc) {
-            res.send(doc);
-        })
-    },
-
     //for lab testing
     async InsertLabPrescriptionData(req, res, next) {
         const testData = new LabPrescription({
@@ -388,6 +380,8 @@ module.exports = {
     },
 
     async downloadPrescription(req, res, next) {
+        const file = fs.createWriteStream("file.pdf");
+        
         console.log("i m in download with report ---", req.params.reportId)
         
 

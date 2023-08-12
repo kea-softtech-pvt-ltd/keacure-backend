@@ -31,13 +31,11 @@ module.exports = function (app) {
   //medicine list, prescription data API
   router.route('/fetchmedicines').get((...params) => MedicalReportController.fetchmedicineData(...params));
   router.route('/add_medicinePrescription').post((...params) => MedicalReportController.InsertMedicinePrescriptionData(...params));
-  // router.route('/fetchmedicinePrescription/:patientAppointmentId/:doctorId/:patientId').get((...params) => MedicalReportController.fetchmedicinePrescriptionData(...params));
   router.route('/fetchmedicinePrescription/:reportId').get((...params) => MedicalReportController.fetchmedicinePrescriptionData(...params));
 
   //Lab Test API 
   router.route('/fetch_lab_test').get((...params) => MedicalReportController.fetchLabTestData(...params));
   router.route('/add_Labprescription').post((...params) => MedicalReportController.InsertLabPrescriptionData(...params));
-  // router.route('/fetch_LabTest_Prescription/:reportId/:doctorId/:patientId').get((...params) => MedicalReportController.fetchLabTestPrescriptionData(...params));
   router.route('/fetch_LabTest_Prescription/:reportId').get((...params) => MedicalReportController.fetchLabTestPrescriptionData(...params));
   router.route('/download-prescription/:reportId').get((...params) => MedicalReportController.downloadPrescription(...params));
         
