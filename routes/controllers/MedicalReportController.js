@@ -337,14 +337,6 @@ module.exports = {
         })
     },
 
-    async fetchmedicinePrescriptionData(req, res, next) {
-        await MedicinePrescription.find({
-            reportId: req.params.reportId,
-        }, function (err, doc) {
-            res.send(doc);
-        })
-    },
-
     //for lab testing
     async InsertLabPrescriptionData(req, res, next) {
         const testData = new LabPrescription({
@@ -390,6 +382,7 @@ module.exports = {
         console.log("i m in download with report ---", req.params.reportId)
         const pathReference = ref(fbStorage, `files/invoice-${req.params.reportId}.pdf`);
         const imgUrl = await getDownloadURL(pathReference)
+        console.log('imgUrl=== :', imgUrl); 
         return res.redirect(imgUrl)
         // var bucket = fs.storage().bucket();
         // const UploadedFileName = 'demo.txt';
@@ -398,7 +391,6 @@ module.exports = {
         //     destination: downloadFileName
         // };
         // const result = await bucket.file(UploadedFileName).download(options);
-        // console.log('result :', result); 
         // return res.download(downloadFileName);
     },
 
