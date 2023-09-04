@@ -206,16 +206,7 @@ module.exports = {
     },
 
     async getPdfPrescription(req, res, next) {
-        //const response = res.sendFile(path.resolve('public/storage/invoice.pdf'));
         const reportData = await MedicalReport.findOne({ _id: req.params.reportId });
-        // var file = fs.createReadStream(reportData.pdfUrl);
-        // var stat = fs.statSync(reportData.pdfUrl);
-        // res.setHeader('Content-Length', stat.size);
-        // res.setHeader('Content-Type', 'application/pdf');
-        // res.setHeader('Content-Disposition', 'attachment; filename=prescription.pdf');
-        // file.pipe(res);
-        //const xhr = new XMLHttpRequest();
-        //xhr.responseType = 'application/pdf';
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', 'attachment; filename=prescription.pdf');
         res.send(reportData.pdfUrl)
@@ -323,6 +314,14 @@ module.exports = {
             }
         );
         res.json(prescriptionData);
+    },
+
+    async fetchmedicinePrescriptionData(req, res, next) {
+        await MedicinePrescription.find({
+            reportId: req.params.reportId,
+        }, function (err, doc) {
+            res.send(doc);
+        })
     },
 
     async fetchmedicineData(req, res, next) {
