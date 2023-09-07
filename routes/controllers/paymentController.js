@@ -57,6 +57,7 @@ module.exports = {
 
     async getBookingDetailsBydoctorId(req, res, next) {
         const doctorId = mongoose.Types.ObjectId(req.params.doctorId);
+        // console.log("doctorId-------", doctorId)
         await Payment.aggregate([
             { "$match": { "doctorId": doctorId } },
             {
@@ -98,6 +99,7 @@ module.exports = {
                 }
                 if (result) {
                     const test = result.map(function (item, index) {
+                        // console.log("---------------", item)
                         const note1 = item["timeSlot"]
                         const dateTime = item["startDate"]
                         if (item.dependentId) {
