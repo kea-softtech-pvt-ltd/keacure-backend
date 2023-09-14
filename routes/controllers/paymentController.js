@@ -99,7 +99,6 @@ module.exports = {
                 }
                 if (result) {
                     const test = result.map(function (item, index) {
-                        // console.log("---------------", item)
                         const note1 = item["timeSlot"]
                         const dateTime = item["startDate"]
                         if (item.dependentId) {
@@ -107,8 +106,13 @@ module.exports = {
                             result[index]["note"] = note2
 
                         } else {
-                            const note2 = item.patientDetails[0]["name"] + "(" + item.status +")"
-                            result[index]["note"] = note2
+                            if(item.patientDetails.lenght > 0){
+                                const note2 = item.patientDetails[0]["name"] + "(" + item.status +")"
+                                result[index]["note"] = note2
+                            }else{
+                                null
+                            }
+                           
                         }
                         result[index]["duration"] = "00:" + note1 + ":00"
                         result[index]["start"] = dateTime + ":00"
