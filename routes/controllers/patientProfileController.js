@@ -101,6 +101,7 @@ module.exports = {
             if (userExit) {
                 PatientLogin.findByIdAndUpdate({ _id: _id }, {
                     isLoggedIn: true,
+                    isParent: true,
                     accessToken: accessToken,
                     refreshToken: refreshToken,
                 }, { new: true }, function (err, data) {
@@ -249,9 +250,7 @@ module.exports = {
             name: req.body.name,
             email: req.body.email,
             gender: req.body.gender,
-            mobile: req.body.mobile,
             age: req.body.age,
-            isLoggedIn: true
         })
         data.save();
         PatientLogin.findOneAndUpdate(
@@ -261,7 +260,7 @@ module.exports = {
                 if (error) {
                     console.log(error);
                 } else {
-                    console.log(success);
+                    //console.log(success);
                 }
             }
         );

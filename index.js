@@ -30,7 +30,6 @@ const tlClient = axios.create({
     sendPartnerWelcomeMessage: user => {
         if ('8806971543' && 'shubhangi') {
             const params = new URLSearchParams();
-            console.log("======params======", params)
             params.append("numbers", [parseInt("91" + "8806971543")]);
             params.append(
               "message",

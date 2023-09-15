@@ -52,7 +52,6 @@ module.exports = {
     });
   },
   async deleteExperienceById(req, res){
-    console.log("---", req.params.id)
     await DoctorExperience.findByIdAndRemove({_id:req.params.id}, function(err, doc){
       res.send(doc)
     })

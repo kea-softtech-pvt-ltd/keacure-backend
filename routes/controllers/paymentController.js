@@ -57,7 +57,6 @@ module.exports = {
 
     async getBookingDetailsBydoctorId(req, res, next) {
         const doctorId = mongoose.Types.ObjectId(req.params.doctorId);
-        // console.log("doctorId-------", doctorId)
         await Payment.aggregate([
             { "$match": { "doctorId": doctorId } },
             {
@@ -102,17 +101,20 @@ module.exports = {
                         const note1 = item["timeSlot"]
                         const dateTime = item["startDate"]
                         if (item.dependentId) {
-                            const note2 = item.dependentDetails[0]["name"] + "(" + item.status +")"
-                            result[index]["note"] = note2
-
-                        } else {
-                            if(item.patientDetails.lenght > 0){
-                                const note2 = item.patientDetails[0]["name"] + "(" + item.status +")"
+                            if (item.dependentDetails.lenght > 0) {
+                                const note2 = item.dependentDetails[0]["name"] + "(" + item.status + ")"
                                 result[index]["note"] = note2
-                            }else{
+                            } else {
                                 null
                             }
-                           
+                        } else {
+                            if (item.patientDetails.lenght > 0) {
+                                const note2 = item.patientDetails[0]["name"] + "(" + item.status + ")"
+                                result[index]["note"] = note2
+                            } else {
+                                null
+                            }
+
                         }
                         result[index]["duration"] = "00:" + note1 + ":00"
                         result[index]["start"] = dateTime + ":00"
@@ -164,7 +166,7 @@ module.exports = {
                     const test = result.map(function (item, index) {
                         const note1 = item["timeSlot"]
                         const dateTime = item["startDate"]
-                        const note2 = item.doctorDetails[0]["name"] + "(" + item.status +")"
+                        const note2 = item.doctorDetails[0]["name"] + "(" + item.status + ")"
                         result[index]["note"] = "Dr." + note2
                         result[index]["duration"] = "00:" + note1 + ":00"
                         result[index]["start"] = dateTime + ":00"

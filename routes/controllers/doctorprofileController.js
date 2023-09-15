@@ -96,7 +96,6 @@ module.exports = {
   //for fetch otp
   async loginOtp(req, res, next) {
     const { _id, getOTP } = req.body;
-
     // const  {otp} = await loginOtpSchema.validateAsync(req.body)
     if (!getOTP) {
       return res.json({ "status": { "error": "please fill the field properly" } });
