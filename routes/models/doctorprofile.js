@@ -6,6 +6,7 @@ const doctorDetail = new mongoose.Schema({
   accessToken         :String,
   refreshToken        :String,
   isLoggedIn          :Boolean,
+  isSubscribed        :Boolean,
   mobile              :Number,
   otp                 :String,
   photo               :String,

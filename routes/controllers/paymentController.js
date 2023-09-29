@@ -101,15 +101,15 @@ module.exports = {
                         const note1 = item["timeSlot"]
                         const dateTime = item["startDate"]
                         if (item.dependentId) {
-                            if (item.dependentDetails.lenght > 0) {
-                                const note2 = item.dependentDetails[0]["name"] + "(" + item.status + ")"
+                            if (item.dependentDetails[0]) {
+                                const note2 = item.dependentDetails[0]["name"]
                                 result[index]["note"] = note2
                             } else {
                                 null
                             }
                         } else {
-                            if (item.patientDetails.lenght > 0) {
-                                const note2 = item.patientDetails[0]["name"] + "(" + item.status + ")"
+                            if (item.patientDetails[0]) {
+                                const note2 = item.patientDetails[0]["name"]
                                 result[index]["note"] = note2
                             } else {
                                 null
@@ -118,6 +118,7 @@ module.exports = {
                         }
                         result[index]["duration"] = "00:" + note1 + ":00"
                         result[index]["start"] = dateTime + ":00"
+                        result[index]["state"] ="(" + item.status + ")"
                         return item
                     })
                     res.send(test)
@@ -166,10 +167,11 @@ module.exports = {
                     const test = result.map(function (item, index) {
                         const note1 = item["timeSlot"]
                         const dateTime = item["startDate"]
-                        const note2 = item.doctorDetails[0]["name"] + "(" + item.status + ")"
+                        const note2 = item.doctorDetails[0]["name"]
                         result[index]["note"] = "Dr." + note2
                         result[index]["duration"] = "00:" + note1 + ":00"
                         result[index]["start"] = dateTime + ":00"
+                        result[index]["state"] ="(" + item.status + ")"
                         return item
                     })
                     res.send(test)

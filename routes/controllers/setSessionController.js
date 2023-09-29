@@ -46,7 +46,7 @@ module.exports = {
     },
 
     async fetchSetSessionData(req, res, next) {
-        await Session.find({ doctorId: req.params.doctorId, clinicId: req.params.clinicId, _id: req.params.id }, function (err, doc) {
+        await Session.find({_id: req.params.id }, function (err, doc) {
             res.send(doc);
         })
     },

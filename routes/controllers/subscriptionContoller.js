@@ -5,7 +5,8 @@ module.exports = {
         const data = new subscriptionModel({
             doctorId: req.body.doctorId,
             registerDate: req.body.date,
-            selected_plan: req.body.plan
+            selected_plan: req.body.plan,
+            isSubscribe : true
         })
         data.save();
         res.json(data);
@@ -22,6 +23,7 @@ module.exports = {
             doctorId: req.body.doctorId,
             registerDate: req.body.date,
             selected_plan: req.body.plan,
+            isSubscribe : true
         }
         await subscriptionModel.findByIdAndUpdate({ _id: req.params.id }, data, {
             new: true
