@@ -183,14 +183,7 @@ module.exports = {
                         // Grab the public url
                         const downloadURL = await getDownloadURL(snapshot.ref);
 
-                        await MedicalReport.findByIdAndUpdate({ _id: id }, {pdfUrl:`files/invoice-${id}.pdf`},{new:true}, function (err, data) {
-                            if (err) {
-                                res.json(err);
-                            }
-                            else {
-                                res.json(data);
-                            }
-                        });
+                        await MedicalReport.findByIdAndUpdate({ _id: id }, {pdfUrl:`files/invoice-${id}.pdf`});
 
                         return res.send({
                             message: 'file uploaded to firebase storage',
@@ -207,8 +200,8 @@ module.exports = {
 
     async getPdfPrescription(req, res, next) {
         const reportData = await MedicalReport.findOne({ _id: req.params.reportId });
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', 'attachment; filename=prescription.pdf');
+       // res.setHeader('Content-Type', 'application/pdf');
+        // res.setHeader('Content-Disposition', 'attachment; filename=prescription.pdf');
         res.send(reportData.pdfUrl)
     },
 
@@ -358,7 +351,7 @@ module.exports = {
                 if (error) {
                     console.log(error);
                 } else {
-                    console.log(success);
+                   // console.log(success);
                 }
             }
         );
