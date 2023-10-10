@@ -147,39 +147,6 @@ module.exports = {
     })
   },
 
-  //fetchdata
-  // async uploadProfilePic(req, res, next) {
-  //   console.log(req)
-  //   try {
-  //     const dateTime = giveCurrentDateTime();
-
-  //     const storageRef = ref(fbStorage, `files/${req.file.originalname + "       " + dateTime}`);
-
-  //     // Create file metadata including the content type
-  //     const metadata = {
-  //         contentType: req.file.mimetype,
-  //     };
-
-  //     // Upload the file in the bucket storage
-  //     const snapshot = await uploadBytesResumable(storageRef, req.file.buffer, metadata);
-  //     //by using uploadBytesResumable we can control the progress of uploading like pause, resume, cancel
-
-  //     // Grab the public url
-  //     const downloadURL = await getDownloadURL(snapshot.ref);
-
-  //     console.log('File successfully uploaded.');
-  //     return res.send({
-  //         message: 'file uploaded to firebase storage',
-  //         name: req.file.originalname,
-  //         type: req.file.mimetype,
-  //         downloadURL: downloadURL
-  //     })
-  //   } catch (error) {
-  //       return res.status(400).send(error.message)
-  //   }
-  //   res.send({})
-  // },
-
   async fetchDataById(req, res, next) {
     await DoctorLogin.findById(req.params.id, function (err, doc) {
       res.send(doc);
@@ -205,9 +172,6 @@ module.exports = {
   },
 
   async fetchAllDoctor(req, res, next) {
-    // const page = parseInt(req.query.page);
-    // const limit = parseInt(req.query.limit);
-    // const skipIndex = (page - 1) * limit;
     const searchText = req.body.key ? req.body.key : ""
     await DoctorLogin.aggregate([
       { "$match": { "name": { $regex: new RegExp(searchText), $options: 'i' } } },
@@ -342,7 +306,6 @@ module.exports = {
     const sendPartnerWelcomeMessage = () => {
       if ('8806971543' && 'shubhangi') {
         const params = new URLSearchParams();
-        // console.log("======params======", params)
         params.append("numbers", [parseInt("91" + "8806971543")]);
         params.append(
           "message",

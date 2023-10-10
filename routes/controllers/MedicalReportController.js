@@ -18,7 +18,7 @@ const htmlPDF = require('puppeteer-html-pdf');
 const readFile = require('util').promisify(fs.readFile);
 const mongoose = require('mongoose');
 var path = require('path');
-
+// const logo = require("../../public/images/logo.png")
 module.exports = {
     async InsertMedicalData(req, res, next) {
         const doctorId = req.body.doctorId

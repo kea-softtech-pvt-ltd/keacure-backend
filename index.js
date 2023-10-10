@@ -86,7 +86,6 @@ mongoose.connect(dbUrl, {
 //required route
 app.use(cors());
 app.use(function (req, res, next) {
-
     res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
@@ -94,8 +93,8 @@ app.use(function (req, res, next) {
 app.get('/report/:file', function (req, res) {
     request(`http://localhost:9000/storage/` + req.params.file).pipe(res);
 })
-
-
+app.use(express.static(path.join(__dirname,'http://localhost:9000/images/logo.png')));
+// app.use('/images', express.static('images')); 
 require('./routes/doctorRoutes')(app);
 require('./routes/educationRoute')(app);
 require('./routes/experienceRoute')(app);
@@ -104,9 +103,10 @@ require('./routes/fetchapiRoute')(app);
 require('./routes/patientRoutes')(app);
 require('./routes/patientMedicalRoutes')(app);
 require('./routes/patientLifestyleRoutes')(app);
-require('./routes/payment')(app);
+require('./routes/paymentRoute')(app);
 require('./routes/helperRoute')(app);
 require('./routes/adminRout')(app);
+require('./routes/subscriptionRoute')(app);
 //app.use("/", require("./controllers/doctorExperienceRoute"))
 
 app.listen(9000, () => {
