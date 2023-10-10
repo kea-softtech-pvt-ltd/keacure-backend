@@ -19,6 +19,8 @@ module.exports = function(app){
     router.route('/fetchsetSession/:id').get((...params)=>{setSessionRoutec.fetchSetSessionData(...params)})
     router.route('/fetchtime').post((...params)=>{setSessionRoutec.fetchSessionData(...params)})
     router.route('/fetchtime/:id').get((...params)=>{setSessionRoutec.fetchSessionDataById(...params)})
+
+    //for patient que
     router.route('/fetcSessionSlots/:doctorId/:clinicId').get((...params)=>{setSessionRoutec.getSessionDataById(...params)})
     router.route('/fetchDaysSlots').get((...params)=>{setSessionRoutec.getDaysSlots(...params)})
     router.route('/deleteSlots/:id').delete((...params)=>{setSessionRoutec.deleteSessionData(...params)})

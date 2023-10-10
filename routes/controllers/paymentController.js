@@ -179,12 +179,6 @@ module.exports = {
             })
     },
 
-    async getDaySlots(req, res, next) {
-        await Payment.find({ doctorId: req.params.doctorId, clinicId: req.params.clinicId, daySlotId: req.params.daySlotId }, function (err, doc) {
-            res.send(doc);
-        })
-    },
-
     async cancelAppointment(req, res) {
         await Payment.findByIdAndUpdate(req.params.id, { isDeleted: true, deletedAt: new Date(), status: "Cancelled" });
         res.status(200).json('user Deleted');

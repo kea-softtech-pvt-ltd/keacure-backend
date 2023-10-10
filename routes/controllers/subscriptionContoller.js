@@ -1,5 +1,5 @@
 const subscriptionModel = require('../models/subscription-model');
-
+const subscriptionPlans = require('../models/subscription_master')
 module.exports = {
     async addSubscription(req, res, next) {
         const data = new subscriptionModel({
@@ -36,6 +36,25 @@ module.exports = {
             }
 
         })
-    }
+    },
+
+    //for admin
+    async addAdminSubscription(req, res, next) {
+        const data = new subscriptionPlans({
+            name: req.body.name,
+            duration: req.body.duration,
+            features: req.body.features,
+            status : req.body.status
+        })
+        console.log("==========", data)
+        data.save(data);
+        res.json(data);
+    },
+
+    async getAdminSubscription(req, res, next) {
+        await subscriptionPlans.find(function (err, docs) {
+          res.send(docs)
+        })
+    },
 
 }

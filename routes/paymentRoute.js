@@ -12,9 +12,6 @@ module.exports = function (app) {
   router.route('/updateStatus/:patientAppointmentId').post((...params)=>paymentController.updateStatus(...params));
   router.route('/cancelappointment/:id').delete((...params)=>{paymentController.cancelAppointment(...params)})
   
-  // create route for patient queue
-  router.route('/fetchSelectedDaySlots/:doctorId/:clinicId/:daySlotId').post((...params)=>{paymentController.getDaySlots(...params)})
-
   //subscription 
   router.route('/subscription').post((...params)=>subscriptionController.addSubscription(...params));
   router.route('/getsubscription/:doctorId').get((...params)=>subscriptionController.getSubscription(...params));

@@ -1,6 +1,4 @@
-const { ObjectId } = require('mongodb')
 const PatientMedical = require('../models/patientMedicalInfo')
-const mongoose = require('mongoose');
 
 module.exports = {
   //fetch inserted data
