@@ -4,6 +4,7 @@ const doctorExperience = require('../models/doctorExperience');
 const clinicInfo = require('../models/clinicInfo');
 const ownClinicInfo = require('../models/ownClinicInfo');
 const setSession = require('../models/setSession');
+const subScription = require('../models/subscription-model')
 // const TextLocalSMS = require('../../services/TextLocalSMS')
 const jwt = require("jsonwebtoken");
 const config = require("../auth/config")
@@ -225,6 +226,14 @@ module.exports = {
           localField: "_id",
           foreignField: "doctorId",
           as: "experienceList"
+        }
+      },
+      {
+        $lookup: {
+          from: subScription.collection.name,
+          localField: "_id",
+          foreignField: "doctorId",
+          as: "subscription"
         }
       }
     ])
