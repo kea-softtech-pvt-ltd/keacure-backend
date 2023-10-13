@@ -4,7 +4,7 @@ const paymentController = require('./controllers/paymentController');
 const subscriptionController = require('./controllers/subscriptionContoller')
 
 module.exports = function (app) {
-  router.route('/razorpay/order').post((...params)=>paymentController.getPaymentDetails(...params));
+  //router.route('/razorpay/order').post((...params)=>paymentController.getPaymentDetails(...params));
   router.route('/payment/order').post((...params)=>paymentController.getOrderedPaymentDetails(...params));
   router.route('/getBookingData/:doctorId/:clinicId').get((...params)=>paymentController.fetchPaymentDataByDoctorId(...params));
   router.route('/getBookingData/:doctorId').get((...params)=>paymentController.getBookingDetailsBydoctorId(...params));

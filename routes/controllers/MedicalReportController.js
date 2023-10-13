@@ -18,7 +18,7 @@ const htmlPDF = require('puppeteer-html-pdf');
 const readFile = require('util').promisify(fs.readFile);
 const mongoose = require('mongoose');
 var path = require('path');
-// const logo = require("../../public/images/logo.png")
+// const logo = require("../../public/images")
 module.exports = {
     async InsertMedicalData(req, res, next) {
         const doctorId = req.body.doctorId
@@ -132,6 +132,7 @@ module.exports = {
                     const testList = result[0].labTestList
                     const pdfData = {
                         DoctorData: {
+                            // logo : logo,
                             Name: result[0].doctorDetails[0].name,
                             Mobile: result[0].doctorDetails[0].mobile,
                             degree: (result[0].educationList.length > 0 )? result[0].educationList[0].degree : "",
@@ -164,7 +165,8 @@ module.exports = {
 
                     const options = {
                         format: 'A4',
-                        path: `public/storage/invoice-${id}.pdf`
+                        path: `public/storage/invoice-${id}.pdf`,
+                        // logo: 'public/images/wecurify.png',
                     }
 
                     try {
@@ -391,5 +393,4 @@ module.exports = {
         symptom.save();
         res.json(symptom);
     },
-
 }
