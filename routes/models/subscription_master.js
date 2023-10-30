@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 const subscriptionPlans = new mongoose.Schema({
     name     : String,
-    duration : String,
+    frequency : String,
+    amount    : Number,
     features : [],
     status   : Boolean
 },  {collection: 'subscriptionPlans_masters' });

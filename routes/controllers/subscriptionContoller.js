@@ -52,7 +52,8 @@ module.exports = {
     async addAdminSubscription(req, res, next) {
         const data = new subscriptionPlans({
             name: req.body.name,
-            duration: req.body.duration,
+            frequency: req.body.frequency,
+            amount: req.body.amount,
             features: req.body.features,
             status : req.body.status
         })
