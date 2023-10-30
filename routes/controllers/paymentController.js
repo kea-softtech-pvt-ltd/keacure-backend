@@ -7,17 +7,19 @@ const Razorpay = require('razorpay');
 const mongoose = require('mongoose');
 
 module.exports = {
-    // async getPaymentDetails(req, res) {
-    //     var instance = new Razorpay({ key_id: 'rzp_test_9YSujFU2kXGJti', key_secret: 'NgKdgQNRgRjjzQzafHgPwYS8' })
-    //     var options = {
-    //         amount: 50000,  // amount in the smallest currency unit
-    //         currency: "INR",
-    //         receipt: "order_rcptid_11"
-    //     };
-    //     const ordeDetails = await instance.orders.create(options, function (err, order) {
-    //         res.send({ orderId: order.id })
-    //     });
-    // },
+    async getPaymentDetails(req, res) {
+        var instance = new Razorpay({ key_id: 'rzp_test_9YSujFU2kXGJti', key_secret: 'NgKdgQNRgRjjzQzafHgPwYS8' })
+        var options = {
+            amount: 50000,  // amount in the smallest currency unit
+            currency: "INR",
+            receipt: "order_rcptid_11"
+        };
+        const ordeDetails = await instance.orders.create(options, function (err, order) {
+            res.send({ orderId: order.id })
+        });
+    },
+
+   
 
     async getOrderedPaymentDetails(req, res) {
         const Data = new Payment({
