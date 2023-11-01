@@ -110,7 +110,6 @@ module.exports = {
       if (userExit) {
         DoctorLogin.findByIdAndUpdate({ _id: _id }, {
           isLoggedIn: true,
-          isSubscribed: true,
           accessToken: accessToken,
           refreshToken: refreshToken,
         }, { new: true }, function (err, data) {
