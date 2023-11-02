@@ -1,8 +1,7 @@
 const features_master = require('../models/features_master');
 const subscriptionModel = require('../models/subscription-model');
 const subscriptionPlans = require('../models/subscription_master')
-const DoctorLogin =require('../models/doctorprofile')
-const Razorpay = require('razorpay');
+const moment = require("moment");
 
 module.exports = {
     async getFeatures(req, res, next) {
@@ -12,26 +11,19 @@ module.exports = {
     },
 
     async addSubscription(req, res, next) {
+        var date = moment(req.body.date).format("YYYY-MM-DD");
+        var days = req.body.duration
+        var currentDate = moment(date);
+        var expirydate = moment(currentDate).add(days, 'd');
         const data = new subscriptionModel({
             doctorId: req.body.doctorId,
-            registerDate: req.body.date,
-            expiryDate: req.body.expiryDate,
+            registerDate: currentDate,
+            expiryDate: expirydate,
             selected_plan: req.body.plan,
-            duration:req.body.duration,
+            duration: req.body.duration,
             isSubscribe: true
         })
         data.save();
-        // DoctorLogin.findOneAndUpdate(
-        //     { _id: req.body.doctorId },
-        //     { $push: { isSubscribe: true} },
-        //     function (error, success) {
-        //         if (error) {
-        //             console.log(error);
-        //         } else {
-        //            // console.log(success);
-        //         }
-        //     }
-        // );
         res.json(data);
     },
 
@@ -47,7 +39,7 @@ module.exports = {
             registerDate: req.body.date,
             expiryDate: req.body.expiryDate,
             selected_plan: req.body.plan,
-            duration:req.body.duration,
+            duration: req.body.duration,
             isSubscribe: true
         }
         await subscriptionModel.findByIdAndUpdate({ _id: req.params.id }, data, {
@@ -91,7 +83,7 @@ module.exports = {
                 res.json(err)
             }
             else {
-                res.json  (data)
+                res.json(data)
             }
         })
     },
@@ -109,7 +101,7 @@ module.exports = {
     },
 
     async getSubscriptionById(req, res, next) {
-        await subscriptionPlans.find({_id: req.params.id }, function (err, doc) {
+        await subscriptionPlans.find({ _id: req.params.id }, function (err, doc) {
             res.send(doc);
         })
     },
