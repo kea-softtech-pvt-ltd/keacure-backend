@@ -103,7 +103,7 @@ require('./routes/fetchapiRoute')(app);
 require('./routes/patientRoutes')(app);
 require('./routes/patientMedicalRoutes')(app);
 require('./routes/patientLifestyleRoutes')(app);
-require('./routes/bookingRoute')(app);
+require('./routes/paymentRoute')(app);
 require('./routes/helperRoute')(app);
 require('./routes/adminRout')(app);
 require('./routes/subscriptionRoute')(app);
