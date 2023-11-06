@@ -1,6 +1,7 @@
 const features_master = require('../models/features_master');
 const subscriptionModel = require('../models/subscription-model');
-const subscriptionPlans = require('../models/subscription_master')
+const subscriptionPlans = require('../models/subscription_master');
+const doctorLogin = require('../models/doctorprofile')
 const moment = require("moment");
 
 module.exports = {
@@ -8,6 +9,13 @@ module.exports = {
         await features_master.find(function (err, docs) {
             res.send(docs)
         })
+    },
+
+    async addFeatures(req, res, next) {
+        const data = new features_master({
+            name: req.body.name,
+        })
+        data.save();
     },
 
     async addSubscription(req, res, next) {
@@ -24,6 +32,17 @@ module.exports = {
             isSubscribe: true
         })
         data.save();
+        // doctorLogin.findOneAndUpdate(
+        //     { _id: req.body.doctorId },
+        //     { $push: { isSubscribed : true } },{ new: true },
+        //     function (error, success) {
+        //         if (error) {
+        //             console.log(error);
+        //         } else {
+        //          console.log(success);
+        //         }
+        //     }
+        // );
         res.json(data);
     },
 

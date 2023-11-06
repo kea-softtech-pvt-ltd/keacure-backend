@@ -1,4 +1,4 @@
-const Payment = require('../models/payment');
+const Payment = require('../models/bookingModule');
 const PatientLogin = require('../models/patientProfile');
 const clinicInfo = require('../models/clinicInfo');
 const ownClinicInfo = require('../models/ownClinicInfo');
@@ -7,6 +7,7 @@ const Razorpay = require('razorpay');
 const mongoose = require('mongoose');
 
 module.exports = {
+    
     async getPaymentDetails(req, res) {
         var instance = new Razorpay({ key_id: 'rzp_test_9YSujFU2kXGJti', key_secret: 'NgKdgQNRgRjjzQzafHgPwYS8' })
         var options = {
@@ -120,7 +121,7 @@ module.exports = {
                         }
                         result[index]["duration"] = "00:" + note1 + ":00"
                         result[index]["start"] = dateTime + ":00"
-                        result[index]["state"] ="(" + item.status + ")"
+                        // result[index]["state"] ="(" + item.status + ")"
                         return item
                     })
                     res.send(test)
@@ -139,7 +140,6 @@ module.exports = {
         await Payment.findByIdAndUpdate({ _id: req.params.patientAppointmentId }, data, function (err, data) {
             if (err) {
                 res.json(err);
-
             }
             else {
                 res.json(data);
@@ -173,7 +173,7 @@ module.exports = {
                         result[index]["note"] = "Dr." + note2
                         result[index]["duration"] = "00:" + note1 + ":00"
                         result[index]["start"] = dateTime + ":00"
-                        result[index]["state"] ="(" + item.status + ")"
+                      //  result[index]["state"] ="(" + item.status + ")"
                         return item
                     })
                     res.send(test)

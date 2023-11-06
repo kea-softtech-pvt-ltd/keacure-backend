@@ -1,6 +1,6 @@
 const express     = require('express'),
 router            = express.Router();
-const paymentController = require('./controllers/paymentController');
+const paymentController = require('./controllers/bookingDataController');
 const subscriptionController = require('./controllers/subscriptionContoller')
 
 module.exports = function (app) {
@@ -12,6 +12,11 @@ module.exports = function (app) {
   router.route('/updateStatus/:patientAppointmentId').post((...params)=>paymentController.updateStatus(...params));
   router.route('/cancelappointment/:id').delete((...params)=>{paymentController.cancelAppointment(...params)})
   
+  // router.route('/getBookingData/:doctorId').get((...params)=>{
+  //   auth.checkUserLoggedIn(),
+  //   auth.checkSubscription(),
+  //   paymentController.getBookingDetailsBydoctorId(...params)
+  // });
   //subscription 
   router.route('/subscription').post((...params)=>subscriptionController.addSubscription(...params));
   router.route('/getsubscription/:doctorId').get((...params)=>subscriptionController.getSubscription(...params));

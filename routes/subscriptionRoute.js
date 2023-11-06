@@ -5,6 +5,7 @@ const subscriptionController = require('./controllers/subscriptionContoller')
 module.exports = function (app) {
   //features 
   router.route('/getfeatures').get((...params)=>subscriptionController.getFeatures(...params));
+  router.route('/addfeatures').post((...params)=>subscriptionController.addFeatures(...params));  
   //subscription 
   router.route('/subscription').post((...params)=>subscriptionController.addSubscription(...params));
   router.route('/getsubscription/:doctorId').get((...params)=>subscriptionController.getSubscription(...params));
