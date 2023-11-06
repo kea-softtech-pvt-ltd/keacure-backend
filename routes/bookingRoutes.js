@@ -1,6 +1,6 @@
 const express     = require('express'),
 router            = express.Router();
-const paymentController = require('./controllers/bookingDetailsController');
+const paymentController = require('./controllers/bookingDataController');
 const subscriptionController = require('./controllers/subscriptionContoller')
 
 module.exports = function (app) {

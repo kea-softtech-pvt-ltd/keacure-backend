@@ -1,5 +1,5 @@
 const PatientLogin = require('../models/patientProfile');
-const Payment = require('../models/payment');
+const Payment = require('../models/bookingModule');
 const jwt = require("jsonwebtoken");
 const config = require("../auth/config");
 const Razorpay = require('razorpay');
