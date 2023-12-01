@@ -58,6 +58,12 @@ module.exports = {
         })
     },
 
+    async getAppointment(req, res, next) {
+        await Payment.find({ _id: req.params.id }, function (err, doc) {
+            res.send(doc);
+        })
+    },
+  
     async getBookingDetailsBydoctorId(req, res, next) {
         const doctorId = mongoose.Types.ObjectId(req.params.doctorId);
         await Payment.aggregate([

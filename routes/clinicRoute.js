@@ -8,6 +8,7 @@ module.exports = function(app){
     //create clinic route
     router.route('/fetchclinic/:id').get((...params)=>{clinicInfoRoute.fetchClinicById(...params)});
     router.route('/insertclinic').post((...params)=>{clinicInfoRoute.insertAllClinic(...params)})
+    router.route('/clinicservicess').get((...params)=>{clinicInfoRoute.clinicAllServices(...params)})
     
     //create ownClinic Route
     router.route('/fetchownclinic/:id').get((...params)=>{ownClinicInfoRoute.fetchOwnClinicData(...params)})
