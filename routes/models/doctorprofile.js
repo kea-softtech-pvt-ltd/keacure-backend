@@ -15,6 +15,7 @@ const doctorDetail = new mongoose.Schema({
   address             :String,
   officialEmail       :String,
   personalEmail       :String,
+  medicines_ID        :String,
   education:{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'doctorEducations'

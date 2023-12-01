@@ -112,6 +112,7 @@ module.exports = {
           isLoggedIn: true,
           accessToken: accessToken,
           refreshToken: refreshToken,
+          medicines_ID: `medicines_${_id}`
         }, { new: true }, function (err, data) {
           if (err) {
             res.json(err);

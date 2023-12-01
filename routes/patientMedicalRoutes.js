@@ -5,7 +5,8 @@ const multer = require("multer");
 const fbStorage = getStorage();
 const upload = multer({ storage: multer.memoryStorage() });
 
-const MedicalReportController   = require('./controllers/MedicalReportController')
+const MedicalReportController   = require('./controllers/MedicalReportController');
+const medicineList_forDoctor = require("./models/medicineList_forDoctor");
 
 module.exports = function (app) {
   // patient medical report API
@@ -33,6 +34,10 @@ module.exports = function (app) {
   //symptoms Api
   router.route('/fetchsymptoms').get((...params) => MedicalReportController.fetchSymptomsData(...params));
   router.route('/addsymptoms').post((...params) => MedicalReportController.addSymptomsData(...params));
+
+  //for perticular doctor medicine list
+  router.route('/add_mymedicines_list').post((...params) => medicineList_forDoctor.InsertMedicineList(...params));
+  router.route('/get_mymedicines_list').get((...params) => medicineList_forDoctor.getMedicineList(...params));
   
   app.use('/api', router);
 };
