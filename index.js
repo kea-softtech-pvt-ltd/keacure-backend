@@ -17,6 +17,7 @@ initializeApp(config.firebaseConfig);
 const fbStorage = getStorage();
 const upload = multer({ storage: multer.memoryStorage() });
 const axios = require("axios");
+const CsvUpload = require("express-fileupload");
 
 const tlClient = axios.create({
     baseURL: "https://api.textlocal.in/",
@@ -67,7 +68,7 @@ const MainInterceptor = interceptor(function (req, res) {
 
 app.use(MainInterceptor);
 app.use(express.static(dir));
-
+app.use(CsvUpload())
 app.use(cors());
 app.use(express.json());
 

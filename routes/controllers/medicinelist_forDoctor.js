@@ -1,25 +1,19 @@
 const medicineList_forDoctor = require("../models/medicineList_forDoctor");
+const csvtojson = require("csvtojson");
 
 module.exports = {
     //for medicine
     async InsertMedicineList(req, res, next) {
+        const fileName = req.body.medicineslist;
         const MedicineList = new medicineList_forDoctor({
-            medicineList    : req.body.medicineslist,
-            medicines_code  : req.body.medicines_code,
+            medicineList: fileName,
+            medicines_code: req.body.medicines_code,
         })
-        MedicineList.save();
+        await MedicineList.save();
     },
 
-    async getMedicineList(req, res, next) {
-        await medicineList_forDoctor.find()
-            .then(med => res.json(med))
-    },
-
-    async fetchMedicalData(req, res, next) {
-        await medicineList_forDoctor.find({
-            _id: req.params.reportId
-        }, function (err, doc) {
-            res.send(doc);
-        })
+    async getMedicineList (req,res,next){ 
+        await medicineList_forDoctor.find({medicines_code: req.params.medicalId})
+        .then(res => res.json(res))
     }
 }
