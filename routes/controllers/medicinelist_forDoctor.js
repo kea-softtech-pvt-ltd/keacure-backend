@@ -4,12 +4,13 @@ const csvtojson = require("csvtojson");
 module.exports = {
     //for medicine
     async InsertMedicineList(req, res, next) {
-        const fileName = req.body.medicineslist;
-        const MedicineList = new medicineList_forDoctor({
-            medicineList: fileName,
-            medicines_code: req.body.medicines_code,
-        })
-        await MedicineList.save();
+        console.log("data========>", req.files.file)
+        // const fileName = req.files.file;
+        // const MedicineList = new medicineList_forDoctor({
+        //     file: fileName,
+        //     medicines_code: req.body.medicines_code,
+        // })
+        // await MedicineList.save();
     },
 
     async getMedicineList (req,res,next){ 
