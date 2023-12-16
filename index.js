@@ -108,6 +108,7 @@ require('./routes/bookingRoutes')(app);
 require('./routes/helperRoute')(app);
 require('./routes/adminRout')(app);
 require('./routes/subscriptionRoute')(app);
+require('./routes/MedicineRoutes')(app);
 //app.use("/", require("./controllers/doctorExperienceRoute"))
 
 app.listen(9000, () => {
