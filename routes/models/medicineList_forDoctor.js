@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const doctorMedicineList = new mongoose.Schema({
-        file: String,
+        file: [],
         medicines_code: String,
 }, { collection: 'medicine_csv_withdrIds' });
 
