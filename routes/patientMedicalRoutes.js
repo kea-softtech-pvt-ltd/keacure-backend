@@ -35,10 +35,6 @@ module.exports = function (app) {
   router.route('/fetchsymptoms').get((...params) => MedicalReportController.fetchSymptomsData(...params));
   router.route('/addsymptoms').post((...params) => MedicalReportController.addSymptomsData(...params));
 
-  //for perticular doctor medicine list
-  router.route('/add_mymedicines_list').post((...params) => medicineList_forDoctor.InsertMedicineList(...params));
-  router.route('/get_mymedicines_list/:medicalId').get((...params) => medicineList_forDoctor.getMedicineList(...params));
-  
   app.use('/api', router);
 };
   
