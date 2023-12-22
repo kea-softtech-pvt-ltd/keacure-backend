@@ -17,7 +17,6 @@ const fbStorage = getStorage();
 const htmlPDF = require('puppeteer-html-pdf');
 const readFile = require('util').promisify(fs.readFile);
 const mongoose = require('mongoose');
-var path = require('path');
 
 module.exports = {
     async InsertMedicalData(req, res, next) {
@@ -165,8 +164,7 @@ module.exports = {
 
                     const options = {
                         format: 'A4',
-                        path: `public/storage/invoice-${id}.pdf`,
-                        // logo: 'public/images/wecurify.png',
+                        path: `public/storage/invoice-${id}.pdf`
                     }
 
                     try {
@@ -202,8 +200,6 @@ module.exports = {
 
     async getPdfPrescription(req, res, next) {
         const reportData = await MedicalReport.findOne({ _id: req.params.reportId });
-       // res.setHeader('Content-Type', 'application/pdf');
-        // res.setHeader('Content-Disposition', 'attachment; filename=prescription.pdf');
         res.send(reportData.pdfUrl)
     },
 

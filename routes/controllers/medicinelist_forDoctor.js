@@ -32,8 +32,11 @@ module.exports = {
     },
 
     async getMedicineList(req, res, next) {
-        // console.log("-------", res)
-        await medicineList_forDoctor.find({ medicines_code: req.params.medicineId })
-            .then(res =>console.log("-------", res))
+            await medicineList_forDoctor.find({
+                medicines_code: req.params.medicineId,
+            }, function (err, doc) {
+                console.log("-------", doc)
+                res.send(doc);
+            })
     }
 }
