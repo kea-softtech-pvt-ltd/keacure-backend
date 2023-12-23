@@ -32,29 +32,26 @@ module.exports = {
     },
 
     async getMedicineList(req, res, next) {
-        console.log("req-------", req.query)
-        // const { page, limit } = req.query; 
         const page = req.query.page || 1;
-        const limit = req.query.limit || 10;
-
+        const pageSize = parseInt(req.query.pageSize || 10);
         await medicineList_forDoctor.find({
             medicines_code: req.params.medicineId,
         })
-            .skip((page - 1) * limit)
-            .limit(limit)
             .then((filter) => {
                 const data = filter.map((r) => {
                     return r.file
                 })
                 const filteredData = data.reduce((r, e) => (r.push(...e), r), [])
+                const startIndex = (page - 1) * pageSize
+                const endIndex = page * pageSize
                 const paginatedProducts = filteredData.slice(startIndex, endIndex);
 
                 // Calculate the total number of pages
-                const totalPages = Math.ceil(filteredData.length / limit);
+                const totalPages = Math.ceil(filteredData.length / pageSize);
 
                 // Send the paginated products and total pages as the API response
-                // res.json({ filteredData: paginatedProducts, totalPages });
-                res.send({ filteredData: paginatedProducts, totalPages })
+                res.send({ filteredData: paginatedProducts, totalPages });
+                // res.send(filteredData)
             })
 
     }
