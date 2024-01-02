@@ -133,11 +133,34 @@ module.exports = {
                         result[index]["start"] = dateTime + ":00"
                         return item
                     })
-                    const firstIndex = (page - 1) * pageSize;
-                    const lastIndex = page * pageSize;
-                    const paginatedProducts = result.slice(firstIndex, lastIndex)
-                    const totalPages = Math.ceil(result.length / pageSize)
-                    res.send({ test, filteredData: paginatedProducts, totalPages });
+                    const startIndex = (page - 1) * pageSize
+                    const endIndex = page * pageSize
+                    const ongoingProduct = result.filter((data) => {
+                        if (data.status === "Ongoing")
+                            return result
+                    })
+                    const ongoing = ongoingProduct.slice(startIndex, endIndex);
+                    const totalOngoingPages = Math.ceil(ongoingProduct.length / pageSize);
+
+
+                    const CompletedProduct = result.filter((data) => {
+                        if (data.status === "Completed")
+                            return result
+                    })
+                    const completed = CompletedProduct.slice(startIndex, endIndex);
+                    const totalCompletedPages = Math.ceil(CompletedProduct.length / pageSize);
+                    const CancelledProduct = result.filter((data) => {
+                        if (data.status === "Cancelled")
+                            return result
+                    })
+                    const cancelled = CancelledProduct.slice(startIndex, endIndex);
+                    const totalCancelledPages = Math.ceil(CancelledProduct.length / pageSize);
+                    res.send({
+                        test, ongoing: ongoing, totalOngoingPages,
+                        completed: completed, totalCompletedPages,
+                        cancelled: cancelled, totalCancelledPages
+                    });
+
                 }
             })
     },
