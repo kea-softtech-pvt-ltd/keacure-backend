@@ -67,7 +67,6 @@ module.exports = {
 
     async getBookingDetailsBydoctorId(req, res, next) {
         const doctorId = mongoose.Types.ObjectId(req.params.doctorId);
-        console.log('==doctorID', doctorId)
         const page = req.query.page || 1;
         const pageSize = parseInt(req.query.pageSize || 6);
         await Payment.aggregate([
@@ -106,7 +105,6 @@ module.exports = {
             }
         ])
             .exec((err, result) => {
-                console.log('===result', result)
                 if (err) {
                     res.send(err);
                 }
@@ -171,7 +169,7 @@ module.exports = {
                 res.json(err);
             }
             else {
-                res.json(data);
+                res.send(data);
             }
         });
     },

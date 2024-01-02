@@ -49,11 +49,6 @@ module.exports = {
                 const totalPages = Math.ceil(filteredData.length / pageSize);
                 // Send the paginated products and total pages as the API response
                 res.send({ filteredData: paginatedProducts, totalPages });
-                // res.send(filteredData)
-                 console.log('===filteredData', filteredData)
-                console.log('===paginatedProducts', paginatedProducts)
-                console.log('===firstIndex', startIndex)
-                console.log('===lastIndex', endIndex)
             })
     },
 
