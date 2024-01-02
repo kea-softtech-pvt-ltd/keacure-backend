@@ -7,7 +7,7 @@ const Razorpay = require('razorpay');
 const mongoose = require('mongoose');
 
 module.exports = {
-    
+
     async getPaymentDetails(req, res) {
         var instance = new Razorpay({ key_id: 'rzp_test_9YSujFU2kXGJti', key_secret: 'NgKdgQNRgRjjzQzafHgPwYS8' })
         var options = {
@@ -20,7 +20,7 @@ module.exports = {
         });
     },
 
-   
+
 
     async getOrderedPaymentDetails(req, res) {
         const Data = new Payment({
@@ -29,7 +29,7 @@ module.exports = {
             clinicId: req.body.ClinicId,
             slotId: req.body.slotId,
             daySlotId: req.body.daySlotId,
-           // orderId: req.body.order_id,
+            // orderId: req.body.order_id,
             transactionId: req.body.transactionId,
             dependentId: req.body.dependentId,
             fees: req.body.fees,
@@ -58,8 +58,18 @@ module.exports = {
         })
     },
 
+    async getAppointment(req, res, next) {
+        await Payment.find({ _id: req.params.id }, function (err, doc) {
+            res.send(doc);
+        })
+    },
+
+
     async getBookingDetailsBydoctorId(req, res, next) {
         const doctorId = mongoose.Types.ObjectId(req.params.doctorId);
+        console.log('==doctorID', doctorId)
+        const page = req.query.page || 1;
+        const pageSize = parseInt(req.query.pageSize || 6);
         await Payment.aggregate([
             { "$match": { "doctorId": doctorId } },
             {
@@ -96,9 +106,11 @@ module.exports = {
             }
         ])
             .exec((err, result) => {
+                console.log('===result', result)
                 if (err) {
                     res.send(err);
                 }
+
                 if (result) {
                     const test = result.map(function (item, index) {
                         const note1 = item["timeSlot"]
@@ -114,17 +126,20 @@ module.exports = {
                             if (item.patientDetails[0]) {
                                 const note2 = item.patientDetails[0]["name"]
                                 result[index]["note"] = note2
-                            } else {
+                            }
+                            else {
                                 null
                             }
-
                         }
                         result[index]["duration"] = "00:" + note1 + ":00"
                         result[index]["start"] = dateTime + ":00"
-                        // result[index]["state"] ="(" + item.status + ")"
                         return item
                     })
-                    res.send(test)
+                    const firstIndex = (page - 1) * pageSize;
+                    const lastIndex = page * pageSize;
+                    const paginatedProducts = result.slice(firstIndex, lastIndex)
+                    const totalPages = Math.ceil(result.length / pageSize)
+                    res.send({ test, filteredData: paginatedProducts, totalPages });
                 }
             })
     },
@@ -187,7 +202,7 @@ module.exports = {
                         result[index]["note"] = "Dr." + note2
                         result[index]["duration"] = "00:" + note1 + ":00"
                         result[index]["start"] = dateTime + ":00"
-                      //  result[index]["state"] ="(" + item.status + ")"
+                        //  result[index]["state"] ="(" + item.status + ")"
                         return item
                     })
                     res.send(test)
