@@ -45,13 +45,15 @@ module.exports = {
                 const startIndex = (page - 1) * pageSize
                 const endIndex = page * pageSize
                 const paginatedProducts = filteredData.slice(startIndex, endIndex);
-
                 // Calculate the total number of pages
                 const totalPages = Math.ceil(filteredData.length / pageSize);
-
                 // Send the paginated products and total pages as the API response
                 res.send({ filteredData: paginatedProducts, totalPages });
                 // res.send(filteredData)
+                 console.log('===filteredData', filteredData)
+                console.log('===paginatedProducts', paginatedProducts)
+                console.log('===firstIndex', startIndex)
+                console.log('===lastIndex', endIndex)
             })
 
     }
