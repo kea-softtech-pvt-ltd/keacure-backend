@@ -183,6 +183,20 @@ module.exports = {
         });
     },
 
+    async updateIncompleteStatus(req, res, next) {
+        let data = {
+            status: req.body.status,
+        }
+        await Payment.findByIdAndUpdate({ _id: req.params.patientAppointmentId }, data, function (err, data) {
+            if (err) {
+                res.json(err);
+            }
+            else {
+                res.json(data);
+            }
+        });
+    },
+
     async getBookingDetailsByPatientId(req, res, next) {
         const patientId = mongoose.Types.ObjectId(req.params.patientId);
         await Payment.aggregate([

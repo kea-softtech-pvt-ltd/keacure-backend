@@ -52,6 +52,19 @@ module.exports = {
                 // res.send(filteredData)
                
             })
+    },
 
+     async getMedicines(req, res, next) {
+        await medicineList_forDoctor.find({
+            medicines_code: req.params.medicineId,
+        })
+            .then((filter) => {
+                const data = filter.map((r) => {
+                    return r.file
+                })
+                const filteredData = data.reduce((r, e) => (r.push(...e), r), [])
+                res.send(filteredData);
+                // res.send(filteredData)
+            })
     }
 }
