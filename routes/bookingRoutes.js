@@ -10,6 +10,7 @@ module.exports = function (app) {
   router.route('/getBookingData/:doctorId').get((...params)=>paymentController.getBookingDetailsBydoctorId(...params));
   router.route('/getBookings/:patientId').get((...params)=>paymentController.getBookingDetailsByPatientId(...params));
   router.route('/updateStatus/:patientAppointmentId').post((...params)=>paymentController.updateStatus(...params));
+  router.route('/updateIncompleteStatus/:patientAppointmentId').post((...params)=>paymentController.updateIncompleteStatus(...params));
   router.route('/cancelappointment/:id').delete((...params)=>{paymentController.cancelAppointment(...params)})
   router.route('/getappointment/:id').get((...params)=>{paymentController.getAppointment(...params)})
   //subscription 
