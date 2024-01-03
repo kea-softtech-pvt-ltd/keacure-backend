@@ -149,16 +149,26 @@ module.exports = {
                     })
                     const completed = CompletedProduct.slice(startIndex, endIndex);
                     const totalCompletedPages = Math.ceil(CompletedProduct.length / pageSize);
+
                     const CancelledProduct = result.filter((data) => {
                         if (data.status === "Cancelled")
                             return result
                     })
                     const cancelled = CancelledProduct.slice(startIndex, endIndex);
                     const totalCancelledPages = Math.ceil(CancelledProduct.length / pageSize);
+
+                    const IncompleteProduct = result.filter((data) => {
+                        if (data.status === "Incomplete")
+                            return result
+                    })
+                    const incomplete = IncompleteProduct.slice(startIndex, endIndex);
+                    const totalIncompletePages = Math.ceil(IncompleteProduct.length / pageSize);
                     res.send({
                         test, ongoing: ongoing, totalOngoingPages,
                         completed: completed, totalCompletedPages,
-                        cancelled: cancelled, totalCancelledPages
+                        cancelled: cancelled, totalCancelledPages,
+                        incomplete: incomplete, totalIncompletePages,
+
                     });
 
                 }

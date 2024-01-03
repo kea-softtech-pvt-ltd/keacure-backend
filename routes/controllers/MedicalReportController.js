@@ -173,6 +173,8 @@ module.exports = {
                         const content = template(pdfData);
                         const buffer = await htmlPDF.create(content, options);
                         const storageRef = ref(fbStorage, `files/invoice-${id}.pdf`);
+                        console.log("storageRef----------", storageRef)
+
                         // Create file metadata including the content type
                         const metadata = {
                             contentType: "application/pdf",
@@ -182,7 +184,7 @@ module.exports = {
 
                         // Grab the public url
                         const downloadURL = await getDownloadURL(snapshot.ref);
-
+                        console.log("snapshot----------", snapshot)
                         await MedicalReport.findByIdAndUpdate({ _id: id }, {pdfUrl:`files/invoice-${id}.pdf`});
 
                         return res.send({
