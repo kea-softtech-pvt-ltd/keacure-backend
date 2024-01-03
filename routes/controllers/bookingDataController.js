@@ -202,7 +202,7 @@ module.exports = {
                 res.json(err);
             }
             else {
-                res.json(data);
+                res.send(data);
             }
         });
     },
