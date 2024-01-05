@@ -180,8 +180,20 @@ module.exports = {
 
     //for fetching patient info
     async allPatient(req, res, next) {
+        const page = req.query.page || 1;
+        const pageSize = parseInt(req.query.pageSize || 6);
         await PatientLogin.find()
-            .then(foundHome => res.json(foundHome))
+        .then((data)=>{
+            console.l
+            const startIndex = (page - 1) * pageSize
+            const endIndex = page * pageSize
+            const paginatedProducts = data.slice(startIndex, endIndex);
+            // Calculate the total number of pages
+            const totalPages = Math.ceil(data.length / pageSize);
+            // Send the paginated products and total pages as the API response
+            res.send({ patientList: paginatedProducts, totalPages });
+        })
+            // .then((foundHome) =>{ res.json(foundHome))}
     },
 
     async fetchPatientById(req, res, next) {

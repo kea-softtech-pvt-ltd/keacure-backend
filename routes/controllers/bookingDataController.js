@@ -142,7 +142,6 @@ module.exports = {
                     const ongoing = ongoingProduct.slice(startIndex, endIndex);
                     const totalOngoingPages = Math.ceil(ongoingProduct.length / pageSize);
 
-
                     const CompletedProduct = result.filter((data) => {
                         if (data.status === "Completed")
                             return result
@@ -209,6 +208,8 @@ module.exports = {
 
     async getBookingDetailsByPatientId(req, res, next) {
         const patientId = mongoose.Types.ObjectId(req.params.patientId);
+        const page = req.query.page || 1;
+        const pageSize = parseInt(req.query.pageSize || 6);
         await Payment.aggregate([
             { "$match": { "patientId": patientId } },
 
@@ -236,7 +237,40 @@ module.exports = {
                         //  result[index]["state"] ="(" + item.status + ")"
                         return item
                     })
-                    res.send(test)
+                    const startIndex = (page - 1) * pageSize
+                    const endIndex = page * pageSize
+                    const ongoingProduct = result.filter((data) => {
+                        if (data.status === "Ongoing")
+                            return result
+                    })
+                    const ongoing = ongoingProduct.slice(startIndex, endIndex);
+                    const totalOngoingPages = Math.ceil(ongoingProduct.length / pageSize);
+
+                    const CompletedProduct = result.filter((data) => {
+                        if (data.status === "Completed")
+                            return result
+                    })
+                    const completed = CompletedProduct.slice(startIndex, endIndex);
+                    const totalCompletedPages = Math.ceil(CompletedProduct.length / pageSize);
+
+                    const CancelledProduct = result.filter((data) => {
+                        if (data.status === "Cancelled")
+                            return result
+                    })
+                    const cancelled = CancelledProduct.slice(startIndex, endIndex);
+                    const totalCancelledPages = Math.ceil(CancelledProduct.length / pageSize);
+                    const IncompleteProduct = result.filter((data) => {
+                        if (data.status === "Incomplete")
+                            return result
+                    })
+                    const incomplete = IncompleteProduct.slice(startIndex, endIndex);
+                    const totalIncompletePages = Math.ceil(IncompleteProduct.length / pageSize);
+                    res.send({
+                        test, ongoing: ongoing, totalOngoingPages,
+                        completed: completed, totalCompletedPages,
+                        cancelled: cancelled, totalCancelledPages,
+                        incomplete: incomplete, totalIncompletePages,
+                    })
                 }
             })
     },

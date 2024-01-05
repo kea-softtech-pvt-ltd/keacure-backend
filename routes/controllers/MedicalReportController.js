@@ -173,7 +173,6 @@ module.exports = {
                         const content = template(pdfData);
                         const buffer = await htmlPDF.create(content, options);
                         const storageRef = ref(fbStorage, `files/invoice-${id}.pdf`);
-                        console.log("storageRef----------", storageRef)
 
                         // Create file metadata including the content type
                         const metadata = {

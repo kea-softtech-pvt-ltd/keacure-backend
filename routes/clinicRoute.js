@@ -9,6 +9,7 @@ module.exports = function(app){
     router.route('/fetchclinic/:id').get((...params)=>{clinicInfoRoute.fetchClinicById(...params)});
     router.route('/insertclinic').post((...params)=>{clinicInfoRoute.insertAllClinic(...params)})
     router.route('/clinicservicess').get((...params)=>{clinicInfoRoute.clinicAllServices(...params)})
+    router.route('/deleteclinic/:clinicId').delete((...params)=>{clinicInfoRoute.deleteClinic(...params)})
     
     //create ownClinic Route
     router.route('/fetchownclinic/:id').get((...params)=>{ownClinicInfoRoute.fetchOwnClinicData(...params)})

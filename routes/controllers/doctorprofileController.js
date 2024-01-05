@@ -161,7 +161,7 @@ module.exports = {
       gender: req.body.gender,
       address: req.body.address,
       personalEmail: req.body.personalEmail,
-      isSubscribed :req.body.isSubscribed
+      isSubscribed: req.body.isSubscribed
     }
     DoctorLogin.findByIdAndUpdate({ _id: req.params.id }, data, function (err, data) {
       if (err) {
@@ -174,7 +174,9 @@ module.exports = {
   },
 
   async fetchAllDoctor(req, res, next) {
-    const searchText = req.body.key ? req.body.key : ""
+    const searchText = req.body.key ? req.body.key : "";
+    const page = req.query.page || 1;
+    const pageSize = parseInt(req.query.pageSize || 6);
     await DoctorLogin.aggregate([
       { "$match": { "name": { $regex: new RegExp(searchText), $options: 'i' } } },
       {
@@ -207,7 +209,11 @@ module.exports = {
           res.send(err);
         }
         if (result) {
-          res.send(result)
+          const startIndex = (page - 1) * pageSize
+          const endIndex = page * pageSize
+          const doctorList = result.slice(startIndex, endIndex);
+          const doctorListPages = Math.ceil(result.length / pageSize);
+          res.send({doctorList: doctorList, doctorListPages})
         }
       })
   },

@@ -9,5 +9,13 @@ const clinicInfo = new mongoose.Schema({
     address          : String,
     clinicNumber     : String,
     services         : [],
+    isDeleted: {
+        type: Boolean,
+        default: false,
+    },
+    deletedAt: {
+        type: Date,
+        default: null,
+    },
 },  {collection: 'clinicInfos' });
 module.exports = Clinic = mongoose.model('clinicInfo', clinicInfo);
