@@ -1,6 +1,10 @@
 const express = require('express');
 const Clinic = require('../models/clinicInfo');
 const clinicService = require('../models/clinicServiceModule');
+const Clinics = require('../models/clinic')
+const DoctorLogin = require('../models/doctorprofile')
+const mongoose = require('mongoose');
+
 module.exports = {
     async fetchClinicById(req, res, next) {
         const page = req.query.page || 1;
@@ -17,7 +21,7 @@ module.exports = {
                 const endIndex = page * pageSize
                 const paginatedClinic = clinics.slice(startIndex, endIndex);
                 const totalPages = Math.ceil(clinics.length / pageSize);
-                res.send({ clinicData: paginatedClinic, totalPages });
+                res.send({clinic, clinicData: paginatedClinic, totalPages });
             })
     },
 
@@ -40,14 +44,78 @@ module.exports = {
             res.send(docs)
         })
     },
+
     async deleteClinic(req, res) {
         await Clinic.findByIdAndUpdate({ _id: req.params.clinicId }, { isDeleted: true, deletedAt: new Date() });
         res.status(200).json('Clinic Deleted');
     },
-    //  async getFeatures(req, res, next) {
-    //     await features_master.find(function (err, docs) {
-    //         res.send(docs)
-    //     })
-    // },
+
+    // all clinics
+    async setClinicData(req, res, next) {
+        const clinicData = new Clinics({
+            clinicLogo: req.body.clinicLogo,
+            clinicName: req.body.clinicName,
+            address: req.body.address,
+            clinicNumber: req.body.clinicNumber,
+            services: req.body.services,
+        })
+        clinicData.save();
+        DoctorLogin.findOneAndUpdate(
+            { _id: req.params.doctorId },
+            { $push: { clinics: { id: clinicData._id } } },
+            function (error, success) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    (success);
+                }
+            }
+        );
+        res.send(clinicData);
+    },
+
+    async setClinicData(req, res, next) {
+        const clinicData = new Clinics({
+            clinicLogo: req.body.clinicLogo,
+            clinicName: req.body.clinicName,
+            address: req.body.address,
+            clinicNumber: req.body.clinicNumber,
+            services: req.body.services,
+        })
+        clinicData.save();
+        DoctorLogin.findOneAndUpdate(
+            { _id: req.params.doctorId },
+            { $push: { clinics: { id: clinicData._id } } },
+            function (error, success) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    res.send(success);
+                }
+            }
+        );
+        res.send(clinicData);
+    },
+
+    async addClinicId_DoctorData(req, res, next) {
+        const clinicId =  mongoose.Types.ObjectId(req.body.clinicId)
+        await DoctorLogin.findOneAndUpdate(
+            { _id: req.params.doctorId },
+            { $push: { clinics: { id:  clinicId } } },
+            function (error, success) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    res.send(success);
+                }
+            }
+        );
+    },
+
+    async clinicData(req, res, next) {
+        await Clinics.find(function (err, docs) {
+            res.send(docs)
+        })
+    },
 
 }

@@ -3,10 +3,20 @@ const { Readable } = require('stream');
 const csv = require('csv-parser')
 const { getStorage, ref, getDownloadURL, uploadBytesResumable } = require("firebase/storage");
 const fbStorage = getStorage();
+const papa = require("papaparse")
+const fs = require('fs')
 
 module.exports = {
     //for medicine
     async InsertMedicineList(req, res, next) {
+        // console.log("req--------------", req.body.data.file.uri)
+        // const results = []
+        // const options = { header: true, dynamicTyping: true }
+        // fs.createReadStream(req.body.data.file.uri)
+        //     .pipe(papa.parse(papa.NODE_STREAM_INPUT, options))
+        //     .on("data", (data) => results.push(data))
+        //     .on("end", () => console.log("req--------------", results))
+
         const file = req.files.file;
         const medicineId = req.body.medicines_code;
         const stream = Readable.from(file.data);
@@ -52,7 +62,7 @@ module.exports = {
             })
     },
 
-     async getMedicines(req, res, next) {
+    async getMedicines(req, res, next) {
         await medicineList_forDoctor.find({
             medicines_code: req.params.medicineId,
         })
@@ -62,7 +72,6 @@ module.exports = {
                 })
                 const filteredData = data.reduce((r, e) => (r.push(...e), r), [])
                 res.send(filteredData);
-                // res.send(filteredData)
             })
     }
 }

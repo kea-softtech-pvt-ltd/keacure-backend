@@ -19,7 +19,8 @@ const doctorDetail = new mongoose.Schema({
   education:{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'doctorEducations'
-  }
+  },
+  clinics : []
 },{collection: 'doctordetails' });
 
 doctorDetail.statics.createToken = function (user) {
