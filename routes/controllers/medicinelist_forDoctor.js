@@ -37,31 +37,31 @@ module.exports = {
         await medicineList_forDoctor.find({
             medicines_code: req.params.medicineId,
         })
-            .then((filter) => {
-                const data = filter.map((r) => {
+            .then((response) => {
+                const data = response.map((r) => {
                     return r.file
                 })
-                const filteredData = data.reduce((r, e) => (r.push(...e), r), [])
+                const reducedData = data.reduce((r, e) => (r.push(...e), r), [])
                 const startIndex = (page - 1) * pageSize
                 const endIndex = page * pageSize
-                const paginatedProducts = filteredData.slice(startIndex, endIndex);
+                const paginatedProducts = reducedData.slice(startIndex, endIndex);
                 // Calculate the total number of pages
-                const totalPages = Math.ceil(filteredData.length / pageSize);
+                const totalPages = Math.ceil(reducedData.length / pageSize);
                 // Send the paginated products and total pages as the API response
-                res.send({ filteredData: paginatedProducts, totalPages });
+                res.send({reducedData, filteredData: paginatedProducts, totalPages });
             })
     },
 
-     async getMedicines(req, res, next) {
+    async getMedicines(req, res, next) {
         await medicineList_forDoctor.find({
             medicines_code: req.params.medicineId,
         })
-            .then((filter) => {
-                const data = filter.map((r) => {
+            .then((res) => {
+                const data = res.map((r) => {
                     return r.file
                 })
                 const filteredData = data.reduce((r, e) => (r.push(...e), r), [])
-                res.send(filteredData);
+                res.send( filteredData);
                 // res.send(filteredData)
             })
     }
