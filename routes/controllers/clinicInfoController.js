@@ -1,4 +1,3 @@
-const express = require('express');
 const Clinic = require('../models/clinicInfo');
 const clinicService = require('../models/clinicServiceModule');
 const Clinics = require('../models/clinic')
@@ -94,5 +93,17 @@ module.exports = {
             res.send(docs)
         })
     },
+
+    async clinicDataById(req, res, next) {
+        await Clinics.find(function (err, docs) {
+            res.send(docs)
+        })
+    },
+
+    async clinicDataById(req, res, next) {
+        await Clinics.findById({_id:req.params.clinicId}, function (err, doc) {
+          res.send(doc);
+        })
+      },
 
 }
