@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const clinicInfo = new mongoose.Schema({
     clinicId         : mongoose.Schema.Types.ObjectId,
     doctorId         : mongoose.Schema.Types.ObjectId,
-    specialization   : [],
+    // specialization   : [],
     clinicLogo       : String,
     clinicName       : String,
     address          : String,

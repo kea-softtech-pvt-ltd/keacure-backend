@@ -2,6 +2,7 @@ const DoctorLogin = require('../models/doctorprofile');
 const doctorEducation = require('../models/doctorEducation');
 const doctorExperience = require('../models/doctorExperience');
 const clinicInfo = require('../models/clinicInfo');
+const clinics = require('../models/clinic')
 const ownClinicInfo = require('../models/ownClinicInfo');
 const setSession = require('../models/setSession');
 const subScription = require('../models/subscription-model')
@@ -213,7 +214,7 @@ module.exports = {
           const endIndex = page * pageSize
           const doctorList = result.slice(startIndex, endIndex);
           const doctorListPages = Math.ceil(result.length / pageSize);
-          res.send({doctorList: doctorList, doctorListPages})
+          res.send({result,doctorList: doctorList, doctorListPages})
         }
       })
   },
@@ -240,18 +241,10 @@ module.exports = {
       },
       {
         $lookup: {
-          from: clinicInfo.collection.name,
-          localField: "_id",
-          foreignField: "doctorId",
+          from: clinics.collection.name,
+          localField: "clinics.id",
+          foreignField: "_id",
           as: "clinicList"
-        }
-      },
-      {
-        $lookup: {
-          from: ownClinicInfo.collection.name,
-          localField: "_id",
-          foreignField: "doctorId",
-          as: "ownClinicList"
         }
       },
       {
