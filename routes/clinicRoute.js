@@ -31,6 +31,7 @@ module.exports = function(app){
     router.route('/clinics').get((...params)=>{clinicInfoRoute.clinicData(...params)})
     router.route('/clinics/:doctorId').post((...params)=>{clinicInfoRoute.setClinicData(...params)})
     router.route('/addclinicid/:doctorId').post((...params)=>{clinicInfoRoute.addClinicId_DoctorData(...params)})
+    router.route('/getclinic/:clinicId').get((...params)=>{clinicInfoRoute.clinicDataById(...params)})
 
     app.use('/api',router)
 }

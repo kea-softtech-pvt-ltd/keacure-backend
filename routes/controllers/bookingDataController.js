@@ -1,7 +1,6 @@
 const Payment = require('../models/bookingModule');
 const PatientLogin = require('../models/patientProfile');
-const clinicInfo = require('../models/clinicInfo');
-const ownClinicInfo = require('../models/ownClinicInfo');
+const Clinics = require('../models/clinic');
 const DoctorLogin = require('../models/doctorprofile')
 const Razorpay = require('razorpay');
 const mongoose = require('mongoose');
@@ -89,18 +88,10 @@ module.exports = {
             },
             {
                 $lookup: {
-                    from: clinicInfo.collection.name,
+                    from: Clinics.collection.name,
                     localField: "clinicId",
                     foreignField: "_id",
                     as: "clinicList"
-                }
-            },
-            {
-                $lookup: {
-                    from: ownClinicInfo.collection.name,
-                    localField: "clinicId",
-                    foreignField: "_id",
-                    as: "ownClinicList"
                 }
             }
         ])

@@ -1,4 +1,3 @@
-const express = require('express');
 const Clinic = require('../models/clinicInfo');
 const clinicService = require('../models/clinicServiceModule');
 const Clinics = require('../models/clinic')
@@ -67,30 +66,7 @@ module.exports = {
                 if (error) {
                     console.log(error);
                 } else {
-                    (success);
-                }
-            }
-        );
-        res.send(clinicData);
-    },
-
-    async setClinicData(req, res, next) {
-        const clinicData = new Clinics({
-            clinicLogo: req.body.clinicLogo,
-            clinicName: req.body.clinicName,
-            address: req.body.address,
-            clinicNumber: req.body.clinicNumber,
-            services: req.body.services,
-        })
-        clinicData.save();
-        DoctorLogin.findOneAndUpdate(
-            { _id: req.params.doctorId },
-            { $push: { clinics: { id: clinicData._id } } },
-            function (error, success) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    res.send(success);
+                    console.log(success);
                 }
             }
         );
@@ -117,5 +93,17 @@ module.exports = {
             res.send(docs)
         })
     },
+
+    async clinicDataById(req, res, next) {
+        await Clinics.find(function (err, docs) {
+            res.send(docs)
+        })
+    },
+
+    async clinicDataById(req, res, next) {
+        await Clinics.findById({_id:req.params.clinicId}, function (err, doc) {
+          res.send(doc);
+        })
+      },
 
 }
