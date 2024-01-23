@@ -156,6 +156,7 @@ module.exports = {
   },
   //for update data
   async insertPersonalInfoById(req, res, next) {
+    console.log("req---------", req)
     data = {
       photo: req.body.photo,
       name: req.body.name,

@@ -94,11 +94,11 @@ module.exports = {
         })
     },
 
-    async clinicDataById(req, res, next) {
-        await Clinics.find(function (err, docs) {
-            res.send(docs)
-        })
-    },
+    // async clinicDataById(req, res, next) {
+    //     await Clinics.find(function (err, docs) {
+    //         res.send(docs)
+    //     })
+    // },
 
     async clinicDataById(req, res, next) {
         await Clinics.findById({_id:req.params.clinicId}, function (err, doc) {
