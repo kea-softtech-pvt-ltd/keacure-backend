@@ -3,20 +3,10 @@ const { Readable } = require('stream');
 const csv = require('csv-parser')
 const { getStorage, ref, getDownloadURL, uploadBytesResumable } = require("firebase/storage");
 const fbStorage = getStorage();
-const papa = require("papaparse")
-const fs = require('fs')
 
 module.exports = {
     //for medicine
     async InsertMedicineList(req, res, next) {
-        // console.log("req--------------", req.body.data.file.uri)
-        // const results = []
-        // const options = { header: true, dynamicTyping: true }
-        // fs.createReadStream(req.body.data.file.uri)
-        //     .pipe(papa.parse(papa.NODE_STREAM_INPUT, options))
-        //     .on("data", (data) => results.push(data))
-        //     .on("end", () => console.log("req--------------", results))
-
         const file = req.files.file;
         const medicineId = req.body.medicines_code;
         const stream = Readable.from(file.data);
@@ -47,18 +37,18 @@ module.exports = {
         await medicineList_forDoctor.find({
             medicines_code: req.params.medicineId,
         })
-            .then((filter) => {
-                const data = filter.map((r) => {
+            .then((response) => {
+                const data = response.map((r) => {
                     return r.file
                 })
-                const filteredData = data.reduce((r, e) => (r.push(...e), r), [])
+                const reducedData = data.reduce((r, e) => (r.push(...e), r), [])
                 const startIndex = (page - 1) * pageSize
                 const endIndex = page * pageSize
-                const paginatedProducts = filteredData.slice(startIndex, endIndex);
+                const paginatedProducts = reducedData.slice(startIndex, endIndex);
                 // Calculate the total number of pages
-                const totalPages = Math.ceil(filteredData.length / pageSize);
+                const totalPages = Math.ceil(reducedData.length / pageSize);
                 // Send the paginated products and total pages as the API response
-                res.send({ filteredData: paginatedProducts, totalPages });
+                res.send({reducedData, filteredData: paginatedProducts, totalPages });
             })
     },
 
@@ -66,12 +56,13 @@ module.exports = {
         await medicineList_forDoctor.find({
             medicines_code: req.params.medicineId,
         })
-            .then((filter) => {
-                const data = filter.map((r) => {
+            .then((res) => {
+                const data = res.map((r) => {
                     return r.file
                 })
                 const filteredData = data.reduce((r, e) => (r.push(...e), r), [])
-                res.send(filteredData);
+                res.send( filteredData);
+                // res.send(filteredData)
             })
     }
 }
