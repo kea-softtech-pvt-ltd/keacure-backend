@@ -180,42 +180,38 @@ module.exports = {
 
     //for fetching patient info
     async allPatient(req, res, next) {
-        const page = req.query.page || 1;
-        const pageSize = parseInt(req.query.pageSize || 6);
+        const page = req.query.page ? parseInt(req.query.page) : 1;
+        const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : 6;
         await PatientLogin.find()
-        .then((data)=>{
-            console.l
-            const startIndex = (page - 1) * pageSize
-            const endIndex = page * pageSize
-            const paginatedProducts = data.slice(startIndex, endIndex);
-            // Calculate the total number of pages
-            const totalPages = Math.ceil(data.length / pageSize);
-            // Send the paginated products and total pages as the API response
-            res.send({ patientList: paginatedProducts, totalPages });
-        })
-            // .then((foundHome) =>{ res.json(foundHome))}
+            .then((data) => {
+                const endIndex = page * pageSize
+                const startIndex = endIndex - pageSize
+                const paginatedProducts = data.slice(startIndex, endIndex);
+                const totalPages = Math.ceil(data.length / pageSize);
+                res.send({ patientList: paginatedProducts, totalPages });
+            })
     },
 
     async fetchPatientById(req, res, next) {
-    const id = mongoose.Types.ObjectId(req.params.patientId);
+        const id = mongoose.Types.ObjectId(req.params.patientId);
         await PatientLogin.aggregate([
             { "$match": { "_id": id } },
             {
-              $lookup: {
-                from: PatientLogin.collection.name,
-                foreignField: "_id",
-                localField: "dependent.id",
-                as: "dependent",
-              }
+                $lookup: {
+                    from: PatientLogin.collection.name,
+                    foreignField: "_id",
+                    localField: "dependent.id",
+                    as: "dependent",
+                }
             }
-          ])
+        ])
             .exec((err, result) => {
-              if (err) {
-                res.send(err);
-              }
-              if (result) {
-                res.send(result)
-              }
+                if (err) {
+                    res.send(err);
+                }
+                if (result) {
+                    res.send(result)
+                }
             })
     },
 
@@ -267,7 +263,7 @@ module.exports = {
         data.save();
         PatientLogin.findOneAndUpdate(
             { _id: req.params.patientId },
-            { $push: { dependent: {id :  data._id}  } },
+            { $push: { dependent: { id: data._id } } },
             function (error, success) {
                 if (error) {
                     console.log(error);

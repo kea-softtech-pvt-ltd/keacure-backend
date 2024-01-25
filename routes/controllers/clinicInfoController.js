@@ -82,19 +82,13 @@ module.exports = {
                 if (error) {
                     console.log(error);
                 } else {
-                    res.send(success);
+                    console.log(success);
                 }
             }
         );
     },
 
     async clinicData(req, res, next) {
-        await Clinics.find(function (err, docs) {
-            res.send(docs)
-        })
-    },
-
-    async clinicDataById(req, res, next) {
         await Clinics.find(function (err, docs) {
             res.send(docs)
         })
