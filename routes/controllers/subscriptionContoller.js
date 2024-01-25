@@ -53,10 +53,14 @@ module.exports = {
     },
 
     async updateSubscription(req, res) {
+        var date = moment(req.body.date).format("YYYY-MM-DD");
+        var days = req.body.duration
+        var currentDate = moment(date);
+        var expirydate = moment(currentDate).add(days, 'd');
         let data = {
             doctorId: req.body.doctorId,
-            registerDate: req.body.date,
-            expiryDate: req.body.expiryDate,
+            registerDate: currentDate,
+            expiryDate: expirydate,
             selected_plan: req.body.plan,
             duration: req.body.duration,
             isSubscribe: true
