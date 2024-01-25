@@ -19,8 +19,6 @@ module.exports = {
         });
     },
 
-
-
     async getOrderedPaymentDetails(req, res) {
         const Data = new Payment({
             doctorId: req.body.DoctorId,
@@ -63,9 +61,9 @@ module.exports = {
         })
     },
 
-
     async getBookingDetailsBydoctorId(req, res, next) {
         const doctorId = mongoose.Types.ObjectId(req.params.doctorId);
+        console.log("doctorId===", doctorId)
         const page = req.query.page || 1;
         const pageSize = parseInt(req.query.pageSize || 6);
         await Payment.aggregate([

@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 const config = require("./config");
-const PatientLogin = require('../models/patientProfile');
 
 const { TokenExpiredError } = jwt;
 

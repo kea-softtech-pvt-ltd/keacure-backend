@@ -5,7 +5,7 @@ const subscriptionModel = new mongoose.Schema({
     registerDate        : Date,
     expiryDate          : Date,
     selected_plan       : String,
-    isSubscribe         : Boolean,
+    Status              : String,
     duration            : String
 }, { collection: 'subscriptions' })
 module.exports = Subscription = mongoose.model("subScriptionModel", subscriptionModel)
