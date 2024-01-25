@@ -6,7 +6,6 @@ const Razorpay = require('razorpay');
 const mongoose = require('mongoose');
 
 module.exports = {
-
     async getPaymentDetails(req, res) {
         var instance = new Razorpay({ key_id: 'rzp_test_9YSujFU2kXGJti', key_secret: 'NgKdgQNRgRjjzQzafHgPwYS8' })
         var options = {
@@ -26,7 +25,6 @@ module.exports = {
             clinicId: req.body.ClinicId,
             slotId: req.body.slotId,
             daySlotId: req.body.daySlotId,
-            // orderId: req.body.order_id,
             transactionId: req.body.transactionId,
             dependentId: req.body.dependentId,
             fees: req.body.fees,
@@ -126,28 +124,28 @@ module.exports = {
                     const endIndex = page * pageSize
                     const ongoingProduct = result.filter((data) => {
                         if (data.status === "Ongoing")
-                            return result
+                        return data
                     })
                     const ongoing = ongoingProduct.slice(startIndex, endIndex);
                     const totalOngoingPages = Math.ceil(ongoingProduct.length / pageSize);
 
                     const CompletedProduct = result.filter((data) => {
                         if (data.status === "Completed")
-                            return result
+                            return data
                     })
                     const completed = CompletedProduct.slice(startIndex, endIndex);
                     const totalCompletedPages = Math.ceil(CompletedProduct.length / pageSize);
 
                     const CancelledProduct = result.filter((data) => {
                         if (data.status === "Cancelled")
-                            return result
+                            return data
                     })
                     const cancelled = CancelledProduct.slice(startIndex, endIndex);
                     const totalCancelledPages = Math.ceil(CancelledProduct.length / pageSize);
 
                     const IncompleteProduct = result.filter((data) => {
                         if (data.status === "Incomplete")
-                            return result
+                            return data
                     })
                     const incomplete = IncompleteProduct.slice(startIndex, endIndex);
                     const totalIncompletePages = Math.ceil(IncompleteProduct.length / pageSize);
@@ -158,7 +156,6 @@ module.exports = {
                         incomplete: incomplete, totalIncompletePages,
 
                     });
-
                 }
             })
     },

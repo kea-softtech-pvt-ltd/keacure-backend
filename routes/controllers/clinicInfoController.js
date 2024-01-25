@@ -82,7 +82,7 @@ module.exports = {
                 if (error) {
                     console.log(error);
                 } else {
-                    res.send(success);
+                    console.log(success);
                 }
             }
         );
