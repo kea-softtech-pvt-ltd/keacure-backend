@@ -59,12 +59,13 @@ module.exports = {
     },
 
     async createPrescriptionPdf(req, res, next) {
-        const id = mongoose.Types.ObjectId(req.params.reportId);
+        const id = req.params.reportId;
+        console.log('-------',req.params.reportId)
         var dateString = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000))
             .toISOString()
             .split("T")[0];
         await MedicalReport.aggregate([
-            { "$match": { "_id": id } },
+            { "$match": { "_id": req.params.reportId } },
             {
                 $lookup: {
                     from: PatientLogin.collection.name,
@@ -99,14 +100,6 @@ module.exports = {
             },
             {
                 $lookup: {
-                    from: ownClinicInfo.collection.name,
-                    localField: "clinicId",
-                    foreignField: "_id",
-                    as: "ownClinicList"
-                }
-            },
-            {
-                $lookup: {
                     from: MedicinePrescription.collection.name,
                     localField: "medicine_Prescriptions.id",
                     foreignField: "_id",
@@ -124,9 +117,11 @@ module.exports = {
         ])
             .exec(async (err, result) => {
                 if (err) {
+                    console.log("err==========", err);
                     res.send("err==========", err);
                 }
                 if (result) {
+                    console.log('=result', result)
                     const medicineList = result[0].medicineList
                     const testList = result[0].labTestList
                     const pdfData = {

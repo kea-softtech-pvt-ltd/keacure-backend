@@ -156,14 +156,12 @@ module.exports = {
   },
   //for update data
   async insertPersonalInfoById(req, res, next) {
-    console.log("req---------", req)
     data = {
       photo: req.body.photo,
       name: req.body.name,
       gender: req.body.gender,
       address: req.body.address,
       personalEmail: req.body.personalEmail,
-      isSubscribed: req.body.isSubscribed
     }
     DoctorLogin.findByIdAndUpdate({ _id: req.params.id }, data, function (err, data) {
       if (err) {
