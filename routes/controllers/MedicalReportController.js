@@ -60,7 +60,6 @@ module.exports = {
 
     async createPrescriptionPdf(req, res, next) {
         const id = req.params.reportId;
-        console.log('-------',req.params.reportId)
         var dateString = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000))
             .toISOString()
             .split("T")[0];
@@ -117,11 +116,9 @@ module.exports = {
         ])
             .exec(async (err, result) => {
                 if (err) {
-                    console.log("err==========", err);
                     res.send("err==========", err);
                 }
                 if (result) {
-                    console.log('=result', result)
                     const medicineList = result[0].medicineList
                     const testList = result[0].labTestList
                     const pdfData = {
@@ -178,7 +175,6 @@ module.exports = {
 
                         // Grab the public url
                         const downloadURL = await getDownloadURL(snapshot.ref);
-                        console.log("snapshot----------", snapshot)
                         await MedicalReport.findByIdAndUpdate({ _id: id }, {pdfUrl:`files/invoice-${id}.pdf`});
 
                         return res.send({

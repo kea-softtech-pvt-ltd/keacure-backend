@@ -61,7 +61,6 @@ module.exports = {
 
     async getBookingDetailsBydoctorId(req, res, next) {
         const doctorId = mongoose.Types.ObjectId(req.params.doctorId);
-        console.log("doctorId===", doctorId)
         const page = req.query.page || 1;
         const pageSize = parseInt(req.query.pageSize || 6);
         await Payment.aggregate([
@@ -120,11 +119,11 @@ module.exports = {
                         result[index]["start"] = dateTime + ":00"
                         return item
                     })
-                    const startIndex = (page - 1) * pageSize
                     const endIndex = page * pageSize
+                    const startIndex = endIndex - pageSize
                     const ongoingProduct = result.filter((data) => {
                         if (data.status === "Ongoing")
-                        return data
+                            return data
                     })
                     const ongoing = ongoingProduct.slice(startIndex, endIndex);
                     const totalOngoingPages = Math.ceil(ongoingProduct.length / pageSize);
@@ -194,8 +193,8 @@ module.exports = {
 
     async getBookingDetailsByPatientId(req, res, next) {
         const patientId = mongoose.Types.ObjectId(req.params.patientId);
-        const page = req.query.page || 1;
-        const pageSize = parseInt(req.query.pageSize || 6);
+        const page = req.query.page ? parseInt(req.query.page) : 1;
+        const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : 6;
         await Payment.aggregate([
             { "$match": { "patientId": patientId } },
 
@@ -223,8 +222,8 @@ module.exports = {
                         //  result[index]["state"] ="(" + item.status + ")"
                         return item
                     })
-                    const startIndex = (page - 1) * pageSize
                     const endIndex = page * pageSize
+                    const startIndex = endIndex - pageSize
                     const ongoingProduct = result.filter((data) => {
                         if (data.status === "Ongoing")
                             return result

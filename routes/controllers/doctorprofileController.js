@@ -176,7 +176,7 @@ module.exports = {
   async fetchAllDoctor(req, res, next) {
     const searchText = req.body.key ? req.body.key : "";
     const page = req.query.page ? parseInt(req.query.page) : 1;
-    const pageSize =req.query.pageSize ? parseInt(req.query.pageSize) : 6;
+    const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : 6;
     await DoctorLogin.aggregate([
       { "$match": { "name": { $regex: new RegExp(searchText), $options: 'i' } } },
       {
@@ -213,13 +213,15 @@ module.exports = {
           const startIndex = endIndex - pageSize
           const doctorList = result.slice(startIndex, endIndex);
           const doctorListPages = Math.ceil(result.length / pageSize);
-          res.send({result,doctorList: doctorList, doctorListPages})
+          res.send({ result, doctorList: doctorList, doctorListPages })
         }
       })
   },
 
   async fetchDoctorsById(req, res, next) {
     const id = mongoose.Types.ObjectId(req.params.id);
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : 6;
     await DoctorLogin.aggregate([
       { "$match": { "_id": id } },
       {
@@ -256,11 +258,16 @@ module.exports = {
       }
     ])
       .exec((err, result) => {
+        console.log('===result', result[0]['clinicList'])
         if (err) {
           res.send(err);
         }
         if (result) {
-          res.send(result)
+          const endIndex = page * pageSize
+          const startIndex = endIndex - pageSize
+          const clinicList = result[0]['clinicList'].slice(startIndex, endIndex);
+          const clinicListPages = Math.ceil(result[0]['clinicList'].length / pageSize);
+          res.send({ result, clinicList: clinicList, clinicListPages })
         }
       })
   },
