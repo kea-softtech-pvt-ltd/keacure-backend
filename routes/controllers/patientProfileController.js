@@ -87,12 +87,12 @@ module.exports = {
     },
 
     async getPatientOtp(req, res, next) {
-        const { getOTP, _id } = req.body;
-        if (!getOTP) {
+        const { otp, _id } = req.body;
+        if (!otp) {
             return res.json({ "status": { "error": "please fill the field properly" } });
         }
         try {
-            const userExit = await PatientLogin.findOne({ otp: getOTP }, { _id: _id });
+            const userExit = await PatientLogin.findOne({ otp: otp }, { _id: _id });
             const accessToken = jwt.sign({ id: _id }, config.secret, {
                 expiresIn: config.jwtExpiration,
             });
