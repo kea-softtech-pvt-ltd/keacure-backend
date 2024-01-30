@@ -122,36 +122,18 @@ module.exports = {
     },
 
     async insertPatientDetails(req, res, next) {
-        let data = []
-        if (req.file) {
-            data = {
-                photo: req.file.filename,
-                name: req.body.name,
-                email: req.body.email,
-                gender: req.body.gender,
-                mobile: req.body.mobile,
-                age: req.body.age,
-                bloodgroup: req.body.bloodgroup,
-                maritalstatus: req.body.maritalstatus,
-                height: req.body.height,
-                weight: req.body.weight,
-                birthdate: req.body.birthdate,
-                address: req.body.address,
-            }
-        } else {
-            data = {
-                name: req.body.name,
-                email: req.body.email,
-                gender: req.body.gender,
-                mobile: req.body.mobile,
-                age: req.body.age,
-                bloodgroup: req.body.bloodgroup,
-                maritalstatus: req.body.maritalstatus,
-                height: req.body.height,
-                weight: req.body.weight,
-                birthdate: req.body.birthdate,
-                address: req.body.address,
-            }
+        data = {
+            name: req.body.name,
+            email: req.body.email,
+            gender: req.body.gender,
+            mobile: req.body.mobile,
+            age: req.body.age,
+            bloodgroup: req.body.bloodgroup,
+            maritalstatus: req.body.maritalstatus,
+            height: req.body.height,
+            weight: req.body.weight,
+            birthdate: req.body.birthdate,
+            address: req.body.address,
         }
         await PatientLogin.findByIdAndUpdate({ _id: req.params.id }, data, {
             new: true
