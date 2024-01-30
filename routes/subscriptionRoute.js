@@ -9,7 +9,6 @@ module.exports = function (app) {
   //subscription 
   router.route('/subscription').post((...params)=>subscriptionController.addSubscription(...params));
   router.route('/getsubscription/:doctorId').get((...params)=>subscriptionController.getSubscription(...params));
-  router.route('/getsubscriptionByid/:subId').get((...params)=>subscriptionController.getSubscriptionById(...params));
   router.route('/updatesubscriptiondata/:id').post((...params)=>subscriptionController.updateSubscription(...params))
   //admin side
   router.route('/addsubscriptionplans').post((...params)=>subscriptionController.addAdminSubscription(...params))

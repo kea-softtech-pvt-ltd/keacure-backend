@@ -19,7 +19,6 @@ module.exports = {
     },
 
     async addSubscription(req, res, next) {
-        console.log("req-----", req.body)
         var date = moment(req.body.date).format("YYYY-MM-DD");
         var days = req.body.duration
         var currentDate = moment(date);
@@ -50,7 +49,6 @@ module.exports = {
     async getSubscription(req, res) {
         const data = await subscriptionModel.find({ doctorId: req.params.doctorId }, function (err, doc) {
             res.send(doc)
-        console.log("doc----------",doc)
         });
         const allSubData = data.filter((d) => {
             if (d.Status === "Running") {
@@ -92,51 +90,7 @@ module.exports = {
         }
     },
 
-    async getSubscriptionById(req, res) {
-        await subscriptionModel.find({ _id: req.params.subId }, function (err, doc) {
-            res.send(doc)
-        console.log("doc----------",doc)
-        const date = doc[0].expiryDate
-        var expiryDate = moment(date).format("YYYY-MM-DD");
-        var newDate = moment(new Date()).format("YYYY-MM-DD");
-        if ( newDate > expiryDate) {
-            const subdata = {
-                isSubscribed: false,
-            }
-            doctorLogin.findByIdAndUpdate({ _id: req.params.doctorId },  subdata , function (err, data) {
-                if (err) {
-                    console.log(err)
-                }
-                else {
-                    console.log(data)
-                }
-            })
-        } else {
-            console.log(res)
-        }
-        if ( newDate > expiryDate) {
-            const subdata = {
-                Status: "Expired",
-            }
-            subscriptionModel.findByIdAndUpdate({ _id: doc[0]._id },  subdata , function (err, data) {
-                if (err) {
-                    console.log(err)
-                }
-                else {
-                    console.log(data)
-                }
-            })
-        } else {
-            console.log(res)
-        }
-        });
-        
-        
-    },
-
     async updateSubscription(req, res) {
-        console.log("doc----------",req.params.id)
-
         var date = moment(req.body.date).format("YYYY-MM-DD");
         var days = req.body.duration
         var currentDate = moment(date);
