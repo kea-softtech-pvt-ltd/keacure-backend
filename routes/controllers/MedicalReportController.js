@@ -2,9 +2,7 @@ const MedicalReport = require("../models/patient_medical_report");
 const MedicineList = require("../models/medicine_ListModel")
 const PatientLogin = require('../models/patientProfile')
 const DoctorLogin = require('../models/doctorprofile')
-const config = require("../../firebase.config");
-const ownClinicInfo = require('../models/ownClinicInfo')
-const clinicInfo = require('../models/clinicInfo')
+const clinicInfo = require('../models/clinic')
 const doctorEducation = require('../models/doctorEducation')
 const MedicinePrescription = require("../models/medicine_Prescription")
 const LabPrescription = require("../models/lab_testPrescription")
@@ -59,12 +57,12 @@ module.exports = {
     },
 
     async createPrescriptionPdf(req, res, next) {
-        const id = req.params.reportId;
+        const id = mongoose.Types.ObjectId(req.params.reportId);
         var dateString = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000))
             .toISOString()
             .split("T")[0];
         await MedicalReport.aggregate([
-            { "$match": { "_id": req.params.reportId } },
+            { "$match": { "_id": mongoose.Types.ObjectId(req.params.reportId) } },
             {
                 $lookup: {
                     from: PatientLogin.collection.name,
@@ -116,20 +114,19 @@ module.exports = {
         ])
             .exec(async (err, result) => {
                 if (err) {
-                    res.send("err==========", err);
+                    res.send(err);
                 }
                 if (result) {
                     const medicineList = result[0].medicineList
                     const testList = result[0].labTestList
                     const pdfData = {
                         DoctorData: {
-                            // logo : logo,
                             Name: result[0].doctorDetails[0].name,
                             Mobile: result[0].doctorDetails[0].mobile,
-                            degree: (result[0].educationList.length > 0 )? result[0].educationList[0].degree : "",
+                            degree: (result[0].educationList.length > 0) ? result[0].educationList[0].degree : "",
                             clinicName: result[0].clinicList[0].clinicName,
-                            address: result[0].clinicList[0].address || result[0].ownClinicList[0].address,
-                            services: result[0].clinicList[0].services || result[0].ownClinicList[0].services,
+                            address: result[0].clinicList[0].address,
+                            services: result[0].clinicList[0].services,
                             Date: dateString
                         },
                         patientData: {
@@ -153,30 +150,34 @@ module.exports = {
                             testList
                         }
                     }
-
                     const options = {
                         format: 'A4',
                         path: `public/storage/invoice-${id}.pdf`
                     }
-
                     try {
                         const html = await readFile('views/invoice.hbs', 'utf8');
+                        console.log("--------2" ,html)
                         const template = hbs.compile(html);
+                        console.log("--------3", template)
                         const content = template(pdfData);
+                        console.log("--------4", content)
                         const buffer = await htmlPDF.create(content, options);
+                        console.log("--------5", buffer)
                         const storageRef = ref(fbStorage, `files/invoice-${id}.pdf`);
-
                         // Create file metadata including the content type
+                        console.log("--------6")
                         const metadata = {
                             contentType: "application/pdf",
                         };
                         // Upload the file in the bucket storage
+                        console.log("--------7")
                         const snapshot = await uploadBytesResumable(storageRef, buffer, metadata);
-
+                        console.log("--------8")
                         // Grab the public url
                         const downloadURL = await getDownloadURL(snapshot.ref);
-                        await MedicalReport.findByIdAndUpdate({ _id: id }, {pdfUrl:`files/invoice-${id}.pdf`});
-
+                        console.log("--------9")
+                        await MedicalReport.findByIdAndUpdate({ _id: id }, { pdfUrl: `files/invoice-${id}.pdf` },{new:true});
+                        console.log("--------10")
                         return res.send({
                             message: 'file uploaded to firebase storage',
                             name: `invoice-${id}.pdf`,
@@ -274,8 +275,6 @@ module.exports = {
     //for medicine
     async InsertMedicinePrescriptionData(req, res, next) {
         const prescriptionData = new MedicinePrescription({
-            doctorId: req.body.doctorId,
-            patientId: req.body.patientId,
             reportId: req.body.reportId,
             medicineName: req.body.medicineName,
             patientAppointmentId: req.body.patientAppointmentId,
@@ -341,7 +340,7 @@ module.exports = {
                 if (error) {
                     console.log(error);
                 } else {
-                   // console.log(success);
+                    // console.log(success);
                 }
             }
         );

@@ -2,6 +2,7 @@ const features_master = require('../models/features_master');
 const subscriptionModel = require('../models/subscription-model');
 const subscriptionPlans = require('../models/subscription_master');
 const doctorLogin = require('../models/doctorprofile')
+const mongoose = require('mongoose');
 const moment = require("moment");
 
 module.exports = {
@@ -31,62 +32,64 @@ module.exports = {
             duration: req.body.duration,
             Status: req.body.status
         })
-        data.save();
+        await data.save();
         doctorLogin.findOneAndUpdate(
             { _id: req.body.doctorId },
-            { isSubscribed: true},
+            { isSubscribed: true },
             function (error, success) {
                 if (error) {
-                    console.log(error);
+                    res.json({
+                        "error": "I am error"
+                    });
                 } else {
-                    console.log(success);
+                    res.json({
+                        data,
+                        isSubscribed: true
+                    });
                 }
             }
         );
-        res.json(data);
     },
 
     async getSubscription(req, res) {
-        const data = await subscriptionModel.find({ doctorId: req.params.doctorId }, function (err, doc) {
-            res.send(doc)
-        });
+        const data = await subscriptionModel.find({ doctorId: req.params.doctorId });
         const allSubData = data.filter((d) => {
             if (d.Status === "Running") {
                 return data
             }
         })
-        const date = allSubData[0].expiryDate
-        var expiryDate = moment(date).format("YYYY-MM-DD");
-        var newDate = moment(new Date()).format("YYYY-MM-DD");
-        if ( newDate > expiryDate) {
-            const subdata = {
-                isSubscribed: false,
+        if (allSubData) {
+            const date = allSubData[0].expiryDate
+            var expiryDate = moment(date).format("YYYY-MM-DD");
+            var newDate = moment(new Date()).format("YYYY-MM-DD");
+            if (newDate > expiryDate) {
+                const subdata = {
+                    isSubscribed: false,
+                }
+                const loginData = await doctorLogin.findByIdAndUpdate({ _id: req.params.doctorId }, subdata)
+                const statusData = {
+                    Status: "Expired",
+                }
+                const subscriptionData = await subscriptionModel.findByIdAndUpdate({ _id: allSubData[0]._id }, statusData)
+                res.json({
+                    "status": "success",
+                    "data": {
+                        data,
+                        loginData,
+                        subscriptionData
+                    }
+                })
+            } else {
+                res.json({
+                    "status": "error",
+                    "data": data
+                })
             }
-            doctorLogin.findByIdAndUpdate({ _id: req.params.doctorId },  subdata , function (err, data) {
-                if (err) {
-                    console.log(err)
-                }
-                else {
-                    console.log(data)
-                }
-            })
         } else {
-            console.log(data)
-        }
-        if ( newDate > expiryDate) {
-            const subdata = {
-                Status: "Expired",
-            }
-            subscriptionModel.findByIdAndUpdate({ _id: allSubData[0]._id },  subdata , function (err, data) {
-                if (err) {
-                    console.log(err)
-                }
-                else {
-                    console.log(data)
-                }
+            res.json({
+                "status": "error",
+                "data": "No data found"
             })
-        } else {
-            console.log(data)
         }
     },
 
@@ -104,15 +107,22 @@ module.exports = {
             Status: req.body.status
         })
         data.save();
-        subscriptionModel.findByIdAndUpdate({ _id: req.params.id },{ Status: "Expired"}, function (err, data) {
-            if (err) {
-                console.log(err)
+        subscriptionModel.findOneAndUpdate(
+            { _id:req.params.id },
+            { Status: "Expired" },
+            function (error, success) {
+                if (error) {
+                    res.json({
+                        "error": "I am error"
+                    });
+                } else {
+                    res.json({
+                        data,
+                        Status: "Expired" 
+                    });
+                }
             }
-            else {
-                console.log(data)
-            }
-
-        })
+        );
     },
 
     //for admin

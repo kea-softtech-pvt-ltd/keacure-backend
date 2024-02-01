@@ -258,7 +258,6 @@ module.exports = {
       }
     ])
       .exec((err, result) => {
-        console.log('===result', result[0]['clinicList'])
         if (err) {
           res.send(err);
         }
