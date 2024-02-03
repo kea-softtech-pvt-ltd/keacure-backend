@@ -4,6 +4,7 @@ const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
 const path = require("path");
 const doctorEducationsRoute = require('./controllers/doctorEducationsController')
+const { isSubscribed, isDrLoggedIn } = require("../services/auth")
 
 //add data cb=callback
 const storage = multer.diskStorage({
@@ -27,7 +28,10 @@ const fileFilter = (req, file, cb) => {
 let upload = multer({ storage: storage, fileFilter: fileFilter }).array('document', 6);
 
 module.exports = function (app) {
-  router.route('/fetchEduData/:id').get((...params) => { doctorEducationsRoute.fetchEducationData(...params) });
+  router.route('/fetchEduData/:doctorId').get(
+    isDrLoggedIn,
+    isSubscribed,
+    (...params) => { doctorEducationsRoute.fetchEducationData(...params) });
   router.route('/fetchEduData').get((...params) => { doctorEducationsRoute.fetchEducationData(...params) });
   router.route('/fetchAllEduData').get((...params) => { doctorEducationsRoute.fetchAllEducationData(...params) });
   router.route('/fetchEditEduData/:id').get((...params) => { doctorEducationsRoute.fetchAllEditEducationData(...params) });

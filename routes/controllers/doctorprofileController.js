@@ -127,6 +127,7 @@ module.exports = {
       }
     } catch (err) {
     }
+    next()
   },
 
   async otpIsLoggedIn(req, res, next) {
@@ -150,7 +151,7 @@ module.exports = {
   },
 
   async fetchDataById(req, res, next) {
-    await DoctorLogin.findById(req.params.id, function (err, doc) {
+    await DoctorLogin.findById(req.params.doctorId, function (err, doc) {
       res.send(doc);
     })
   },
@@ -163,7 +164,7 @@ module.exports = {
       address: req.body.address,
       personalEmail: req.body.personalEmail,
     }
-    DoctorLogin.findByIdAndUpdate({ _id: req.params.id }, data, function (err, data) {
+    DoctorLogin.findByIdAndUpdate({ _id: req.params.doctorId }, data, function (err, data) {
       if (err) {
         res.json(err);
       }
@@ -219,7 +220,7 @@ module.exports = {
   },
 
   async fetchDoctorsById(req, res, next) {
-    const id = mongoose.Types.ObjectId(req.params.id);
+    const id = mongoose.Types.ObjectId(req.params.doctorId);
     const page = req.query.page ? parseInt(req.query.page) : 1;
     const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : 6;
     await DoctorLogin.aggregate([

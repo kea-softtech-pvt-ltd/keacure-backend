@@ -135,7 +135,7 @@ module.exports = {
             birthdate: req.body.birthdate,
             address: req.body.address,
         }
-        await PatientLogin.findByIdAndUpdate({ _id: req.params.id }, data, {
+        await PatientLogin.findByIdAndUpdate({ _id: req.params.patientId }, data, {
             new: true
         }, function (err, data) {
             if (err) {

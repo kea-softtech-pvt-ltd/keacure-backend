@@ -2,7 +2,7 @@ const DoctorEducation = require('../models/doctorEducation');
 const { educationalInfoSchema } = require('../auth/doctorSchemasValidate')
 module.exports = {
   async fetchEducationData(req, res, next) {
-    await DoctorEducation.find({ doctorId: req.params.id }, function (err, doc) {
+    await DoctorEducation.find({ doctorId: req.params.doctorId }, function (err, doc) {
       res.send(doc);
     })
   },

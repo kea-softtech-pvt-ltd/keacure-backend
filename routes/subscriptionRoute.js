@@ -1,6 +1,7 @@
 const express     = require('express'),
 router            = express.Router();
 const subscriptionController = require('./controllers/subscriptionContoller')
+const { isSubscribed, isDrLoggedIn } = require("../services/auth")
 
 module.exports = function (app) {
   //features 
@@ -8,7 +9,10 @@ module.exports = function (app) {
   router.route('/addfeatures').post((...params)=>subscriptionController.addFeatures(...params));  
   //subscription 
   router.route('/subscription').post((...params)=>subscriptionController.addSubscription(...params));
-  router.route('/getsubscription/:doctorId').get((...params)=>subscriptionController.getSubscription(...params));
+  router.route('/getsubscription/:doctorId').get(
+    isDrLoggedIn,
+    isSubscribed,
+    (...params)=>subscriptionController.getSubscription(...params));
   router.route('/updatesubscriptiondata/:id').post((...params)=>subscriptionController.updateSubscription(...params))
   //admin side
   router.route('/addsubscriptionplans').post((...params)=>subscriptionController.addAdminSubscription(...params))

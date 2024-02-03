@@ -1,10 +1,12 @@
 const express     = require('express'),
 router            = express.Router();
-const doctorprofileRoute = require('./controllers/doctorprofileController');
+const doctorprofileController = require('./controllers/doctorprofileController');
 const multer         =  require('multer');
 const { v4: uuidv4 } =  require('uuid');
 const path           =  require("path");
+const { isSubscribed, isDrLoggedIn } = require("../services/auth")
 
+// const {isLoggedIn} = require('../services/auth')
 //update data cb=callback
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -27,17 +29,28 @@ const fileFilter = (req, file, cb) => {
 let upload = multer({ storage: storage, fileFilter:fileFilter}).single('photo');
 
 module.exports = function (app) {
-  router.route('/loginotp').post((...params) => {doctorprofileRoute.login(...params)});
-  router.route('/resendotp').post((...params) => {doctorprofileRoute.resetOTP(...params)});
-  router.route('/otp').post((...params) => {doctorprofileRoute.loginOtp(...params)});
-  router.route('/otpIsLoggedIn/:id').post((...params) => {doctorprofileRoute.otpIsLoggedIn(...params)});
-  router.route('/fetchOtp').get((...params) => {doctorprofileRoute.fetchOtp(...params)});
-  router.route('/fetchData/:id').get((...params) => {doctorprofileRoute.fetchDataById(...params)});
-  router.route('/insertPersonalInfo/:id').post(upload, (...params) =>{ doctorprofileRoute.insertPersonalInfoById(...params)});
-  router.route('/doctor/:id').get((...params) =>{ doctorprofileRoute.fetchDoctorsById(...params)});
-  router.route('/auth/token').post((...params)=>doctorprofileRoute.refreshJWTToken(...params));
+  router.route('/loginotp').post((...params) => {doctorprofileController.login(...params)});
+  router.route('/resendotp').post((...params) => {doctorprofileController.resetOTP(...params)});
+  router.route('/otp').post((...params) => {doctorprofileController.loginOtp(...params)});
+  // router.route('/otpIsLoggedIn/:id').post((...params) => {doctorprofileController.otpIsLoggedIn(...params)});
+  router.route('/fetchOtp').get((...params) => {doctorprofileController.fetchOtp(...params)});
+  router.route('/fetchData/:doctorId').get(
+    isDrLoggedIn,
+    isSubscribed,
+    (...params) => {doctorprofileController.fetchDataById(...params)});
+  router.route('/insertPersonalInfo/:doctorId').post(
+    upload, 
+    isDrLoggedIn,
+    isSubscribed,
+    (...params) =>{ doctorprofileController.insertPersonalInfoById(...params)});
+  router.route('/doctor/:doctorId').get(
+    isDrLoggedIn,
+    isSubscribed,
+    (...params) =>{ doctorprofileController.fetchDoctorsById(...params)});
+  router.route('/auth/token').post((...params)=>doctorprofileController.refreshJWTToken(...params));
   //search API
-  router.route('/search').post((...params)=> {doctorprofileRoute.fetchAllDoctor(...params)});
+  router.route('/search').post((...params)=> {doctorprofileController.fetchAllDoctor(...params)});
+  // router.route('/search').post((...params)=> {isLoggedIn ,  doctorprofileController.fetchAllDoctor(...params)});
   // router.post("/upload", upload.single("filename"));
   app.use('/api', router);
 }

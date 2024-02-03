@@ -3,7 +3,7 @@ const { experienceInfoSchema } = require('../auth/doctorSchemasValidate')
 module.exports = {
   //fetch data
   async fetchAllExperienceById(req, res, next) {
-    await DoctorExperience.find({ doctorId: req.params.id }, function (err, doc) {
+    await DoctorExperience.find({ doctorId: req.params.doctorId }, function (err, doc) {
       res.send(doc);
     })
   },

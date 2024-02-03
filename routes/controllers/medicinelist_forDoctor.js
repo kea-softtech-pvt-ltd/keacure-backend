@@ -48,7 +48,8 @@ module.exports = {
                 // Calculate the total number of pages
                 const totalPages = Math.ceil(reducedData.length / pageSize);
                 // Send the paginated products and total pages as the API response
-                res.send({reducedData, filteredData: paginatedProducts, totalPages });
+                const pageIndex = Array.from({ length: totalPages }, (_, index) => index + 1)
+                res.send({ reducedData, filteredData: paginatedProducts, totalPages, pageIndex });
             })
     },
 

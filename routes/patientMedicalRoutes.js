@@ -1,12 +1,6 @@
 const express                   = require("express");
 router                          = express.Router();
-const { getStorage, ref, getDownloadURL, uploadBytesResumable } = require("firebase/storage");
-const multer = require("multer");
-const fbStorage = getStorage();
-const upload = multer({ storage: multer.memoryStorage() });
-
 const MedicalReportController   = require('./controllers/MedicalReportController');
-const medicineList_forDoctor = require("./controllers/medicinelist_forDoctor");
 
 module.exports = function (app) {
   // patient medical report API

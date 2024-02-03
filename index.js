@@ -18,6 +18,7 @@ const fbStorage = getStorage();
 const upload = multer({ storage: multer.memoryStorage() });
 const axios = require("axios");
 const CsvUpload = require("express-fileupload");
+const {loginOtp} = require('./routes/controllers/doctorprofileController')
 
 const tlClient = axios.create({
     baseURL: "https://api.textlocal.in/",
@@ -85,6 +86,7 @@ mongoose.connect(dbUrl, {
 })
 
 //required route
+// app.use(loginOtp)
 app.use(cors());
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");

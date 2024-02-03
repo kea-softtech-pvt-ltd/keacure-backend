@@ -31,7 +31,7 @@ module.exports = function (app) {
   router.route('/add_mymedicines_list').post((...params) => medicineList_forDoctor.InsertMedicineList(...params));
   //for pagination
   router.route('/get_mymedicines_list/:medicineId').get((...params) => medicineList_forDoctor.getMedicineList(...params));
-  //for merge medicime list
+  //for merge medicine list
   router.route('/get_mymedicines/:medicineId').get((...params) => medicineList_forDoctor.getMedicines(...params));
   
   app.use('/api', router);

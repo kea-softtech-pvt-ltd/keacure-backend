@@ -119,30 +119,31 @@ module.exports = {
                         result[index]["start"] = dateTime + ":00"
                         return item
                     })
+                    const sortedData = result.sort((data1, data2) => (data2.selectedDate)-(data1.selectedDate))
                     const endIndex = page * pageSize
                     const startIndex = endIndex - pageSize
-                    const ongoingProduct = result.filter((data) => {
+                    const ongoingProduct = sortedData.filter((data) => {
                         if (data.status === "Ongoing")
                             return data
                     })
                     const ongoing = ongoingProduct.slice(startIndex, endIndex);
                     const totalOngoingPages = Math.ceil(ongoingProduct.length / pageSize);
 
-                    const CompletedProduct = result.filter((data) => {
+                    const CompletedProduct = sortedData.filter((data) => {
                         if (data.status === "Completed")
                             return data
                     })
                     const completed = CompletedProduct.slice(startIndex, endIndex);
                     const totalCompletedPages = Math.ceil(CompletedProduct.length / pageSize);
 
-                    const CancelledProduct = result.filter((data) => {
+                    const CancelledProduct = sortedData.filter((data) => {
                         if (data.status === "Cancelled")
                             return data
                     })
                     const cancelled = CancelledProduct.slice(startIndex, endIndex);
                     const totalCancelledPages = Math.ceil(CancelledProduct.length / pageSize);
 
-                    const IncompleteProduct = result.filter((data) => {
+                    const IncompleteProduct = sortedData.filter((data) => {
                         if (data.status === "Incomplete")
                             return data
                     })
@@ -222,29 +223,30 @@ module.exports = {
                         //  result[index]["state"] ="(" + item.status + ")"
                         return item
                     })
+                    const sortedData = result.sort((data1, data2) => (data2.selectedDate)-(data1.selectedDate))
                     const endIndex = page * pageSize
                     const startIndex = endIndex - pageSize
-                    const ongoingProduct = result.filter((data) => {
+                    const ongoingProduct = sortedData.filter((data) => {
                         if (data.status === "Ongoing")
                             return result
                     })
                     const ongoing = ongoingProduct.slice(startIndex, endIndex);
                     const totalOngoingPages = Math.ceil(ongoingProduct.length / pageSize);
 
-                    const CompletedProduct = result.filter((data) => {
+                    const CompletedProduct = sortedData.filter((data) => {
                         if (data.status === "Completed")
                             return result
                     })
                     const completed = CompletedProduct.slice(startIndex, endIndex);
                     const totalCompletedPages = Math.ceil(CompletedProduct.length / pageSize);
 
-                    const CancelledProduct = result.filter((data) => {
+                    const CancelledProduct = sortedData.filter((data) => {
                         if (data.status === "Cancelled")
                             return result
                     })
                     const cancelled = CancelledProduct.slice(startIndex, endIndex);
                     const totalCancelledPages = Math.ceil(CancelledProduct.length / pageSize);
-                    const IncompleteProduct = result.filter((data) => {
+                    const IncompleteProduct = sortedData.filter((data) => {
                         if (data.status === "Incomplete")
                             return result
                     })

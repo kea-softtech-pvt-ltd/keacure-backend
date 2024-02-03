@@ -3,6 +3,7 @@ const subscriptionModel = require('../models/subscription-model');
 const subscriptionPlans = require('../models/subscription_master');
 const doctorLogin = require('../models/doctorprofile')
 const mongoose = require('mongoose');
+
 const moment = require("moment");
 
 module.exports = {
@@ -52,45 +53,41 @@ module.exports = {
     },
 
     async getSubscription(req, res) {
-        const data = await subscriptionModel.find({ doctorId: req.params.doctorId });
-        const allSubData = data.filter((d) => {
-            if (d.Status === "Running") {
-                return data
-            }
+        await subscriptionModel.find({ doctorId: req.params.doctorId }, function (err, doc) {
+            res.send(doc)
         })
-        if (allSubData) {
-            const date = allSubData[0].expiryDate
-            var expiryDate = moment(date).format("YYYY-MM-DD");
-            var newDate = moment(new Date()).format("YYYY-MM-DD");
-            if (newDate > expiryDate) {
-                const subdata = {
-                    isSubscribed: false,
-                }
-                const loginData = await doctorLogin.findByIdAndUpdate({ _id: req.params.doctorId }, subdata)
-                const statusData = {
-                    Status: "Expired",
-                }
-                const subscriptionData = await subscriptionModel.findByIdAndUpdate({ _id: allSubData[0]._id }, statusData)
-                res.json({
-                    "status": "success",
-                    "data": {
-                        data,
-                        loginData,
-                        subscriptionData
-                    }
-                })
-            } else {
-                res.json({
-                    "status": "error",
-                    "data": data
-                })
-            }
-        } else {
-            res.json({
-                "status": "error",
-                "data": "No data found"
-            })
-        }
+       
+        // const allSubData = data.filter((d) => {
+        //     if (d.Status === "Running") {
+        //         return data
+        //     }
+        // })
+        // const date = allSubData[0].expiryDate
+        // var expiryDate = moment(date).format("YYYY-MM-DD");
+        // var newDate = moment(new Date()).format("YYYY-MM-DD");
+        // if (newDate > expiryDate) {
+        //     const subdata = {
+        //         isSubscribed: false,
+        //     }
+        //     const loginData = await doctorLogin.findByIdAndUpdate({ _id: req.params.doctorId }, subdata)
+        //     const statusData = {
+        //         Status: "Expired",
+        //     }
+        //     const subscriptionData = await subscriptionModel.findByIdAndUpdate({ _id: allSubData[0]._id }, statusData)
+        //     res.json({
+        //         "status": "success",
+        //         "data": {
+        //             data,
+        //             loginData,
+        //             subscriptionData
+        //         }
+        //     })
+        // } else {
+        //     res.json({
+        //         "status": "error",
+        //         "data": data
+        //     })
+        // }
     },
 
     async updateSubscription(req, res) {
@@ -108,7 +105,7 @@ module.exports = {
         })
         data.save();
         subscriptionModel.findOneAndUpdate(
-            { _id:req.params.id },
+            { _id: req.params.id },
             { Status: "Expired" },
             function (error, success) {
                 if (error) {
@@ -118,7 +115,7 @@ module.exports = {
                 } else {
                     res.json({
                         data,
-                        Status: "Expired" 
+                        Status: "Expired"
                     });
                 }
             }
