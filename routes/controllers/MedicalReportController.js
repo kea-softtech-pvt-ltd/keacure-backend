@@ -117,6 +117,7 @@ module.exports = {
                     res.send(err);
                 }
                 if (result) {
+                    console.log("result--------", result)
                     const medicineList = result[0].medicineList
                     const testList = result[0].labTestList
                     const pdfData = {

@@ -12,7 +12,6 @@ module.exports = function (app) {
     isDrLoggedIn,
     isSubscribed,
     (...params)=>{
-      console.log("i m next")
       paymentController.getBookingDetailsBydoctorId(...params)
     }
   );

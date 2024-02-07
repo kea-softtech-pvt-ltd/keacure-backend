@@ -8,60 +8,45 @@ const isDrLoggedIn = async (req, res, next) => {
         if (doc.isLoggedIn === true) {
             next()
         } else {
-            res.send("please loggedIn" )
+            res.send("please loggedIn")
         }
     })
 }
 
 const isSubscribed = async (req, res, next) => {
-    await subscriptionModel.find({ doctorId: req.params.doctorId }, function (err, doc) {
-        const allSubData = doc.filter((d) => {
-            if (d.Status === "Running") {
-                return doc
-            }
-        })
-        var expiryDate = moment(allSubData[0].expiryDate).format("YYYY-MM-DD");
-        var newDate = moment(new Date()).format("YYYY-MM-DD");
-        if (expiryDate < newDate) {
-            subscriptionModel.findOneAndUpdate(
-                { _id: allSubData[0]._id },
-                { Status: "Expired" },
-                function (error, success) {
-                    if (error) {
-                        res.json({
-                            "error": "I am error"
-                        });
-                    } else {
-                        res.json({
-                            doc,
-                            Status: "Expired"
-                        });
-                    }
-                }
-            );
+    const data = await subscriptionModel.find({ doctorId: req.params.doctorId }, function (err, doc) {
+        res.send()
+    })
 
-            //     const loginData = await doctorLogin.findByIdAndUpdate({ _id: req.params.doctorId }, {isSubscribed: false})
-            //     const subscriptionData = await subscriptionModel.findByIdAndUpdate({ _id: allSubData[0]._id }, {Status: "Expired"})
-            //     res.json({
-            //         "status": "success",
-            //         "data": {
-            //             data,
-            //             loginData,
-            //             subscriptionData
-            //         }
-            //     })
-        } else {
-            next()
+    const allSubData = data.filter((d) => {
+        if (d.Status === "Running") {
+            return data
         }
     })
+    var expiryDate = moment(allSubData[0].expiryDate).format("YYYY-MM-DD");
+    var newDate = moment(new Date()).format("YYYY-MM-DD");
+    if (expiryDate < newDate) {
+        const loginData = await doctorLogin.findByIdAndUpdate({ _id: req.params.doctorId }, {isSubscribed: false})
+        const subscriptionData = await subscriptionModel.findByIdAndUpdate({ _id: allSubData[0]._id }, {Status: "Expired"})
+        res.json({
+            "status": "success",
+            "data": {
+                data,
+                loginData,
+                subscriptionData
+            }
+        })
+    } else {
+        next()
+    }
 }
 
 const isPatientLoggedIn = async (req, res, next) => {
-    await patientLogin.findById(req.params.patient, function (err, doc) {
+    await patientLogin.findById(req.params.patientId, function (err, doc) {
         if (doc.isLoggedIn === true) {
             next()
         } else {
-            res.send("please loggedIn" )
+            res.send("please loggedIn")
         }
     })
 }
