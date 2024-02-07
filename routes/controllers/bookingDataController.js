@@ -96,20 +96,21 @@ module.exports = {
                 }
 
                 if (result) {
-                    const test = result.map(function (item, index) {
+                    const sortedData = result.sort((data1, data2) => (data2.selectedDate)-(data1.selectedDate))
+                    const test = sortedData.map(function (item, index) {
                         const note1 = item["timeSlot"]
                         const dateTime = item["startDate"]
                         if (item.dependentId) {
                             if (item.dependentDetails[0]) {
                                 const note2 = item.dependentDetails[0]["name"]
-                                result[index]["note"] = note2
+                                sortedData[index]["note"] = note2
                             } else {
                                 null
                             }
                         } else {
                             if (item.patientDetails[0]) {
                                 const note2 = item.patientDetails[0]["name"]
-                                result[index]["note"] = note2
+                                sortedData[index]["note"] = note2
                             }
                             else {
                                 null
@@ -119,7 +120,6 @@ module.exports = {
                         result[index]["start"] = dateTime + ":00"
                         return item
                     })
-                    const sortedData = result.sort((data1, data2) => (data2.selectedDate)-(data1.selectedDate))
                     const endIndex = page * pageSize
                     const startIndex = endIndex - pageSize
                     const ongoingProduct = sortedData.filter((data) => {
@@ -213,17 +213,17 @@ module.exports = {
                     res.send(err);
                 }
                 if (result) {
-                    const test = result.map(function (item, index) {
+                    const sortedData = result.sort((data1, data2) => (data2.selectedDate)-(data1.selectedDate))
+                    const test = sortedData.map(function (item, index) {
                         const note1 = item["timeSlot"]
                         const dateTime = item["startDate"]
                         const note2 = item.doctorDetails[0]["name"]
-                        result[index]["note"] = "Dr." + note2
-                        result[index]["duration"] = "00:" + note1 + ":00"
-                        result[index]["start"] = dateTime + ":00"
+                        sortedData[index]["note"] = "Dr." + note2
+                        sortedData[index]["duration"] = "00:" + note1 + ":00"
+                        sortedData[index]["start"] = dateTime + ":00"
                         //  result[index]["state"] ="(" + item.status + ")"
                         return item
                     })
-                    const sortedData = result.sort((data1, data2) => (data2.selectedDate)-(data1.selectedDate))
                     const endIndex = page * pageSize
                     const startIndex = endIndex - pageSize
                     const ongoingProduct = sortedData.filter((data) => {
