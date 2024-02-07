@@ -14,30 +14,32 @@ const isDrLoggedIn = async (req, res, next) => {
 }
 
 const isSubscribed = async (req, res, next) => {
-    const data = await subscriptionModel.find({ doctorId: req.params.doctorId }, function (err, doc) {
-        res.send()
-    })
+    const data = await subscriptionModel.find({ doctorId: req.params.doctorId })
 
     const allSubData = data.filter((d) => {
         if (d.Status === "Running") {
             return data
         }
     })
-    var expiryDate = moment(allSubData[0].expiryDate).format("YYYY-MM-DD");
-    var newDate = moment(new Date()).format("YYYY-MM-DD");
-    if (expiryDate < newDate) {
-        const loginData = await doctorLogin.findByIdAndUpdate({ _id: req.params.doctorId }, {isSubscribed: false})
-        const subscriptionData = await subscriptionModel.findByIdAndUpdate({ _id: allSubData[0]._id }, {Status: "Expired"})
-        res.json({
-            "status": "success",
-            "data": {
-                data,
-                loginData,
-                subscriptionData
-            }
-        })
-    } else {
-        next()
+    if (allSubData[0] ) {
+        var expiryDate = moment(allSubData[0].expiryDate).format("YYYY-MM-DD");
+        var newDate = moment(new Date()).format("YYYY-MM-DD");
+        if (expiryDate < newDate) {
+            const loginData = await doctorLogin.findByIdAndUpdate({ _id: req.params.doctorId }, { isSubscribed: false })
+            const subscriptionData = await subscriptionModel.findByIdAndUpdate({ _id: allSubData[0]._id }, { Status: "Expired" })
+            res.json({
+                "status": "success",
+                "data": {
+                    data,
+                    loginData,
+                    subscriptionData
+                }
+            })
+        } else {
+            next()
+        }
+    }else{
+        res.json("error")
     }
 }
 
@@ -51,42 +53,8 @@ const isPatientLoggedIn = async (req, res, next) => {
     })
 }
 
-
-// const isSubscriptionExpired = async (req, res, next) => {
-//     await subscriptionModel.find({ doctorId: req.params.doctorId }, function (err, doc) {
-//         const allSubData = doc.filter((d) => {
-//             if (d.Status === "Running") {
-//                 return doc
-//             }
-//         })
-
-//         var expiryDate = moment(allSubData[0].expiryDate).format("YYYY-MM-DD");
-//         var newDate = moment(new Date()).format("YYYY-MM-DD");
-//         if (expiryDate < newDate) {
-//             doctorLogin.findByIdAndUpdate(
-//                 { _id: req.params.doctorId },
-//                 { isSubscribed: false },
-//                 function (error, success) {
-//                     if (error) {
-//                         res.json({
-//                             "error": "I am error"
-//                         });
-//                     } else {
-//                         res.json({
-//                             doc,
-//                             Status: "false"
-//                         });
-//                     }
-//                 }
-//             );
-//         } else {
-//             next()
-//         }
-//     })
-// }
 module.exports = {
     isDrLoggedIn,
-    // isSubscriptionExpired,
     isSubscribed,
     isPatientLoggedIn
 }

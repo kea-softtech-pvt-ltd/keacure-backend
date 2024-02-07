@@ -32,7 +32,6 @@ module.exports = function (app) {
   router.route('/loginotp').post((...params) => {doctorprofileController.login(...params)});
   router.route('/resendotp').post((...params) => {doctorprofileController.resetOTP(...params)});
   router.route('/otp').post((...params) => {doctorprofileController.loginOtp(...params)});
-  // router.route('/otpIsLoggedIn/:id').post((...params) => {doctorprofileController.otpIsLoggedIn(...params)});
   router.route('/fetchOtp').get((...params) => {doctorprofileController.fetchOtp(...params)});
   router.route('/fetchData/:doctorId').get(
     isDrLoggedIn,
@@ -50,7 +49,5 @@ module.exports = function (app) {
   router.route('/auth/token').post((...params)=>doctorprofileController.refreshJWTToken(...params));
   //search API
   router.route('/search').post((...params)=> {doctorprofileController.fetchAllDoctor(...params)});
-  // router.route('/search').post((...params)=> {isLoggedIn ,  doctorprofileController.fetchAllDoctor(...params)});
-  // router.post("/upload", upload.single("filename"));
   app.use('/api', router);
 }
