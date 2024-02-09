@@ -62,8 +62,7 @@ module.exports = {
                     return r.file
                 })
                 const filteredData = data.reduce((r, e) => (r.push(...e), r), [])
-                res.send( filteredData);
-                // res.send(filteredData)
+                res.send(filteredData);
             })
     }
 }

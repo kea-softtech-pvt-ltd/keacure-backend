@@ -1,9 +1,11 @@
 const express = require('express'),
-    router = express.Router();
-const clinicInfoRoute = require('./controllers/clinicInfoController');
-const ownClinicInfoRoute = require('./controllers/ownClinicInfoController');
-const setSessionRoutec = require('./controllers/setSessionController');
-const { isSubscribed, isDrLoggedIn } = require("../services/auth")
+router = express.Router();
+const clinicInfoRoute = require('../controllers/clinicInfoController');
+const setSessionRoutec = require('../controllers/setSessionController');
+const { 
+    isSubscribed, 
+    isDrLoggedIn 
+} = require("../services/auth")
 
 module.exports = function (app) {
     //create clinic route
@@ -11,10 +13,6 @@ module.exports = function (app) {
     router.route('/insertclinic').post((...params) => { clinicInfoRoute.insertAllClinic(...params) })
     router.route('/clinicservicess').get((...params) => { clinicInfoRoute.clinicAllServices(...params) })
     router.route('/deleteclinic/:clinicId').delete((...params) => { clinicInfoRoute.deleteClinic(...params) })
-
-    //create ownClinic Route
-    router.route('/fetchownclinic/:id').get((...params) => { ownClinicInfoRoute.fetchOwnClinicData(...params) })
-    router.route('/insertownclinic').post((...params) => { ownClinicInfoRoute.insertOwnClinicData(...params) })
 
     //create session Route
     router.route('/setSession').post((...params) => { setSessionRoutec.setSessionData(...params) })

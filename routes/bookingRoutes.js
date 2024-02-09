@@ -1,8 +1,11 @@
 const express     = require('express'),
 router            = express.Router();
-const paymentController = require('./controllers/bookingDataController');
-const subscriptionController = require('./controllers/subscriptionContoller')
-const { isSubscribed, isDrLoggedIn } = require("../services/auth")
+const paymentController = require('../controllers/bookingDataController');
+const subscriptionController = require('../controllers/subscriptionContoller')
+const { 
+  isSubscribed, 
+  isDrLoggedIn 
+} = require("../services/auth")
 
 module.exports = function (app) {
   //router.route('/razorpay/order').post((...params)=>paymentController.getPaymentDetails(...params));
@@ -19,8 +22,7 @@ module.exports = function (app) {
   router.route('/updateStatus/:patientAppointmentId').post((...params)=>paymentController.updateStatus(...params));
   router.route('/updateIncompleteStatus/:patientAppointmentId').post((...params)=>paymentController.updateIncompleteStatus(...params));
   router.route('/cancelappointment/:id').delete((...params)=>{paymentController.cancelAppointment(...params)})
-  router.route('/getappointment/:id').get(
-    (...params)=>{paymentController.getAppointment(...params)})
+  router.route('/getappointment/:id').get((...params)=>{paymentController.getAppointment(...params)})
   //subscription 
   router.route('/subscription').post((...params)=>subscriptionController.addSubscription(...params));
   router.route('/getsubscription/:doctorId').get(

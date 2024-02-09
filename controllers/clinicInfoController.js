@@ -20,7 +20,7 @@ module.exports = {
                 const endIndex = page * pageSize
                 const paginatedClinic = clinics.slice(startIndex, endIndex);
                 const totalPages = Math.ceil(clinics.length / pageSize);
-                res.send({clinic, clinicData: paginatedClinic, totalPages });
+                res.send({ clinic, clinicData: paginatedClinic, totalPages });
             })
     },
 
@@ -74,10 +74,10 @@ module.exports = {
     },
 
     async addClinicId_DoctorData(req, res, next) {
-        const clinicId =  mongoose.Types.ObjectId(req.body.clinicId)
+        const clinicId = mongoose.Types.ObjectId(req.body.clinicId)
         await DoctorLogin.findOneAndUpdate(
             { _id: req.params.doctorId },
-            { $push: { clinics: { id:  clinicId } } },
+            { $push: { clinics: { id: clinicId } } },
             function (error, success) {
                 if (error) {
                     console.log(error);
@@ -94,16 +94,9 @@ module.exports = {
         })
     },
 
-    // async clinicDataById(req, res, next) {
-    //     await Clinics.find(function (err, docs) {
-    //         res.send(docs)
-    //     })
-    // },
-
     async clinicDataById(req, res, next) {
-        await Clinics.findById({_id:req.params.clinicId}, function (err, doc) {
-          res.send(doc);
+        await Clinics.findById({ _id: req.params.clinicId }, function (err, doc) {
+            res.send(doc);
         })
-      },
-
+    }
 }

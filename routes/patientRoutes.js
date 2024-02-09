@@ -1,6 +1,6 @@
 const express     = require('express'),
 router            = express.Router();
-const patientProfileController = require('./controllers/patientProfileController');
+const patientProfileController = require('../controllers/patientProfileController');
 const multer         =  require('multer');
 const { v4: uuidv4 } =  require('uuid');
 const path           =  require("path");

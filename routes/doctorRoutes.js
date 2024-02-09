@@ -1,13 +1,14 @@
 const express     = require('express'),
 router            = express.Router();
-const doctorprofileController = require('./controllers/doctorprofileController');
 const multer         =  require('multer');
 const { v4: uuidv4 } =  require('uuid');
 const path           =  require("path");
-const { isSubscribed, isDrLoggedIn } = require("../services/auth")
+const doctorprofileController = require('../controllers/doctorprofileController');
+const { 
+  isSubscribed, 
+  isDrLoggedIn 
+} = require("../services/auth")
 
-// const {isLoggedIn} = require('../services/auth')
-//update data cb=callback
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
       cb(null,'../keacure-webapp/public/images');

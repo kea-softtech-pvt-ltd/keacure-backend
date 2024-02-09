@@ -1,6 +1,6 @@
 const express     = require('express'),
 router            = express.Router();
-const admimnController = require('./controllers/adminController');
+const admimnController = require('../controllers/adminController');
 
 module.exports = function(app){
     //create clinic route

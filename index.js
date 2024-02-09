@@ -1,73 +1,16 @@
 const express = require("express");
 const cors = require("cors");
 const request = require('request')
-const { initializeApp } = require("firebase/app");
-const { getStorage, ref, getDownloadURL, uploadBytesResumable } = require("firebase/storage");
 const config = require("./firebase.config");
-const multer = require("multer");
 const mongoose = require("mongoose");
-require('dotenv').config();
 const app = express();
 var path = require('path');
-var fs = require('fs');
-var interceptor = require('express-interceptor')
 var dir = path.join(__dirname, 'public');
-var storage = path.join(__dirname, 'public/storage/');
+require('dotenv').config();
+const { initializeApp } = require("firebase/app");
 initializeApp(config.firebaseConfig);
-const fbStorage = getStorage();
-const upload = multer({ storage: multer.memoryStorage() });
-const axios = require("axios");
 const CsvUpload = require("express-fileupload");
-const {loginOtp} = require('./routes/controllers/doctorprofileController')
 
-const tlClient = axios.create({
-    baseURL: "https://api.textlocal.in/",
-    params: {
-        apiKey: "YBzNv++3trI-OjGn7uQnRiEfE6LmKaZ4JtriZ8MIvX", //Text local api key
-        sender: "600010"
-    }
-  });
-  
-  const smsClient = {
-    sendPartnerWelcomeMessage: user => {
-        if ('8806971543' && 'shubhangi') {
-            const params = new URLSearchParams();
-            params.append("numbers", [parseInt("91" + "8806971543")]);
-            params.append(
-              "message",
-              `Hi there,
-                your one time OTP is 1234`
-            );
-        tlClient.post("/send", params);
-      }
-    },
-    sendVerificationMessage: user => {
-        if ('8806971543' && 'shubhangi') {
-        const params = new URLSearchParams();
-        params.append("numbers", [parseInt("91" + "8806971543")]);
-        params.append(
-          "message",
-          `Your iWheels verification code is 12121`
-        );
-        tlClient.post("/send", params);
-      }
-    }
-  };
-  
-const MainInterceptor = interceptor(function (req, res) {
-    return {
-        isInterceptable: function () {
-            return true
-        },
-        intercept: function (body, send) {
-            send(body)
-        },
-        afterSend: (oldBody, newBody) => {
-        }
-    }
-})
-
-app.use(MainInterceptor);
 app.use(express.static(dir));
 app.use(CsvUpload())
 app.use(cors());
@@ -86,7 +29,6 @@ mongoose.connect(dbUrl, {
 })
 
 //required route
-// app.use(loginOtp)
 app.use(cors());
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -97,7 +39,6 @@ app.get('/report/:file', function (req, res) {
     request(`http://localhost:9000/storage/` + req.params.file).pipe(res);
 })
 app.use(express.static(path.join(__dirname,'http://localhost:9000/images/logo.png')));
-// app.use('/images', express.static('images')); 
 require('./routes/doctorRoutes')(app);
 require('./routes/educationRoute')(app);
 require('./routes/experienceRoute')(app);
@@ -111,7 +52,6 @@ require('./routes/helperRoute')(app);
 require('./routes/adminRout')(app);
 require('./routes/subscriptionRoute')(app);
 require('./routes/MedicineRoutes')(app);
-//app.use("/", require("./controllers/doctorExperienceRoute"))
 
 app.listen(9000, () => {
     console.log(`Server is running on port: 9000`);

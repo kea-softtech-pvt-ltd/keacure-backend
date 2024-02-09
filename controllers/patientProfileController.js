@@ -123,17 +123,17 @@ module.exports = {
 
     async insertPatientDetails(req, res, next) {
         data = {
-            name: req.body.name,
-            email: req.body.email,
-            gender: req.body.gender,
-            mobile: req.body.mobile,
-            age: req.body.age,
-            bloodgroup: req.body.bloodgroup,
+            name        : req.body.name,
+            email       : req.body.email,
+            gender      : req.body.gender,
+            mobile      : req.body.mobile,
+            age         : req.body.age,
+            bloodgroup  : req.body.bloodgroup,
             maritalstatus: req.body.maritalstatus,
-            height: req.body.height,
-            weight: req.body.weight,
-            birthdate: req.body.birthdate,
-            address: req.body.address,
+            height      : req.body.height,
+            weight      : req.body.weight,
+            birthdate   : req.body.birthdate,
+            address     : req.body.address,
         }
         await PatientLogin.findByIdAndUpdate({ _id: req.params.patientId }, data, {
             new: true

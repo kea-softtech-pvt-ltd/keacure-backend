@@ -1,6 +1,6 @@
 const express     = require('express'),
 router            = express.Router();
-const subscriptionController = require('./controllers/subscriptionContoller')
+const subscriptionController = require('../controllers/subscriptionContoller')
 const { isSubscribed, isDrLoggedIn } = require("../services/auth")
 
 module.exports = function (app) {
@@ -20,8 +20,6 @@ module.exports = function (app) {
   router.route('/deletesubscriptionplans/:id').delete((...params)=>subscriptionController.deleteAdminSubscription(...params))
   router.route('/getsubscriptionplanById/:id').get((...params)=>subscriptionController.getSubscriptionPlanById(...params))
   router.route('/getsubscriptionplans').get((...params)=>subscriptionController.getAdminSubscription(...params))
-  // router.route('https://api.razorpay.com/plans').get((...params)=>subscriptionController.getPlans(...params))
-  // router.route('https://api.razorpay.com/plans').post((...params)=>subscriptionController.getSubscriptions(...params))
   
   app.use('/api', router);
 };

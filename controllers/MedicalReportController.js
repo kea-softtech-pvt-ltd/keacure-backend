@@ -8,13 +8,13 @@ const MedicinePrescription = require("../models/medicine_Prescription")
 const LabPrescription = require("../models/lab_testPrescription")
 const LabTest = require("../models/lab_TestModel")
 const symptomsList = require("../models/symptoms");
-const fs = require('fs');
-const hbs = require('hbs');
-const { getStorage, ref, getDownloadURL, uploadBytesResumable, getStream, getBytes } = require("firebase/storage");
-const fbStorage = getStorage();
-const htmlPDF = require('puppeteer-html-pdf');
+const fs = require('fs'); 
+const PuppeteerHTMLPDF = require('puppeteer-html-pdf');
 const readFile = require('util').promisify(fs.readFile);
 const mongoose = require('mongoose');
+const hbs = require('hbs');
+const { getStorage, ref, getDownloadURL, uploadBytesResumable } = require("firebase/storage");
+const fbStorage = getStorage();
 
 module.exports = {
     async InsertMedicalData(req, res, next) {
@@ -117,9 +117,9 @@ module.exports = {
                     res.send(err);
                 }
                 if (result) {
-                    console.log("result--------", result)
                     const medicineList = result[0].medicineList
                     const testList = result[0].labTestList
+
                     const pdfData = {
                         DoctorData: {
                             Name: result[0].doctorDetails[0].name,
@@ -151,34 +151,27 @@ module.exports = {
                             testList
                         }
                     }
+                    const htmlPDF = new PuppeteerHTMLPDF();
                     const options = {
                         format: 'A4',
                         path: `public/storage/invoice-${id}.pdf`
                     }
                     try {
+                        htmlPDF.setOptions(options);
                         const html = await readFile('views/invoice.hbs', 'utf8');
-                        console.log("--------2" ,html)
                         const template = hbs.compile(html);
-                        console.log("--------3", template)
                         const content = template(pdfData);
-                        console.log("--------4", content)
-                        const buffer = await htmlPDF.create(content, options);
-                        console.log("--------5", buffer)
+                        const buffer = await htmlPDF.create(content);
                         const storageRef = ref(fbStorage, `files/invoice-${id}.pdf`);
                         // Create file metadata including the content type
-                        console.log("--------6")
                         const metadata = {
                             contentType: "application/pdf",
                         };
                         // Upload the file in the bucket storage
-                        console.log("--------7")
                         const snapshot = await uploadBytesResumable(storageRef, buffer, metadata);
-                        console.log("--------8")
                         // Grab the public url
                         const downloadURL = await getDownloadURL(snapshot.ref);
-                        console.log("--------9")
-                        await MedicalReport.findByIdAndUpdate({ _id: id }, { pdfUrl: `files/invoice-${id}.pdf` },{new:true});
-                        console.log("--------10")
+                        await MedicalReport.findByIdAndUpdate({ _id: id }, { pdfUrl: `files/invoice-${id}.pdf` }, { new: true });
                         return res.send({
                             message: 'file uploaded to firebase storage',
                             name: `invoice-${id}.pdf`,

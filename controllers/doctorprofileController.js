@@ -1,22 +1,17 @@
 const DoctorLogin = require('../models/doctorprofile');
 const doctorEducation = require('../models/doctorEducation');
 const doctorExperience = require('../models/doctorExperience');
-const clinicInfo = require('../models/clinicInfo');
 const clinics = require('../models/clinic')
-const ownClinicInfo = require('../models/ownClinicInfo');
 const setSession = require('../models/setSession');
 const subScription = require('../models/subscription-model')
-// const TextLocalSMS = require('../../services/TextLocalSMS')
 const jwt = require("jsonwebtoken");
 const config = require("../auth/config")
 const mongoose = require('mongoose');
-const { getStorage, ref, getDownloadURL, uploadBytesResumable } = require("firebase/storage");
-const fbStorage = getStorage();
+const { getStorage } = require("firebase/storage");
 const axios = require("axios");
 
 const {
   loginSchema,
-  personalInfoSchema
 } = require('../auth/doctorSchemasValidate')
 
 //for insert mobile number and generate otp
@@ -43,7 +38,6 @@ module.exports = {
             res.json(err);
           }
           else {
-            //TextLocalSMS.sendSMS(mobile, )
             res.json(data);
           }
         })
@@ -309,27 +303,27 @@ module.exports = {
     }
   },
 
-  async sendSMS() {
-    const result = await axios.create({
-      baseURL: "https://api.textlocal.in/",
-      params: {
-        apiKey: "YBzNv++3trI-OjGn7uQnRiEfE6LmKaZ4JtriZ8MIvX", //Text local api key
-        sender: "600010"
-      }
-    })
+  // async sendSMS() {
+  //   const result = await axios.create({
+  //     baseURL: "https://api.textlocal.in/",
+  //     params: {
+  //       apiKey: "YBzNv++3trI-OjGn7uQnRiEfE6LmKaZ4JtriZ8MIvX", //Text local api key
+  //       sender: "600010"
+  //     }
+  //   })
 
-    const sendPartnerWelcomeMessage = () => {
-      if ('8806971543' && 'shubhangi') {
-        const params = new URLSearchParams();
-        params.append("numbers", [parseInt("91" + "8806971543")]);
-        params.append(
-          "message",
-          `Hi there,
-            your one time OTP is 1234`
-        );
-        result
-      }
-    }
-    return sendPartnerWelcomeMessage()
-  },
+  //   const sendPartnerWelcomeMessage = () => {
+  //     if ('8806971543' && 'shubhangi') {
+  //       const params = new URLSearchParams();
+  //       params.append("numbers", [parseInt("91" + "8806971543")]);
+  //       params.append(
+  //         "message",
+  //         `Hi there,
+  //           your one time OTP is 1234`
+  //       );
+  //       result
+  //     }
+  //   }
+  //   return sendPartnerWelcomeMessage()
+  // },
 } 

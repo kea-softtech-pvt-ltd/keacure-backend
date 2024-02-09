@@ -46,19 +46,19 @@ module.exports = {
     },
 
     async fetchSetSessionData(req, res, next) {
-        await Session.find({_id: req.params.id }, function (err, doc) {
+        await Session.find({ _id: req.params.id }, function (err, doc) {
             res.send(doc);
         })
     },
 
     async fetchSessionData(req, res, next) {
-        await Session.find({ doctorId: req.body.doctorId, clinicId: req.body.clinicId,  isDeleted:req.body.isDeleted }, function (err, doc) {
+        await Session.find({ doctorId: req.body.doctorId, clinicId: req.body.clinicId, isDeleted: req.body.isDeleted }, function (err, doc) {
             res.send(doc);
         })
     },
 
     async deleteSessionData(req, res) {
-        await Session.findByIdAndUpdate(req.params.id, { isDeleted: true , deletedAt:new Date()});
+        await Session.findByIdAndUpdate(req.params.id, { isDeleted: true, deletedAt: new Date() });
         res.status(200).json('user Deleted');
     },
 

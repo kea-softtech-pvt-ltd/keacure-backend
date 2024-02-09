@@ -1,6 +1,6 @@
-const subscriptionModel = require('../routes/models/subscription-model')
-const doctorLogin = require('../routes/models/doctorprofile')
-const patientLogin = require('../routes/models/patientProfile')
+const subscriptionModel = require('../models/subscription-model')
+const doctorLogin = require('../models/doctorprofile')
+const patientLogin = require('../models/patientProfile')
 const moment = require("moment");
 
 const isDrLoggedIn = async (req, res, next) => {

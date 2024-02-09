@@ -34,7 +34,7 @@
     "nexmo": "^2.9.1",
     "nodemon": "^2.0.15",
     "papaparse": "^5.4.1",
-    "puppeteer-html-pdf": "^2.0.8",
+    "puppeteer-html-pdf": "^3.0.3",
     "razorpay": "^2.8.3",
     "react-geocode": "^0.2.3",
     "request": "^2.88.2",

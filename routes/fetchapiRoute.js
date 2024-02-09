@@ -1,8 +1,8 @@
 const express     = require('express'),
 router            = express.Router();
-const allergiesRoute = require('./controllers/allergiesController');
-const drdegreesRoute = require('./controllers/drdegreesController');
-const specializationRoute = require('./controllers/specializationController');
+const allergiesRoute = require('../controllers/allergiesController');
+const drdegreesRoute = require('../controllers/drdegreesController');
+const specializationRoute = require('../controllers/specializationController');
 
 module.exports = function (app) {
     router.route('/getAllergies').get((...params) => {allergiesRoute.getAllAllergies(...params)});

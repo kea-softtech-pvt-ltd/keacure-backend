@@ -1,6 +1,6 @@
 const express                   = require("express");
 router                          = express.Router();
-const MedicalReportController   = require('./controllers/MedicalReportController');
+const MedicalReportController   = require('../controllers/MedicalReportController');
 
 module.exports = function (app) {
   // patient medical report API

@@ -1,5 +1,5 @@
 const DoctorEducation = require('../models/doctorEducation');
-const { educationalInfoSchema } = require('../auth/doctorSchemasValidate')
+
 module.exports = {
   async fetchEducationData(req, res, next) {
     await DoctorEducation.find({ doctorId: req.params.doctorId }, function (err, doc) {
@@ -22,18 +22,12 @@ module.exports = {
 
   //for add data
   async allEducationData(req, res, next) {
-    //const result = await educationalInfoSchema.validateAsync(req.body)
-    const reqFiles = [];
-    // for (var i = 0; i < req.files.length; i++) {
-    //   reqFiles.push(req.files[i].filename)
-    // }
     const educationData = new DoctorEducation({
       doctorId: req.body.doctorId,
       specialization: req.body.specialization,
       collage: req.body.collage,
       comYear: req.body.comYear,
       degree: req.body.degree,
-      // document         : reqFiles
     })
     educationData.save();
     if (res) {
@@ -44,18 +38,12 @@ module.exports = {
   //for update data
   async allUpdateEducationData(req, res, next) {
     await DoctorEducation.findById(req.params.id, function (err, doc) {
-      let reqFiles = [];
-      reqFiles = doc.document
-      // for (var i = 0; i < req.files.length; i++) {
-      //     reqFiles.push(req.files[i].filename)
-      // }
       DoctorEducation.findByIdAndUpdate({ _id: req.params.id }, {
         doctorId: req.body.doctorId,
         specialization: req.body.specialization,
         collage: req.body.collage,
         comYear: req.body.comYear,
         degree: req.body.degree,
-        document: reqFiles
       }, { new: true }, function (err, data) {
         if (err) {
           res.json(err);

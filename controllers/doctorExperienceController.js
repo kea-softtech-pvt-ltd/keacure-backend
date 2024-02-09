@@ -1,5 +1,5 @@
 const DoctorExperience = require('../models/doctorExperience');
-const { experienceInfoSchema } = require('../auth/doctorSchemasValidate')
+
 module.exports = {
   //fetch data
   async fetchAllExperienceById(req, res, next) {
@@ -21,8 +21,6 @@ module.exports = {
   },
 
   async allExperienceData(req, res, next) {
-    // const result = await experienceInfoSchema.validateAsync(req.body)
-
     const experienceData = new DoctorExperience({
       doctorId      : req.body.doctorId,
       clinicName    : req.body.clinicName,
@@ -37,11 +35,11 @@ module.exports = {
   //for update data
   async allExperienceDataById(req, res, next) {
     DoctorExperience.findByIdAndUpdate({ _id: req.params.id }, {
-      doctorId: req.body.doctorId,
-      clinicName: req.body.clinicName,
-      startYear: req.body.startYear,
-      endYear: req.body.endYear,
-      description: req.body.description
+      doctorId    : req.body.doctorId,
+      clinicName  : req.body.clinicName,
+      startYear   : req.body.startYear,
+      endYear     : req.body.endYear,
+      description : req.body.description
     }, { new: true }, function (err, data) {
       if (err) {
         res.json(err);

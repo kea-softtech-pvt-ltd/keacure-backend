@@ -96,7 +96,7 @@ module.exports = {
                 }
 
                 if (result) {
-                    const sortedData = result.sort((data1, data2) => (data2.selectedDate)-(data1.selectedDate))
+                    const sortedData = result.sort((data1, data2) => (data2.selectedDate) - (data1.selectedDate))
                     const test = sortedData.map(function (item, index) {
                         const note1 = item["timeSlot"]
                         const dateTime = item["startDate"]
@@ -213,7 +213,7 @@ module.exports = {
                     res.send(err);
                 }
                 if (result) {
-                    const sortedData = result.sort((data1, data2) => (data2.selectedDate)-(data1.selectedDate))
+                    const sortedData = result.sort((data1, data2) => (data2.selectedDate) - (data1.selectedDate))
                     const test = sortedData.map(function (item, index) {
                         const note1 = item["timeSlot"]
                         const dateTime = item["startDate"]
@@ -221,7 +221,6 @@ module.exports = {
                         sortedData[index]["note"] = "Dr." + note2
                         sortedData[index]["duration"] = "00:" + note1 + ":00"
                         sortedData[index]["start"] = dateTime + ":00"
-                        //  result[index]["state"] ="(" + item.status + ")"
                         return item
                     })
                     const endIndex = page * pageSize
