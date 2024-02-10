@@ -39,7 +39,7 @@ const isSubscribed = async (req, res, next) => {
             next()
         }
     }else{
-        res.json("error")
+        res.json({"status":"error"})
     }
 }
 

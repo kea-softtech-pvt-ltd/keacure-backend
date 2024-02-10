@@ -209,6 +209,22 @@ module.exports = {
                     as: "doctorDetails",
                 }
             },
+            {
+                $lookup: {
+                    from: PatientLogin.collection.name,
+                    localField: "patientId",
+                    foreignField: "_id",
+                    as: "patientDetails",
+                }
+            },
+            {
+                $lookup: {
+                    from: PatientLogin.collection.name,
+                    localField: "dependentId",
+                    foreignField: "_id",
+                    as: "dependentDetails",
+                }
+            },
         ])
             .exec((err, result) => {
                 if (err) {
