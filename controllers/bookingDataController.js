@@ -98,7 +98,7 @@ module.exports = {
                 }
 
                 if (result) {
-                    const sortedData = result.sort((data1, data2) => (data2.selectedDate) - (data1.selectedDate))
+                    const sortedData = result.sort((data1, data2) => (data1.selectedDate) - (data2.selectedDate))
                     const test = sortedData.map(function (item, index) {
                         const note1 = item["timeSlot"]
                         const dateTime = item["startDate"]
