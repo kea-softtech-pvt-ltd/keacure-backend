@@ -8,6 +8,7 @@ const payment = new mongoose.Schema({
     daySlotId: { type: mongoose.Schema.Types.ObjectId },
     medicalReportId: { type: mongoose.Schema.Types.ObjectId },
     dependentId:  { type: mongoose.Schema.Types.ObjectId },
+    isdependent: Boolean,
     orderId: String,
     transactionId: String,
     Appointment: String,

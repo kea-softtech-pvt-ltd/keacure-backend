@@ -134,6 +134,7 @@ module.exports = {
             weight      : req.body.weight,
             birthdate   : req.body.birthdate,
             address     : req.body.address,
+            isParent    : false,
         }
         await PatientLogin.findByIdAndUpdate({ _id: req.params.patientId }, data, {
             new: true
@@ -166,10 +167,15 @@ module.exports = {
         const pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : 6;
         await PatientLogin.find()
             .then((data) => {
+                const patients = data.filter((item) => {
+                    if (item.isParent !== true) {
+                        return data
+                    }
+                })
                 const endIndex = page * pageSize
                 const startIndex = endIndex - pageSize
-                const paginatedProducts = data.slice(startIndex, endIndex);
-                const totalPages = Math.ceil(data.length / pageSize);
+                const paginatedProducts = patients.slice(startIndex, endIndex);
+                const totalPages = Math.ceil(patients.length / pageSize);
                 res.send({ patientList: paginatedProducts, totalPages });
             })
     },
@@ -237,10 +243,12 @@ module.exports = {
 
     async addDependent(req, res, next) {
         const data = new PatientLogin({
-            name: req.body.name,
-            email: req.body.email,
-            gender: req.body.gender,
-            age: req.body.age,
+            name        : req.body.name,
+            email       : req.body.email,
+            gender      : req.body.gender,
+            age         : req.body.age,
+            isParent    : true,
+            parentId    : req.params.patientId
         })
         data.save();
         PatientLogin.findOneAndUpdate(

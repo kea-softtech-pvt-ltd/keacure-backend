@@ -21,8 +21,10 @@ const patientDetails = new mongoose.Schema({
     address             :String,
     isLoggedIn          :Boolean,
     expiryDate          :Date,
+    parentId            :mongoose.Schema.Types.ObjectId,
+    isParent            :Boolean,
     dependent           :[]
-},{collection:'patientLogins'});
+},{collection:'patients'});
 
 patientDetails.statics.createToken = function (user) {
     let expiredAt = new Date();
@@ -45,4 +47,4 @@ patientDetails.statics.createToken = function (user) {
     return token.expiryDate.getTime() < new Date().getTime();
   }
   
-module.exports = PatientLogin = mongoose.model(' patientDetails',  patientDetails);
+module.exports = PatientLogin = mongoose.model('patientDetails',  patientDetails);
