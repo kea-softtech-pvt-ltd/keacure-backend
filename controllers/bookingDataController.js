@@ -27,6 +27,7 @@ module.exports = {
             daySlotId: req.body.daySlotId,
             transactionId: req.body.transactionId,
             dependentId: req.body.dependentId,
+            isdependent: req.body.isdependent,
             fees: req.body.fees,
             date: req.body.date,
             currency: req.body.currency,
@@ -41,6 +42,7 @@ module.exports = {
             paymentMethod: req.body.paymentMethod,
             total: req.body.total
         })
+        console.log("Data=======", Data)
         await Data.save();
         if (res) {
             return res.json(Data)

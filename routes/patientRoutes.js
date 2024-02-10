@@ -36,10 +36,7 @@ module.exports = function (app) {
     isPatientLoggedIn,
     (...params) => {patientProfileController.insertPatientDetails(...params)});
   router.route('/patient').post((...params) => {patientProfileController.allPatient(...params)});
-  router.route('/patientById/:patientId').get(
-    upload ,
-    isPatientLoggedIn,
-    (...params)=>patientProfileController.fetchPatientById(...params));
+  router.route('/patientById/:patientId').get((...params)=>patientProfileController.fetchPatientById(...params));
   router.route('/auth/refreshToken').post((...params)=>patientProfileController.refreshJWTToken(...params));
   router.route('/adddependent/:patientId').post(
     upload ,
