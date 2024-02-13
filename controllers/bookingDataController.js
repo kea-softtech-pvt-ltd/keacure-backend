@@ -19,30 +19,31 @@ module.exports = {
     },
 
     async getOrderedPaymentDetails(req, res) {
+        const dependentId  = req.body.dependentId
+        
         const Data = new Payment({
-            doctorId: req.body.DoctorId,
-            patientId: req.body.patientId,
-            clinicId: req.body.ClinicId,
-            slotId: req.body.slotId,
-            daySlotId: req.body.daySlotId,
-            transactionId: req.body.transactionId,
-            dependentId: req.body.dependentId,
-            isdependent: req.body.isdependent,
-            fees: req.body.fees,
-            date: req.body.date,
-            currency: req.body.currency,
-            day: req.body.day,
-            timeSlot: req.body.timeSlot,
-            slotTime: req.body.slotTime,
-            selectedDate: req.body.selectedDate,
-            startDate: req.body.startDate,
-            status: req.body.status,
-            medicalReportId: req.body.medicalReportId,
-            payment: req.body.payment,
-            paymentMethod: req.body.paymentMethod,
-            total: req.body.total
+            doctorId        : req.body.DoctorId,
+            patientId       : req.body.patientId,
+            clinicId        : req.body.ClinicId,
+            slotId          : req.body.slotId,
+            daySlotId       : req.body.daySlotId,
+            transactionId   : req.body.transactionId,
+            dependentId     : req.body.dependentId,
+            isdependent     : dependentId ? true : false,
+            fees            : req.body.fees,
+            date            : req.body.date,
+            currency        : req.body.currency,
+            day             : req.body.day,
+            timeSlot        : req.body.timeSlot,
+            slotTime        : req.body.slotTime,
+            selectedDate    : req.body.selectedDate,
+            startDate       : req.body.startDate,
+            status          : req.body.status,
+            medicalReportId : req.body.medicalReportId,
+            payment         : req.body.payment,
+            paymentMethod   : req.body.paymentMethod,
+            total           : req.body.total
         })
-        console.log("Data=======", Data)
         await Data.save();
         if (res) {
             return res.json(Data)
@@ -235,8 +236,19 @@ module.exports = {
                     const test = sortedData.map(function (item, index) {
                         const note1 = item["timeSlot"]
                         const dateTime = item["startDate"]
-                        const note2 = item.doctorDetails[0]["name"]
-                        sortedData[index]["note"] = "Dr." + note2
+                        if (item.dependentId) {
+                            const note2 = item.dependentDetails[0]["name"]
+                            const note3 = item.dependentDetails[0]["name"]
+                            sortedData[index]["note"] = "Dr." + note2 
+                            sortedData[index]["state"] = "("+"Pt:"+ note3 +")"
+                            
+                        } else {
+                            const note2 = item.doctorDetails[0]["name"]
+                            const note4 = item.patientDetails[0]["name"]
+                            sortedData[index]["note"] = "Dr." + note2 
+                            sortedData[index]["state"] =  "("+"Pt:"+ note4 +")"
+
+                        }
                         sortedData[index]["duration"] = "00:" + note1 + ":00"
                         sortedData[index]["start"] = dateTime + ":00"
                         return item

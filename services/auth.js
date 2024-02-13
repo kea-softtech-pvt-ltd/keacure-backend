@@ -8,7 +8,7 @@ const isDrLoggedIn = async (req, res, next) => {
         if (doc.isLoggedIn === true) {
             next()
         } else {
-            res.send("please loggedIn")
+            res.json({"status":"please loggedIn"})
         }
     })
 }
