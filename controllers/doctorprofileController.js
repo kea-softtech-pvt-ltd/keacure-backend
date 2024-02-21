@@ -96,30 +96,20 @@ module.exports = {
     if (!getOTP) {
       return res.json({ "status": { "error": "please fill the field properly" } });
     }
-    try {
-      const userExit = await DoctorLogin.findOne({ otp: getOTP }, { _id: _id });
-      const accessToken = jwt.sign({ id: _id }, config.secret, {
-        expiresIn: config.jwtExpiration,
-      });
-      const refreshToken = DoctorLogin.createToken(userExit);
-      if (userExit) {
-        DoctorLogin.findByIdAndUpdate({ _id: _id }, {
-          isLoggedIn: true,
-          accessToken: accessToken,
-          refreshToken: refreshToken,
-          medicines_ID: `medicines_${_id}`
-        }, { new: true }, function (err, data) {
-          if (err) {
-            res.json(err);
-          }
-          else {
-            res.json(data);
-          }
-        })
-      } else {
-        return res.json({ "status": { "error": "Please Enter Correct OTP" } })
-      }
-    } catch (err) {
+    const userExit = await DoctorLogin.findOne({ otp: getOTP }, { _id: _id });
+    const accessToken = jwt.sign({ id: _id }, config.secret, {
+      expiresIn: config.jwtExpiration,
+    });
+    const refreshToken = DoctorLogin.createToken(userExit);
+    if (userExit) {
+      DoctorLogin.findByIdAndUpdate({ _id: _id }, {
+        isLoggedIn: true,
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        medicines_ID: `medicines_${_id}`
+      }, { new: true })
+    } else {
+      res.json({ "status": { "error": "Please Enter Correct OTP" } })
     }
     next()
   },
