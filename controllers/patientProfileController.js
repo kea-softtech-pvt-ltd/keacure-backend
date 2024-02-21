@@ -101,7 +101,6 @@ module.exports = {
             if (userExit) {
                 PatientLogin.findByIdAndUpdate({ _id: _id }, {
                     isLoggedIn: true,
-                    isParent: true,
                     accessToken: accessToken,
                     refreshToken: refreshToken,
                 }, { new: true }, function (err, data) {

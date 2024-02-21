@@ -57,7 +57,7 @@ module.exports = {
     },
 
     async createPrescriptionPdf(req, res, next) {
-        const id = mongoose.Types.ObjectId(req.params.reportId);
+        const id = req.params.reportId;
         var dateString = new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000))
             .toISOString()
             .split("T")[0];
