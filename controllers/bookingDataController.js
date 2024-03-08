@@ -19,7 +19,7 @@ module.exports = {
     },
 
     async getOrderedPaymentDetails(req, res) {
-        const dependentId  = req.body.dependentId
+        const dependentId  = mongoose.Types.ObjectId(req.body.dependentId)
         
         const Data = new Payment({
             doctorId        : req.body.DoctorId,
