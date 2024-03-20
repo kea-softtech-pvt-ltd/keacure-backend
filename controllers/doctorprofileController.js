@@ -110,14 +110,7 @@ module.exports = {
           accessToken: accessToken,
           refreshToken: refreshToken,
           medicines_ID: `medicines_${_id}`
-        }, { new: true }, function (err, data) {
-          if (err) {
-            res.json(err);
-          }
-          else {
-            res.json(data);
-          }
-        })
+        }, { new: true })
       } else {
         res.json({ "status": { "error": "Please Enter Correct OTP" } })
       }

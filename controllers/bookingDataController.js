@@ -237,16 +237,16 @@ module.exports = {
                         const note1 = item["timeSlot"]
                         const dateTime = item["startDate"]
                         if (item.dependentId) {
-                            const note2 = item.dependentDetails[0]["name"]
+                            const note2 = item.doctorDetails[0]["name"]
                             const note3 = item.dependentDetails[0]["name"]
                             sortedData[index]["note"] = "Dr." + note2 
-                            sortedData[index]["state"] = "("+"Pt:"+ note3 +")"
+                            sortedData[index]["state"] = "("+"Pt-"+ note3 +")"
                             
                         } else {
                             const note2 = item.doctorDetails[0]["name"]
                             const note4 = item.patientDetails[0]["name"]
                             sortedData[index]["note"] = "Dr." + note2 
-                            sortedData[index]["state"] =  "("+"Pt:"+ note4 +")"
+                            sortedData[index]["state"] =  "("+"Pt.-"+ note4 +")"
 
                         }
                         sortedData[index]["duration"] = "00:" + note1 + ":00"
