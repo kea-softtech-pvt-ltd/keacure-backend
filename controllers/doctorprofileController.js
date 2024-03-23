@@ -91,14 +91,12 @@ module.exports = {
 
   //for fetch otp
   async loginOtp(req, res, next) {
-    const { _id, getOTP } = req.body;
-    // const  {otp} = await loginOtpSchema.validateAsync(req.body)
+    const { getOTP, _id } = req.body;
     if (!getOTP) {
       return res.json({ "status": { "error": "please fill the field properly" } });
     }
     try {
       const userExit = await DoctorLogin.findOne({ otp: getOTP }, { _id: _id });
-
       const accessToken = jwt.sign({ _id: _id }, config.secret, {
         expiresIn: config.jwtExpiration,
       });
@@ -110,14 +108,20 @@ module.exports = {
           accessToken: accessToken,
           refreshToken: refreshToken,
           medicines_ID: `medicines_${_id}`
-        }, { new: true })
+        }, { new: true }, function (err, data) {
+          if (err) {
+            res.json(err);
+          }
+          else {
+            res.json(data);
+          }
+        })
       } else {
         res.json({ "status": { "error": "Please Enter Correct OTP" } })
       }
     } catch (err) {
       res.json({ "status": { "error": "Please Enter Correct OTP" } })
     }
-    next()
   },
 
   async otpIsLoggedIn(req, res, next) {
