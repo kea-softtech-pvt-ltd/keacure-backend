@@ -36,9 +36,9 @@ app.use(function (req, res, next) {
   next();
 });
 app.get('/report/:file', function (req, res) {
-    request(`http://localhost:9000/storage/` + req.params.file).pipe(res);
+    request(`https://keacure-backend.vercel.app/storage/` + req.params.file).pipe(res);
 })
-app.use(express.static(path.join(__dirname,'http://localhost:9000/images/logo.png')));
+app.use(express.static(path.join(__dirname,'https://keacure-backend.vercel.app/images/logo.png')));
 require('./routes/doctorRoutes')(app);
 require('./routes/educationRoute')(app);
 require('./routes/experienceRoute')(app);
